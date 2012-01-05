@@ -62,6 +62,7 @@ public class VueRechAuteur extends Vue {
 	}
 	
 	public void setEtat(int etat) {
+		super.setEtat(etat);
 		switch (etat) {
 		case initiale:
 			//ICI FAIRE UNE RECHERCHE DES AUTEURS, BOITE DIALOGUE AVEC

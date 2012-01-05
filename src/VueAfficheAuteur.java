@@ -83,6 +83,7 @@ public class VueAfficheAuteur extends Vue {
 	}
 	
 	public void setEtat(int etat) {
+		super.setEtat(etat);
 		switch (etat) {
 		case initiale:
 			break;

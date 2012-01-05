@@ -1,6 +1,5 @@
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -36,6 +35,7 @@ public class VueNouvelArticle extends Vue {
 	private String _page;
 	private HashSet<Auteur> _auteurs = new HashSet<Auteur>();
 	private HashSet<String> _motsCles = new HashSet<String>();
+	
 	private Parution _parution;
 	private Periodique _periodique;
 	
@@ -76,7 +76,7 @@ public class VueNouvelArticle extends Vue {
 						msg.setVisible(true);
 					}
 					else
-						getControleur().rechArticle(_parution, _titre);
+						getControleur().rechArticle(getParution(), _titre);
 				} catch (NumberFormatException ex) {
 					Message msg = new Message("La page n'est pas un numero");
 					msg.setVisible(true);
@@ -222,7 +222,7 @@ public class VueNouvelArticle extends Vue {
 					dialog.setVisible(true);
 					textFieldNom.setText("");
 					textFieldPrenom.setText("");
-					setEtat(Vue.inter4);
+					setEtat(Vue.finale);
 				}
 				else
 				{
@@ -265,21 +265,7 @@ public class VueNouvelArticle extends Vue {
 					msg.setVisible(true);
 				}
 				else
-				{
-					_periodique = getControleur().rechPeriodique(issn);
-					if (_periodique != null && _periodique.getNbParutions() != 0)
-						setEtat(inter1);
-					else if (_periodique != null && _periodique.getNbParutions() == 0)
-					{			
-						int option = JOptionPane.showConfirmDialog(null, "Il n'y a pas de parutions, voulez-vous les créer ?",
-								"Erreur Parutions", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-						if(option != JOptionPane.NO_OPTION )
-							setEtat(Vue.alternate);
-						else
-							setEtat(Vue.initiale);
-					}
-				}
+					setPeriodique(getControleur().rechPeriodique(issn));
 			}
 		});
 		
@@ -295,7 +281,7 @@ public class VueNouvelArticle extends Vue {
 					msg.setVisible(true);
 				}
 				else
-					_parution = getControleur().rechParution(_periodique, Integer.decode(id));
+					setParution(getControleur().rechParution(getPeriodique(), Integer.decode(id)));
 			}
 		});
 		
@@ -312,7 +298,7 @@ public class VueNouvelArticle extends Vue {
 					dg.setVisible(true);
 				}
 				else
-					getControleur().nouvArticle(_titre, Integer.decode(_page), _auteurs, _motsCles, _parution);
+					getControleur().nouvArticle(_titre, Integer.decode(_page), _auteurs, _motsCles, getParution());
 			}
 		});
 		
@@ -372,11 +358,16 @@ public class VueNouvelArticle extends Vue {
 		content.setVisible(true);
 	}
 	
+	private void setPeriodique(Periodique pe) { _periodique = pe; }
+	private void setParution(Parution pa) { _parution = pa; }
+	public Periodique getPeriodique() { return _periodique; }
+	public Parution getParution() { return _parution; }
+	
 	public void setEtat(int etat){
 		super.setEtat(etat);
 		switch (etat) {
 		case initiale:
-			initModeles();
+			initSources();
 			lblIssn.setEnabled(true);
 			textFieldIssn.setEnabled(true);
 			btnRechPe.setEnabled(true);
@@ -385,6 +376,20 @@ public class VueNouvelArticle extends Vue {
 			textFieldId.setEnabled(false);
 			btnRechPa.setEnabled(false);
 			btnAnnulerPa.setEnabled(false);
+			labelMC.setEnabled(false);
+			listSource.setEnabled(false);
+			listCible.setEnabled(false);
+			buttonSC.setEnabled(false);
+			btnTerminer.setEnabled(false);
+			lblNouvelAuteurs.setEnabled(false);
+			labelInfo.setEnabled(false);
+			lblNom.setEnabled(false);
+			lblPrenom.setEnabled(false);
+			textFieldNom.setEnabled(false);
+			textFieldPrenom.setEnabled(false);
+			btnNouvelAut.setEnabled(false);
+			btnAnnulerAut.setEnabled(false);
+			lblNouvelArticle.setEnabled(false);
 			break;
 		case inter1:
 			// selection periodique -> selection parution
@@ -420,7 +425,7 @@ public class VueNouvelArticle extends Vue {
 			btnAnnulerArt.setEnabled(true);
 			
 			// Ajout auteur -> ajout article
-			initModeles();
+			initSources();
 			lblNouvelAuteurs.setEnabled(false);
 			labelInfo.setEnabled(false);
 			lblNom.setEnabled(false);
@@ -456,7 +461,7 @@ public class VueNouvelArticle extends Vue {
 			listSource.setEnabled(false);
 			listCible.setEnabled(false);
 			break;
-		case inter4:
+		case finale:
 			// Ajout auteurs -> Ajout mots cles
 			labelMC.setEnabled(true);
 			listSource.setEnabled(true);
@@ -465,24 +470,13 @@ public class VueNouvelArticle extends Vue {
 			btnTerminer.setEnabled(true);
 			btnFermer.setEnabled(true);
 			break;
-		case alternate:
-			content.setVisible(false);
-			this.getControleur().saisirParution();
-			break;
-		case alternate2:
-			content.setVisible(false);
-			this.getControleur().saisiePeriodique();
-			break;
-		case finale:
-			content.setVisible(false);
-			this.getControleur().fermerVue(this);
-			break;
 		}
 	}
 
-	private void initModeles() {
+	private void initSources() {
 		modeleCible.clear();
 		modeleSource.clear();
+		_auteurs = new HashSet<Auteur>();
 		for(String item : getControleur().lectureLignesFichier())
 			modeleSource.addElement(item);
 	}

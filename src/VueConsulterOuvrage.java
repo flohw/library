@@ -174,18 +174,4 @@ public class VueConsulterOuvrage extends Vue {
 			dialog.setVisible(true);
 		}
 	}
-	
-	public void setEtat(int etat) {
-		super.setEtat(etat);
-		switch (etat) {
-		case initiale:
-			break;
-		case alternate:
-			getControleur().fermerVue(this);
-			getControleur().saisirOuvrage();
-			break;
-		case finale:
-			break;
-		}
-	}
 }

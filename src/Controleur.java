@@ -354,18 +354,37 @@ public class Controleur implements Serializable{
 		// Opérations liées à l'application en réponse à une action de l'utilisateur dans une vue
 		////////////////////////////////////////////////////////////////////////////
 		
+		public Ouvrage rechOuvrage(String isbn, String titre, String editeur, GregorianCalendar date) {
+			Ouvrage ouv = this.getOuvrage(isbn);
+			if (ouv != null) {
+				int option = JOptionPane.showConfirmDialog(null, "Cet ouvrage existe déjà, voulez vous créer un exemplaire ?",
+						"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+				if(option == JOptionPane.YES_OPTION )
+				{
+					fermerVue(getVueSaisieOuvrage());
+					saisirExemplaire();
+				}
+			} else {
+				this.getVueSaisieOuvrage().setEtat(Vue.inter1);
+				ouv = new Ouvrage(isbn, titre, editeur, date);
+			}
+			return ouv;
+		}
+		
 		public Ouvrage rechOuvrage(String isbn) {
 			Ouvrage ouv = this.getOuvrage(isbn);
-			if (ouv == null) {			
+			if (ouv == null) {
 				int option = JOptionPane.showConfirmDialog(null, "Ouvrage inconnu, voulez-vous le créer ?",
 						"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-				if(option != JOptionPane.NO_OPTION )
+				if(option == JOptionPane.YES_OPTION )
 				{
 					if (this.getVueConsulterOuvrage() != null)
-						this.getVueConsulterOuvrage().setEtat(Vue.alternate);
+						fermerVue(getVueConsulterOuvrage());
 					if (this.getVueSaisieExemplaire() != null)
-						this.getVueSaisieExemplaire().setEtat(Vue.alternate);
+						fermerVue(getVueSaisieExemplaire());
+					saisirOuvrage();
 				}
 			} else {
 				if (this.getVueSaisieExemplaire() != null) {
@@ -373,48 +392,44 @@ public class Controleur implements Serializable{
 					this.getVueSaisieExemplaire().setEtat(Vue.inter1);
 					this.getVueSaisieExemplaire().alimente(ouv);
 				}
-				if (this.getVueConsulterOuvrage() != null) {
-					this.getVueConsulterOuvrage().setEtat(Vue.inter1);
+				if (this.getVueConsulterOuvrage() != null)
 					this.getVueConsulterOuvrage().alimente(ouv);
-				}
 			}
 			return ouv;
 		} // Fin rechOuvrage
 		
-		public boolean nouvOuvrage(String isbn, String titre, HashSet<Auteur> auteurs, String editeur,
-			GregorianCalendar dateEdition, HashSet<String> motsCles) {
+		public void nouvOuvrage(Ouvrage ouv, HashSet<Auteur> auteurs, HashSet<String> motsCles) {
 			// vérification de la présence des infos obligatoires et du format de la date
-			if (this.getOuvrage(isbn )== null) {
-				// Instanciation de l'ouvrage
-				// Ajout de l'ouvrage dans l'ensemble des ouvrages de la bibliothèque
-				Ouvrage ouvrage = new Ouvrage(isbn, titre, editeur, dateEdition);
-				this.setOuvrage(ouvrage, isbn);
-				for (Auteur aut : auteurs)
-				{
-					if (getAuteur(aut) == null)
-						this.getAuteurs().add(aut);
-					aut.ajouterOuvrage(isbn, ouvrage);
-				}
-				MotCle mot = null;
-				for (String mc : motsCles)
-				{
-					mot = getMotCle(mc);
-					if (mot == null)
-					{
-						mot = new MotCle(mc);
-						this.getMotsCles().add(mot);
-					}
-					mot.ajouterOuvrage(isbn, ouvrage);
-				}
-				Message dialog = new Message("Ouvrage enregistré");
-				dialog.setVisible(true);
-				this.fermerVue (this.getVueSaisieOuvrage());
-				return true;
-			} else {
-				Message dialog = new Message("Ouvrage déjà présent");
-				dialog.setVisible(true);
-				return false;
+			// Instanciation de l'ouvrage
+			// Ajout de l'ouvrage dans l'ensemble des ouvrages de la bibliothèque
+			this.setOuvrage(ouv, ouv.getIsbn());
+			for (Auteur aut : auteurs)
+			{
+				if (getAuteur(aut) == null)
+					this.getAuteurs().add(aut);
+				aut.ajouterOuvrage(ouv.getIsbn(), ouv);
 			}
+			MotCle mot = null;
+			for (String mc : motsCles)
+			{
+				mot = getMotCle(mc);
+				if (mot == null)
+				{
+					mot = new MotCle(mc);
+					this.getMotsCles().add(mot);
+				}
+				mot.ajouterOuvrage(ouv.getIsbn(), ouv);
+			}
+			
+			int option = JOptionPane.showConfirmDialog(null, "Ouvrage enregistré, voulez-vous en créer un autre ?",
+					"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+			if(option == JOptionPane.YES_OPTION )
+			{
+				getVueSaisieOuvrage().setEtat(Vue.initiale);
+			}
+			else
+				this.fermerVue (this.getVueSaisieOuvrage());
 		}
 		
 		public void nouvExemplaire(Ouvrage ouv, String dateReception, String statut) {
@@ -472,20 +487,46 @@ public class Controleur implements Serializable{
 				if (this.getVueConsulterPeriodique() != null)
 					this.getVueConsulterPeriodique().alimente(per);
 				if (this.getVueNouvelleParution() != null)
+				{
 					this.getVueNouvelleParution().alimente(per);
+					this.getVueNouvelleParution().setEtat(Vue.finale);
+				}
+				if (this.getVueNouvelArticle() != null)
+				{
+					if (per.getNbParutions() != 0)
+						getVueNouvelArticle().setEtat(Vue.inter1);
+					else if (per.getNbParutions() == 0)
+					{			
+						int option = JOptionPane.showConfirmDialog(null, "Il n'y a pas de parutions, voulez-vous les créer ?",
+								"Erreur Parutions", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+						if(option == JOptionPane.YES_OPTION )
+						{
+							fermerVue(getVueNouvelArticle());
+							saisirParution();
+						}
+						else
+							getVueNouvelArticle().setEtat(Vue.initiale);
+					}
+				}
 			}
 			return per;
 		}
 		
-		public boolean nouveauPeriodique (String issn, String nom, GregorianCalendar date) {
+		public void nouveauPeriodique (String issn, String nom, GregorianCalendar date) {
 			if (this.getPeriodique(issn) == null) {
 				Periodique periodique = new Periodique(issn, nom, date);
 				this.setPeriodique(periodique, issn);
-				return true;
+				int option = JOptionPane.showConfirmDialog(null, "Periodique enregistré, voulez-vous en créer un nouveau ?",
+						"Nouveau Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+				if(option == JOptionPane.YES_OPTION )
+					getVueNouveauPeriodique().setEtat(Vue.initiale);
+				else
+					fermerVue(getVueNouveauPeriodique());
 			} else {
 				Message dialogue = new Message("Le périodique existe déjà");
 				dialogue.setVisible(true);
-				return false;
 			}
 		}
 		
@@ -504,18 +545,21 @@ public class Controleur implements Serializable{
 						", voulez-vous en créer une autre ?",
 						"Nouvelle Parution", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-				if(option != JOptionPane.NO_OPTION)
+				if(option == JOptionPane.YES_OPTION)
 				{
 					if (this.getVueNouvelleParution() != null)
-						this.getVueNouvelleParution().setEtat(Vue.initiale);
+						getVueNouvelleParution().setEtat(Vue.initiale);
 				}
 				else
-					this.getVueNouvelleParution().setEtat(Vue.finale);
+				{
+					if (this.getVueNouvelleParution() != null)
+						fermerVue(getVueNouvelleParution());
+				}
 			}
 		}
 		
-		public Article rechArticle(Parution parution, String titre) {
-			Article article = parution.getArticle(titre);
+		public Article rechArticle(Parution pa, String titre) {
+			Article article = pa.getArticle(titre);
 			if (article != null)
 			{
 				Message dg = new Message("Ce titre existe déjà pour cette parution");
@@ -537,7 +581,8 @@ public class Controleur implements Serializable{
 				if(option == JOptionPane.YES_OPTION)
 				{
 					if (this.getVueNouvelArticle() != null)
-						this.getVueNouvelArticle().setEtat(Vue.alternate);
+						fermerVue(getVueNouvelArticle());
+					saisirParution();
 				}
 			}
 			else
@@ -564,9 +609,19 @@ public class Controleur implements Serializable{
 				}
 				newArticle.ajouterMC(mot);
 			}
-			Message dialog = new Message("Article enregistré");
-			dialog.setVisible(true);
-			getVueNouvelArticle().setEtat(Vue.finale);
+			int option = JOptionPane.showConfirmDialog(null, "L'article a bien été enregistré, voulez-vous en créer un nouveau ?",
+					"Nouvelle Parution", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+			if(option == JOptionPane.YES_OPTION)
+			{
+				if (this.getVueNouvelArticle() != null)
+					getVueNouvelArticle().setEtat(Vue.initiale);
+			}
+			else
+			{
+				if (this.getVueNouvelArticle() != null)
+					fermerVue(getVueNouvelArticle());
+			}
 		}
 		/*****************************************/
 		/* Lecture des lignes d'un fichier texte */

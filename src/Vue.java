@@ -13,7 +13,7 @@ public abstract class Vue extends JFrame implements Observer{
 	// énumération des états possibles pour une vue
 	// cet état permet de contrôler l'enchaînement des dialogues possibles pour l'utilisateur
 	// dans une vue
-	final static int initiale = 0, inter1 = 1, inter2 = 2, inter3 = 3, inter4 = 4, finale = 5, alternate = 6, alternate2 = 7;
+	final static int initiale = 0, inter1 = 1, inter2 = 2, inter3 = 3, inter4 = 4, finale = 5;
 	
 	private Controleur _controleur;
 	private int _etat;

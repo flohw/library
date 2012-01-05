@@ -71,10 +71,8 @@ public class VueSaisieExemplaire extends Vue {
 		buttonRech = new JButton("Rechercher");
 		buttonRech.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String isbn = textFieldIsbn.getText();
 				// liaison de la vue avec l'objet observé
-				setOuvrage (getControleur().rechOuvrage(isbn));
-				setEtat(Vue.inter1);
+				setOuvrage (getControleur().rechOuvrage(textFieldIsbn.getText()));
 		}});
 		buttonRech.setBounds(357, 27, 107, 25);
 		contentPane.add(buttonRech);
@@ -82,13 +80,12 @@ public class VueSaisieExemplaire extends Vue {
 		buttonEnreg = new JButton("Enregistrer");
 		buttonEnreg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String dateReception = textFieldDateReception.getText();
 				String statut;
 				if (RadioButtonConsultable.isSelected()) {
 					statut = "consultable";}
 				else {
 					statut = "empruntable";}
-					getControleur().nouvExemplaire(getOuvrage(), dateReception, statut);
+					getControleur().nouvExemplaire(getOuvrage(), textFieldDateReception.getText(), statut);
 				}
 		});
 		buttonEnreg.setBounds(357, 143, 107, 25);
@@ -162,12 +159,8 @@ public class VueSaisieExemplaire extends Vue {
 		contentPane.add(RadioButtonEmpruntable);
 	}
 	
-	private Ouvrage getOuvrage() {
-		return _ouvrage;
-	}
-	private void setOuvrage(Ouvrage ouvrage) {
-		 _ouvrage = ouvrage;
-	}
+	private Ouvrage getOuvrage() { return _ouvrage; }
+	public void setOuvrage(Ouvrage ouvrage) { _ouvrage = ouvrage; }
 	
 	public void alimente(Ouvrage ouv) {
 		textFieldTitre.setText(ouv.getTitre());
@@ -179,26 +172,19 @@ public class VueSaisieExemplaire extends Vue {
 	
 	public void setEtat (int etat){
 		switch (etat) {
-		case initiale: {
+		case initiale:
 			buttonRech.setEnabled(true);
 			break;
-			}
-		case inter1: {
+		case inter1:
 			buttonEnreg.setEnabled(true);
 			RadioButtonConsultable.setEnabled(true);
 			RadioButtonEmpruntable.setEnabled(true);
 			textFieldDateReception.setEditable(true);
 			break;
-			}
-		case alternate:
-			getControleur().fermerVue(VueSaisieExemplaire.this);
-			this.getControleur().saisirOuvrage();
-			break;
-		case finale: {
+		case finale:
 			buttonRech.setEnabled(false);
 			buttonFermer.setEnabled(true);
 			break;
-			}
 		}
 	}
 

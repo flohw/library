@@ -46,6 +46,7 @@ public class Parution extends Observable implements Serializable {
 	public String getTitre() { return _titre; }
 	public Periodique getPeriodique() { return _periodique; }
 	public HashMap<String, Article> getArticles() { return _articles; }
+	public Article getArticle(String titre) { return getArticles().get(titre); }
 	
 	public int getNbArticles() { return _articles.size(); }
 	
@@ -56,10 +57,6 @@ public class Parution extends Observable implements Serializable {
 	
 	public String afficheInfos() {
 		return "Titre : " + getTitre() + ", " + getNbArticles() + " articles\n";
-	}
-
-	public Article getArticle(String titre) {
-		return getArticles().get(titre);
 	}
 	
 }

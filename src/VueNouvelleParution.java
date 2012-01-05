@@ -50,11 +50,7 @@ public class VueNouvelleParution extends Vue {
 					dialog.setVisible(true);
 				}
 				else
-				{
-					_periodique = getControleur().rechPeriodique(textFieldIssn.getText());
-					if (_periodique != null)
-						setEtat(Vue.inter1);
-				}
+					setPeriodique(getControleur().rechPeriodique(textFieldIssn.getText()));
 			}
 		});
 		
@@ -81,11 +77,7 @@ public class VueNouvelleParution extends Vue {
 					dialog.setVisible(true);
 				}
 				else
-				{
-					getControleur().nouvelleParution(_periodique, Integer.decode(id), titre);
-					textFieldId.setText("");
-					textFieldTitre.setText("");
-				}
+					getControleur().nouvelleParution(getPeriodique(), Integer.decode(id), titre);
 			}
 		});
 		
@@ -155,6 +147,9 @@ public class VueNouvelleParution extends Vue {
 		content.add(lblISSN);
 	}
 	
+	private void setPeriodique(Periodique pe) { _periodique = pe; }
+	public Periodique getPeriodique() { return _periodique; }
+	
 	public void alimente (Periodique pe)
 	{
 		textFieldPerio.setText(pe.getNom());
@@ -162,19 +157,16 @@ public class VueNouvelleParution extends Vue {
 	}
 	
 	public void setEtat(int etat) {
+		super.setEtat(etat);
 		switch (etat) {
 		case initiale:
+			textFieldId.setText("");
+			textFieldTitre.setText("");
 			break;
-		case inter1:
+		case finale:
 			textFieldTitre.setEditable(true);
 			textFieldId.setEditable(true);
 			btnEnregistrer.setEnabled(true);
-			break;
-		case alternate:
-			getControleur().fermerVue(this);
-			getControleur().saisiePeriodique();
-			break;
-		case finale:
 			break;
 		}
 	}

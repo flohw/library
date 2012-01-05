@@ -130,19 +130,9 @@ public class VueConsulterPeriodique extends Vue {
 		modelePeriodiques.clear();
 		for (Integer i : per.getParutions().keySet())
 			modelePeriodiques.addElement(per.getParution(i).afficheInfos());
-		if (per.getNbParutions() == 0)
-		{
+		if (per.getNbParutions() == 0) {
 			Message dialog = new Message("Aucune parution pour ce périodique");
 			dialog.setVisible(true);
-		}
-	}
-	
-	public void setEtat(int etat) {
-		switch(etat){
-		case initiale:
-			break;
-		case finale:
-			break;
 		}
 	}
 }

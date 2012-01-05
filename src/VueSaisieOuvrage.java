@@ -56,10 +56,7 @@ public class VueSaisieOuvrage extends Vue {
 	private JSeparator separator;
 	private JSeparator separator_1;
 	
-	private String _isbn;
-	private String _titre;
-	private GregorianCalendar _dateEd;
-	private String _editeur;
+	private Ouvrage _ouvrage;
 	private HashSet<Auteur> _auteurs = new HashSet<Auteur>();
 	private HashSet<String> _motsCles = new HashSet<String>();
 		
@@ -106,10 +103,10 @@ public class VueSaisieOuvrage extends Vue {
 		btnEnregistrerOuvrage.setBounds(206, 116, 123, 25);
 		btnEnregistrerOuvrage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				_isbn = textFieldIsbn.getText();
-				_titre = textFieldTitre.getText();
-				_editeur = textFieldEditeur.getText();
-				_dateEd = ESDate.lireDate (textFieldDateEd.getText());
+				String _isbn = textFieldIsbn.getText();
+				String _titre = textFieldTitre.getText();
+				String _editeur = textFieldEditeur.getText();
+				GregorianCalendar _dateEd = ESDate.lireDate (textFieldDateEd.getText());
 				if ((_isbn.length() == 0) || (_titre.length() == 0) || (_editeur.length() == 0))
 				{
 					Message dialog = new Message("Un des champs est vide");
@@ -121,14 +118,13 @@ public class VueSaisieOuvrage extends Vue {
 					dialog.setVisible(true);
 				}
 				else
-					setEtat(Vue.inter1);
+					setOuvrage(getControleur().rechOuvrage(_isbn, _titre, _editeur, _dateEd));
 			}
 		});
 		btnAnnulerOuvrage = new JButton("Annuler");
 		btnAnnulerOuvrage.setBounds(419, 116, 83, 25);
 		btnAnnulerOuvrage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setEtat(Vue.finale);
 				getControleur().fermerVue(VueSaisieOuvrage.this);
 			}
 		});
@@ -275,13 +271,7 @@ public class VueSaisieOuvrage extends Vue {
 					dialog.setVisible(true);
 				}
 				else
-				{
-					if (getControleur().nouvOuvrage(_isbn, _titre, _auteurs, _editeur, _dateEd, _motsCles))
-					{
-						setEtat(Vue.finale);
-						getControleur().fermerVue(VueSaisieOuvrage.this);
-					}
-				}
+					getControleur().nouvOuvrage(getOuvrage(), _auteurs, _motsCles);
 			}
 		});
 		btnTerminer.setEnabled(false);
@@ -315,6 +305,9 @@ public class VueSaisieOuvrage extends Vue {
 		content.add(scrollCible);
 		
 	}
+	
+	private void setOuvrage(Ouvrage ouv) { _ouvrage = ouv; }
+	public Ouvrage getOuvrage() { return _ouvrage; }
 	
 	public void setEtat (int etat){
 		super.setEtat(etat);

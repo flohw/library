@@ -36,14 +36,6 @@ public class Ouvrage extends Observable implements Serializable {
 	// Constructeur
 	// ************************************************************************************************************
 
-	/**
-	 * Constructeur. 
-	 * @param isbn			numero ISBN de l'ouvrage
-	 * @param titre			titre de l'ouvrage
-	 * @param auteur		auteur de l'ouvrage
-	 * @param editeur		editeur de l'ouvrage
-	 * @param dateEdition	date d'edition
-	 */
 	public Ouvrage(String isbn, String titre, String editeur, GregorianCalendar dateEdition) {
 		this.setIsbn(isbn);
 		this.setTitre(titre);

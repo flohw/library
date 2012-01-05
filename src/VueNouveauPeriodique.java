@@ -2,7 +2,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -62,19 +61,7 @@ public class VueNouveauPeriodique extends Vue {
 					dialog.setVisible(true);
 				}
 				else
-				{
-					boolean add = getControleur().nouveauPeriodique(issn, nom, ESDate.lireDate(date));
-					if (add)
-					{		
-						int option = JOptionPane.showConfirmDialog(null, "Periodique enregistré, voulez-vous en créer un nouveau ?",
-								"Nouveau Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-						if(option == JOptionPane.YES_OPTION )
-							setEtat(Vue.initiale);
-						else
-							getControleur().fermerVue(VueNouveauPeriodique.this);
-					}
-				}
+					getControleur().nouveauPeriodique(issn, nom, ESDate.lireDate(date));
 			}
 		});
 		
@@ -98,13 +85,12 @@ public class VueNouveauPeriodique extends Vue {
 	}
 	
 	public void setEtat(int etat) {
+		super.setEtat(etat);
 		switch (etat){
 		case initiale:
 			textFieldIssn.setText("");
 			textFieldDate.setText("");
 			textFieldNom.setText("");
-			break;
-		case finale:
 			break;
 		}
 	}
