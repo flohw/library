@@ -1,9 +1,9 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
@@ -11,7 +11,7 @@ import javax.swing.JButton;
 public class VueNouveauPeriodique extends Vue {
 
 	private static final long serialVersionUID = 1L;
-	private JFrame frame;
+	private JPanel content;
 	private JTextField textFieldIssn;
 	private JTextField textFieldNom;
 	private JTextField textFieldDate;
@@ -21,11 +21,11 @@ public class VueNouveauPeriodique extends Vue {
 
 	public VueNouveauPeriodique(Controleur controleur) {
 		super(controleur);
-		frame = new JFrame();
-		frame.setTitle("Enregistrer un Nouveau Périodique");
-		frame.setResizable(false);
-		frame.setBounds(100, 100, 539, 154);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		content = new JPanel();
+		setTitle("Enregistrer un Nouveau Périodique");
+		setBounds(100, 100, 539, 154);
+		setContentPane(content);
+		content.setLayout(null);
 		
 		JLabel lblIssn = new JLabel("ISSN");
 		lblIssn.setBounds(89, 9, 122, 15);
@@ -72,7 +72,7 @@ public class VueNouveauPeriodique extends Vue {
 						if(option == JOptionPane.YES_OPTION )
 							setEtat(Vue.initiale);
 						else
-							setEtat(Vue.finale);
+							getControleur().fermerVue(VueNouveauPeriodique.this);
 					}
 				}
 			}
@@ -83,23 +83,20 @@ public class VueNouveauPeriodique extends Vue {
 		btnAnnuler.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Actions recherche ouvrage
-				setEtat(Vue.finale);
+				getControleur().fermerVue(VueNouveauPeriodique.this);
 			}
 		});
 		
-		frame.getContentPane().setLayout(null);
-		frame.getContentPane().add(lblIssn);
-		frame.getContentPane().add(lblNomDuPriodique);
-		frame.getContentPane().add(lblDateDabonnement);
-		frame.getContentPane().add(textFieldNom);
-		frame.getContentPane().add(textFieldIssn);
-		frame.getContentPane().add(textFieldDate);
-		frame.getContentPane().add(btnEnregistrer);
-		frame.getContentPane().add(btnAnnuler);
-		frame.setVisible(true);
+		content.add(lblIssn);
+		content.add(lblNomDuPriodique);
+		content.add(lblDateDabonnement);
+		content.add(textFieldNom);
+		content.add(textFieldIssn);
+		content.add(textFieldDate);
+		content.add(btnEnregistrer);
+		content.add(btnAnnuler);
 	}
 	
-	public JFrame getFrame() { return frame; }
 	public void setEtat(int etat) {
 		switch (etat){
 		case initiale:
@@ -108,8 +105,6 @@ public class VueNouveauPeriodique extends Vue {
 			textFieldNom.setText("");
 			break;
 		case finale:
-			frame.setVisible(false);
-			getControleur().menuBiblio();
 			break;
 		}
 	}

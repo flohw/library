@@ -456,15 +456,15 @@ public class Controleur implements Serializable{
 				int option = JOptionPane.showConfirmDialog(null, "Periodique inconnu, voulez-vous le créer ?",
 						"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-				if(option != JOptionPane.NO_OPTION )
+				if(option == JOptionPane.YES_OPTION )
 				{
 					if (this.getVueConsulterPeriodique() != null)
-						this.getVueConsulterPeriodique().setEtat(Vue.alternate);
+						fermerVue(getVueConsulterPeriodique());
 					if (this.getVueNouvelArticle() != null)
-						this.getVueNouvelArticle().setEtat(Vue.alternate2);
+						fermerVue(getVueNouvelArticle());
 					if (this.getVueNouvelleParution() != null)
-						this.getVueNouvelleParution().setEtat(Vue.alternate);
-					
+						fermerVue(getVueNouvelleParution());
+					saisiePeriodique();
 				}
 			}
 			else

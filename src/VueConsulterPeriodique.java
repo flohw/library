@@ -1,6 +1,6 @@
-import javax.swing.JFrame;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -13,7 +13,7 @@ import java.awt.event.ActionEvent;
 public class VueConsulterPeriodique extends Vue {
 
 	private static final long serialVersionUID = 1L;
-	private JFrame frame;
+	private JPanel content;
 	private JLabel lblIssn;
 	private JLabel lblParutions;
 	private JLabel lblNomDuPriodique;
@@ -25,8 +25,8 @@ public class VueConsulterPeriodique extends Vue {
 	private JTextField textFieldDate;
 	private JTextField textFieldIssn;
 	
-	JScrollPane scrollPane;
-	JList listPeriodiques;
+	private JScrollPane scrollPane;
+	private JList listPeriodiques;
 	private DefaultListModel modelePeriodiques = new DefaultListModel();
 	
 	private JButton btnRechercher;
@@ -36,11 +36,11 @@ public class VueConsulterPeriodique extends Vue {
 
 	public VueConsulterPeriodique(Controleur controleur) {
 		super(controleur);
-		frame = new JFrame();
-		frame.setTitle("Consulter un Périodique");
-		frame.setResizable(false);
-		frame.setBounds(100, 100, 497, 389);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		content = new JPanel();
+		setTitle("Consulter un Périodique");
+		setBounds(100, 100, 497, 389);
+		setContentPane(content);
+		content.setLayout(null);
 		
 		lblIssn = new JLabel("ISSN");
 		lblIssn.setBounds(6, 13, 154, 16);
@@ -97,29 +97,29 @@ public class VueConsulterPeriodique extends Vue {
 		listPeriodiques = new JList();
 		scrollPane = new JScrollPane(listPeriodiques);
 		scrollPane.setBounds(172, 221, 305, 86);
-		frame.getContentPane().add(scrollPane);
 		listPeriodiques.setModel(modelePeriodiques);
 		
 		btnTerminer = new JButton("Terminer");
 		btnTerminer.setBounds(172, 319, 138, 25);
 		btnTerminer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				setEtat(Vue.finale);
+				getControleur().fermerVue(VueConsulterPeriodique.this);
 			}
 		});
-		frame.getContentPane().setLayout(null);
-		frame.getContentPane().add(lblIssn);
-		frame.getContentPane().add(lblIssn_1);
-		frame.getContentPane().add(lblNomDuPriodique);
-		frame.getContentPane().add(lblDateDabonnement);
-		frame.getContentPane().add(lblParutions);
-		frame.getContentPane().add(textFieldIssnRech);
-		frame.getContentPane().add(textFieldNom);
-		frame.getContentPane().add(textFieldDate);
-		frame.getContentPane().add(textFieldIssn);
-		frame.getContentPane().add(btnRechercher);
-		frame.getContentPane().add(btnTerminer);
-		frame.getContentPane().add(separator);
+		
+		content.add(scrollPane);
+		content.add(lblIssn);
+		content.add(lblIssn_1);
+		content.add(lblNomDuPriodique);
+		content.add(lblDateDabonnement);
+		content.add(lblParutions);
+		content.add(textFieldIssnRech);
+		content.add(textFieldNom);
+		content.add(textFieldDate);
+		content.add(textFieldIssn);
+		content.add(btnRechercher);
+		content.add(btnTerminer);
+		content.add(separator);
 	}
 	
 	public void alimente(Periodique per)
@@ -137,19 +137,11 @@ public class VueConsulterPeriodique extends Vue {
 		}
 	}
 	
-	public JFrame getFrame() { return frame; }
 	public void setEtat(int etat) {
 		switch(etat){
 		case initiale:
-			frame.setVisible(true);
-			break;
-		case alternate:
-			frame.setVisible(false);
-			getControleur().saisiePeriodique();
 			break;
 		case finale:
-			frame.setVisible(false);
-			getControleur().menuBiblio();
 			break;
 		}
 	}

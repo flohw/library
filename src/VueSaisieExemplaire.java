@@ -1,8 +1,8 @@
 import java.awt.Rectangle;
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -16,12 +16,7 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
-/**
- * Fenêtre de saisie d'un exemplaire d'un ouvrage avec la vue des exemplaires de l'ouvrage
- * Code du JFrame généré par Window Builder/Swing Designer.
- * @author IUT,  A.Culet 
- * @version 1.0
- */
+
 public class VueSaisieExemplaire extends Vue {
 
 	private static final long serialVersionUID = 1L;
@@ -50,7 +45,6 @@ public class VueSaisieExemplaire extends Vue {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
 		setBounds(100, 100, 540, 461);
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
@@ -174,7 +168,6 @@ public class VueSaisieExemplaire extends Vue {
 	private void setOuvrage(Ouvrage ouvrage) {
 		 _ouvrage = ouvrage;
 	}
-		
 	
 	public void alimente(Ouvrage ouv) {
 		textFieldTitre.setText(ouv.getTitre());

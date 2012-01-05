@@ -1,5 +1,5 @@
-import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
@@ -11,7 +11,7 @@ import java.awt.Font;
 public class VueNouvelleParution extends Vue {
 
 	private static final long serialVersionUID = 1L;
-	private JFrame frame;
+	private JPanel content;
 	private JButton btnEnregistrer;
 	private JButton btnAnnuler;
 	
@@ -27,22 +27,17 @@ public class VueNouvelleParution extends Vue {
 
 	public VueNouvelleParution(Controleur controleur) {
 		super (controleur);
-		frame = new JFrame();
-		frame.setResizable(false);
-		frame.setTitle("Nouvelle Parution");
-		frame.setBounds(100, 100, 465, 397);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		content = new JPanel();
+		setTitle("Nouvelle Parution");
+		setBounds(100, 100, 465, 397);
+		setContentPane(content);
+		content.setLayout(null);
 		
 		JLabel lblISSN = new JLabel("ISSN");
 		lblISSN.setBounds(6, 13, 120, 16);
 		
-		
-		frame.getContentPane().setLayout(null);
-		frame.getContentPane().add(lblISSN);
-		
 		separator = new JSeparator();
 		separator.setBounds(0, 82, 465, 12);
-		frame.getContentPane().add(separator);
 		
 		btnRechercher = new JButton("Rechercher");
 		btnRechercher.setBounds(164, 41, 120, 29);
@@ -62,17 +57,15 @@ public class VueNouvelleParution extends Vue {
 				}
 			}
 		});
-		frame.getContentPane().add(btnRechercher);
 		
 		
 		btnAnnuler = new JButton("Fermer");
 		btnAnnuler.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				setEtat(Vue.finale);
+				getControleur().fermerVue(VueNouvelleParution.this);
 			}
 		});
 		btnAnnuler.setBounds(180, 339, 93, 29);
-		frame.getContentPane().add(btnAnnuler);
 		
 		btnEnregistrer = new JButton("Enregistrer");
 		btnEnregistrer.setEnabled(false);
@@ -98,22 +91,18 @@ public class VueNouvelleParution extends Vue {
 		
 		textFieldIssn = new JTextField();
 		textFieldIssn.setBounds(138, 7, 317, 28);
-		frame.getContentPane().add(textFieldIssn);
 		textFieldIssn.setColumns(10);
 		
 		JLabel lblTitre = new JLabel("Titre");
 		lblTitre.setBounds(6, 272, 120, 16);
-		frame.getContentPane().add(lblTitre);
 		
 		textFieldTitre = new JTextField();
 		textFieldTitre.setEditable(false);
 		textFieldTitre.setColumns(10);
 		textFieldTitre.setBounds(138, 266, 317, 28);
-		frame.getContentPane().add(textFieldTitre);
 		
 		JLabel lblIdentifiant = new JLabel("Identifiant");
 		lblIdentifiant.setBounds(6, 305, 120, 16);
-		frame.getContentPane().add(lblIdentifiant);
 		
 		textFieldId = new JTextField();
 		textFieldId.setEditable(false);
@@ -122,21 +111,17 @@ public class VueNouvelleParution extends Vue {
 		
 		separator_1 = new JSeparator();
 		separator_1.setBounds(0, 214, 465, 12);
-		frame.getContentPane().add(separator_1);
 		
 		JLabel lblParution = new JLabel("Parution");
 		lblParution.setFont(new Font("Lucida Grande", Font.BOLD | Font.ITALIC, 13));
 		lblParution.setBounds(195, 238, 61, 16);
-		frame.getContentPane().add(lblParution);
 		
 		JLabel lblPeriodique = new JLabel("Periodique");
 		lblPeriodique.setFont(new Font("Lucida Grande", Font.BOLD | Font.ITALIC, 13));
 		lblPeriodique.setBounds(180, 106, 80, 16);
-		frame.getContentPane().add(lblPeriodique);
 		
 		JLabel labelTitrePerio = new JLabel("Titre");
 		labelTitrePerio.setBounds(6, 140, 120, 16);
-		frame.getContentPane().add(labelTitrePerio);
 		
 		textFieldPerio = new JTextField();
 		textFieldPerio.setEditable(false);
@@ -147,16 +132,27 @@ public class VueNouvelleParution extends Vue {
 		textFieldDate.setEditable(false);
 		textFieldDate.setColumns(10);
 		textFieldDate.setBounds(138, 174, 317, 28);
-		frame.getContentPane().add(textFieldDate);
 		
 		JLabel lblDate = new JLabel("Date");
 		lblDate.setBounds(6, 180, 120, 16);
 		
-		frame.getContentPane().add(lblDate);
-		frame.getContentPane().add(textFieldPerio);
-		frame.getContentPane().add(textFieldId);
-		frame.getContentPane().add(btnEnregistrer);
-		frame.setVisible(true);
+		content.add(lblDate);
+		content.add(textFieldPerio);
+		content.add(textFieldId);
+		content.add(btnEnregistrer);
+		content.add(textFieldDate);
+		content.add(labelTitrePerio);
+		content.add(lblPeriodique);
+		content.add(lblParution);
+		content.add(separator_1);
+		content.add(lblIdentifiant);
+		content.add(textFieldTitre);
+		content.add(lblTitre);
+		content.add(textFieldIssn);
+		content.add(btnAnnuler);
+		content.add(btnRechercher);
+		content.add(separator);
+		content.add(lblISSN);
 	}
 	
 	public void alimente (Periodique pe)
@@ -164,7 +160,7 @@ public class VueNouvelleParution extends Vue {
 		textFieldPerio.setText(pe.getNom());
 		textFieldDate.setText(ESDate.ecrireDate(pe.getDate()));
 	}
-	public JFrame getFrame() { return frame; }
+	
 	public void setEtat(int etat) {
 		switch (etat) {
 		case initiale:
@@ -175,12 +171,10 @@ public class VueNouvelleParution extends Vue {
 			btnEnregistrer.setEnabled(true);
 			break;
 		case alternate:
-			frame.setVisible(false);
+			getControleur().fermerVue(this);
 			getControleur().saisiePeriodique();
 			break;
 		case finale:
-			frame.setVisible(false);
-			getControleur().fermerVue(this);
 			break;
 		}
 	}

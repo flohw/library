@@ -1,9 +1,9 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -16,7 +16,7 @@ public class VueConsulterOuvrage extends Vue {
 
 	private static final long serialVersionUID = 1L;
 
-	private JFrame frame;
+	private JPanel content;
 	
 	private JLabel lblAuteur;
 	private JLabel lblDateDdition;
@@ -49,11 +49,11 @@ public class VueConsulterOuvrage extends Vue {
 
 	public VueConsulterOuvrage(Controleur controleur) {
 		super(controleur);
-		frame = new JFrame();
-		frame.setResizable(false);
-		frame.setTitle("Consulter un Ouvrage");
-		frame.setBounds(100, 100, 612, 541);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		content = new JPanel();
+		setTitle("Consulter un Ouvrage");
+		setBounds(100, 100, 612, 541);
+		setContentPane(content);
+		content.setLayout(null);
 		
 		lblIsbn = new JLabel("ISBN");
 		lblIsbn.setBounds(89, 9, 154, 15);
@@ -121,37 +121,37 @@ public class VueConsulterOuvrage extends Vue {
 		scrollMC = new JScrollPane(listMC);
 		scrollMC.setBounds(new Rectangle(219, 295, 339, 74));
 		
+		listExemplaires = new JList(modeleExemplaires);
+		scrollExemplaires = new JScrollPane(listExemplaires);
+		scrollExemplaires.setBounds(220, 394, 338, 70);
+		
 		btnTerminer = new JButton("Terminer");
 		btnTerminer.setBounds(264, 476, 111, 25);
 		btnTerminer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Actions recherche ouvrage
-				setEtat(Vue.finale);
+				getControleur().fermerVue(VueConsulterOuvrage.this);
 			}
 		});
 		
-		frame.getContentPane().setLayout(null);
-		frame.getContentPane().add(lblIsbn);
-		frame.getContentPane().add(lblDateEd);
-		frame.getContentPane().add(lblEditeur);
-		frame.getContentPane().add(lblExemplaires);
-		frame.getContentPane().add(lblMotsclefs);
-		frame.getContentPane().add(lblAuteur);
-		frame.getContentPane().add(lblDateDdition);
-		frame.getContentPane().add(textFieldTitre);
-		frame.getContentPane().add(textFieldIsbn);
-		frame.getContentPane().add(textFieldDateEd);
-		frame.getContentPane().add(textFieldEditeur);
-		frame.getContentPane().add(scrollAuteurs);
-		frame.getContentPane().add(scrollMC);
-		
-		listExemplaires = new JList(modeleExemplaires);
-		scrollExemplaires = new JScrollPane(listExemplaires);
-		scrollExemplaires.setBounds(220, 394, 338, 70);
-		frame.getContentPane().add(scrollExemplaires);
-		frame.getContentPane().add(btnRechercher);
-		frame.getContentPane().add(btnTerminer);
-		frame.getContentPane().add(separator);
+		content.setLayout(null);
+		content.add(lblIsbn);
+		content.add(lblDateEd);
+		content.add(lblEditeur);
+		content.add(lblExemplaires);
+		content.add(lblMotsclefs);
+		content.add(lblAuteur);
+		content.add(lblDateDdition);
+		content.add(textFieldTitre);
+		content.add(textFieldIsbn);
+		content.add(textFieldDateEd);
+		content.add(textFieldEditeur);
+		content.add(scrollAuteurs);
+		content.add(scrollMC);
+		content.add(scrollExemplaires);
+		content.add(btnRechercher);
+		content.add(btnTerminer);
+		content.add(separator);
 	}
 	
 	public void alimente(Ouvrage ouv) {
@@ -175,21 +175,16 @@ public class VueConsulterOuvrage extends Vue {
 		}
 	}
 	
-	public JFrame getFrame() { return frame; }
-	
 	public void setEtat(int etat) {
 		super.setEtat(etat);
 		switch (etat) {
 		case initiale:
-			frame.setVisible(true);
 			break;
 		case alternate:
-			frame.setVisible(false);
+			getControleur().fermerVue(this);
 			getControleur().saisirOuvrage();
 			break;
 		case finale:
-			frame.setVisible(false);
-			this.getControleur().menuBiblio();
 			break;
 		}
 	}

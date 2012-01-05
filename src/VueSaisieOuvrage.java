@@ -1,6 +1,6 @@
-import javax.swing.JFrame;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -21,7 +21,7 @@ public class VueSaisieOuvrage extends Vue {
 
 	private static final long serialVersionUID = 1L;
 
-	private JFrame frame;
+	private JPanel content;
 	
 	private JLabel lblISBN;
 	private JLabel lblDateEdition;
@@ -69,10 +69,10 @@ public class VueSaisieOuvrage extends Vue {
 	 */
 	public VueSaisieOuvrage(Controleur controleur) {
 		super(controleur);
-		frame = new JFrame();
-		frame.setResizable(false);
-		frame.setBounds(100, 100, 717, 578);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		content = new JPanel();
+		setBounds(100, 100, 717, 578);
+		setContentPane(content);
+		content.setLayout(null);
 		
 		lblTitre = new JLabel("Titre");
 		lblTitre.setBounds(116, 9, 117, 15);
@@ -128,8 +128,8 @@ public class VueSaisieOuvrage extends Vue {
 		btnAnnulerOuvrage.setBounds(419, 116, 83, 25);
 		btnAnnulerOuvrage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Actions pour annuler ouvrage
 				setEtat(Vue.finale);
+				getControleur().fermerVue(VueSaisieOuvrage.this);
 			}
 		});
 		
@@ -206,18 +206,14 @@ public class VueSaisieOuvrage extends Vue {
 		listSource.setBounds(108, 304, 199, 161);
 		for(String item : getControleur().lectureLignesFichier())
 			modeleSource.addElement(item);
-		frame.getContentPane().add(listSource);
 		scrollSource = new JScrollPane(listSource);
 		scrollSource.setBounds(listSource.getBounds());
 		scrollSource.setSize(listSource.getSize());
 		
 		listCible = new JList(modeleCible);
 		listCible.setEnabled(false);
-		listCible.setBounds(413, 304, 199, 161);
-		frame.getContentPane().add(listCible);
 		scrollCible = new JScrollPane(listCible);
-		scrollCible.setBounds(listCible.getBounds());
-		scrollCible.setSize(listCible.getSize());
+		scrollCible.setBounds(413, 304, 199, 161);
 		
 		btnCS = new JButton("<<");
 		btnCS.setEnabled(false);
@@ -281,36 +277,42 @@ public class VueSaisieOuvrage extends Vue {
 				else
 				{
 					if (getControleur().nouvOuvrage(_isbn, _titre, _auteurs, _editeur, _dateEd, _motsCles))
+					{
 						setEtat(Vue.finale);
+						getControleur().fermerVue(VueSaisieOuvrage.this);
+					}
 				}
 			}
 		});
 		btnTerminer.setEnabled(false);
-		frame.getContentPane().setLayout(null);
-		frame.getContentPane().add(lblTitre);
-		frame.getContentPane().add(textFieldTitre);
-		frame.getContentPane().add(lblISBN);
-		frame.getContentPane().add(textFieldIsbn);
-		frame.getContentPane().add(lblDateEdition);
-		frame.getContentPane().add(textFieldDateEd);
-		frame.getContentPane().add(lblEditeur);
-		frame.getContentPane().add(textFieldEditeur);
-		frame.getContentPane().add(btnEnregistrerOuvrage);
-		frame.getContentPane().add(btnAnnulerOuvrage);
-		frame.getContentPane().add(separator);
-		frame.getContentPane().add(lblNom);
-		frame.getContentPane().add(separator_1);
-		frame.getContentPane().add(btnTerminer);
-		frame.getContentPane().add(lblMotsclefs);
-		frame.getContentPane().add(lblPrenom);
-		frame.getContentPane().add(btnNouvelAuteur);
-		frame.getContentPane().add(btnAnnulerAuteur);
-		frame.getContentPane().add(textFieldNom);
-		frame.getContentPane().add(textFieldPrenom);
-		frame.getContentPane().add(btnSC);
-		frame.getContentPane().add(btnCS);
-		frame.getContentPane().add(scrollSource);
-		frame.getContentPane().add(scrollCible);
+		
+		content.add(scrollSource);
+		content.add(scrollCible);
+		content.setLayout(null);
+		content.add(lblTitre);
+		content.add(textFieldTitre);
+		content.add(lblISBN);
+		content.add(textFieldIsbn);
+		content.add(lblDateEdition);
+		content.add(textFieldDateEd);
+		content.add(lblEditeur);
+		content.add(textFieldEditeur);
+		content.add(btnEnregistrerOuvrage);
+		content.add(btnAnnulerOuvrage);
+		content.add(separator);
+		content.add(lblNom);
+		content.add(separator_1);
+		content.add(btnTerminer);
+		content.add(lblMotsclefs);
+		content.add(lblPrenom);
+		content.add(btnNouvelAuteur);
+		content.add(btnAnnulerAuteur);
+		content.add(textFieldNom);
+		content.add(textFieldPrenom);
+		content.add(btnSC);
+		content.add(btnCS);
+		content.add(scrollSource);
+		content.add(scrollCible);
 		
 	}
 	
@@ -318,7 +320,6 @@ public class VueSaisieOuvrage extends Vue {
 		super.setEtat(etat);
 		switch (etat) {
 		case initiale: {
-			frame.setVisible(true);
 			btnEnregistrerOuvrage.setEnabled(true);
 			textFieldTitre.setEnabled(true);
 			textFieldIsbn.setEnabled(true);
@@ -394,8 +395,6 @@ public class VueSaisieOuvrage extends Vue {
 			btnSC.setEnabled(false);
 			listSource.setEnabled(false);
 			listCible.setEnabled(false);
-			frame.setVisible(false);
-			this.getControleur().menuBiblio();
 			break;
 		}
 		}
