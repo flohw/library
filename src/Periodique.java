@@ -53,10 +53,7 @@ public class Periodique extends Observable implements Serializable {
 		_parutions = parutions;
 	}
 
-	public void notifierObservateurs() {
-		this.setChanged();
-		this.notifyObservers();	
-	}
+	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }
 
 	
 } // Fin ajouterParution

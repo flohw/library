@@ -81,8 +81,5 @@ public class Article extends Observable implements Serializable {
 		return auteur;
 	}
 
-	public void notifierObservateurs() {
-		this.setChanged();
-		this.notifyObservers();	
-	}
+	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }
 }

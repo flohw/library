@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JSeparator;
 import javax.swing.JList;
 import java.awt.Rectangle;
+import java.util.Observable;
 
 
 public class VueConsulterOuvrage extends Vue {
@@ -46,6 +47,7 @@ public class VueConsulterOuvrage extends Vue {
 	private DefaultListModel modeleMC = new DefaultListModel();
 	
 	private JSeparator separator;
+	Ouvrage _ouvrage;
 
 	public VueConsulterOuvrage(Controleur controleur) {
 		super(controleur);
@@ -154,7 +156,14 @@ public class VueConsulterOuvrage extends Vue {
 		content.add(separator);
 	}
 	
+	public Ouvrage getOuvrage() { return _ouvrage; }
+	public void setOuvrage(Ouvrage ouv) { _ouvrage = ouv; }
+	
 	public void alimente(Ouvrage ouv) {
+		modeleAuteurs.clear();
+		modeleMC.clear();
+		modeleExemplaires.clear();
+		
 		textFieldTitre.setText(ouv.getTitre());
 		for (Auteur aut : ouv.getAuteurs())
 			modeleAuteurs.addElement(aut.getAuteur());
@@ -173,5 +182,11 @@ public class VueConsulterOuvrage extends Vue {
 			Message dialog = new Message("Aucun exemplaire n'est encore disponible");
 			dialog.setVisible(true);
 		}
+	}
+	
+	public void update(Observable observable, Object objet) {
+		// maj de la vue lorque l'ouvrage a été modifié
+		this.alimente(this.getOuvrage());
+		super.update(observable,  objet);
 	}
 }

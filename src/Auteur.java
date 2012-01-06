@@ -47,7 +47,6 @@ public class Auteur extends Observable implements Serializable {
 	public Ouvrage getOuvrage(String isbn) { return getOuvrages().get(isbn); }
 	public Article getArticle(String titre) { return getArticles().get(titre); }
 	
-
 	public void ajouterOuvrage(String isbn, Ouvrage ouvrage) {
 		getOuvrages().put(isbn, ouvrage);
 		ouvrage.ajouterAuteur(this);
@@ -57,5 +56,6 @@ public class Auteur extends Observable implements Serializable {
 		getArticles().put(titre, article);
 	}
 
+	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }
 	
 } // Fin Classe Ouvrage

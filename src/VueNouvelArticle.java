@@ -65,7 +65,7 @@ public class VueNouvelArticle extends Vue {
 		btnEnregistrerArt.setBounds(461, 140, 108, 25);
 		btnEnregistrerArt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				_titre = textFieldId.getText();
+				_titre = textFieldTitre.getText();
 				_page = textFieldPage.getText();
 				try
 				{
@@ -214,13 +214,13 @@ public class VueNouvelArticle extends Vue {
 				// Action enregistrer auteur
 				String nom = textFieldNom.getText();
 				String prenom = textFieldPrenom.getText();
-				if (nom.length() != 0 && prenom.length() != 0)
-				{
+				if (nom.length() != 0 && prenom.length() != 0) {
 					Auteur auteur = new Auteur(nom, prenom);
-					getControleur().auteurExiste(auteur, _auteurs);
-				}
-				else
-				{
+					if (getControleur().auteurExiste(auteur, _auteurs)) {
+						textFieldNom.setText("");
+						textFieldPrenom.setText("");
+					}
+				} else {
 					Message dialog = new Message("Un des champs est vide");
 					dialog.setVisible(true);
 				}
@@ -260,7 +260,7 @@ public class VueNouvelArticle extends Vue {
 					msg.setVisible(true);
 				}
 				else
-					setPeriodique(getControleur().rechPeriodique(issn));
+					getControleur().rechPeriodique(issn);
 			}
 		});
 		
@@ -276,7 +276,7 @@ public class VueNouvelArticle extends Vue {
 					msg.setVisible(true);
 				}
 				else
-					setParution(getControleur().rechParution(getPeriodique(), Integer.decode(id)));
+					getControleur().rechParution(getPeriodique(), Integer.decode(id));
 			}
 		});
 		
@@ -353,8 +353,8 @@ public class VueNouvelArticle extends Vue {
 		content.setVisible(true);
 	}
 	
-	private void setPeriodique(Periodique pe) { _periodique = pe; }
-	private void setParution(Parution pa) { _parution = pa; }
+	public void setPeriodique(Periodique pe) { _periodique = pe; }
+	public void setParution(Parution pa) { _parution = pa; }
 	public Periodique getPeriodique() { return _periodique; }
 	public Parution getParution() { return _parution; }
 	

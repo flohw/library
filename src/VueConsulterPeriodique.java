@@ -8,6 +8,7 @@ import javax.swing.JSeparator;
 import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Observable;
 
 
 public class VueConsulterPeriodique extends Vue {
@@ -33,6 +34,8 @@ public class VueConsulterPeriodique extends Vue {
 	private JButton btnTerminer;
 	
 	private JSeparator separator;
+	
+	private Periodique _periodique;
 
 	public VueConsulterPeriodique(Controleur controleur) {
 		super(controleur);
@@ -122,6 +125,9 @@ public class VueConsulterPeriodique extends Vue {
 		content.add(separator);
 	}
 	
+	public void setPeriodique(Periodique pe) { _periodique = pe; }
+	public Periodique getPeriodique() { return _periodique; }
+	
 	public void alimente(Periodique per)
 	{
 		textFieldNom.setText(per.getNom());
@@ -134,5 +140,11 @@ public class VueConsulterPeriodique extends Vue {
 			Message dialog = new Message("Aucune parution pour ce périodique");
 			dialog.setVisible(true);
 		}
+	}
+	
+	public void update(Observable observable, Object objet) {
+		// maj de la vue lorque l'ouvrage a été modifié
+		this.alimente(this.getPeriodique());
+		super.update(observable,  objet);
 	}
 }

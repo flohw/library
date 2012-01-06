@@ -50,10 +50,7 @@ public class Parution extends Observable implements Serializable {
 	
 	public int getNbArticles() { return _articles.size(); }
 	
-	public void notifierObservateurs() {
-		this.setChanged();
-		this.notifyObservers();	
-	}
+	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }
 	
 	public String afficheInfos() {
 		return "Titre : " + getTitre() + ", " + getNbArticles() + " articles\n";

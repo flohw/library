@@ -72,7 +72,7 @@ public class VueSaisieExemplaire extends Vue {
 		buttonRech.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// liaison de la vue avec l'objet observé
-				setOuvrage (getControleur().rechOuvrage(textFieldIsbn.getText()));
+				getControleur().rechOuvrage(textFieldIsbn.getText());
 		}});
 		buttonRech.setBounds(357, 27, 107, 25);
 		contentPane.add(buttonRech);
@@ -192,5 +192,5 @@ public class VueSaisieExemplaire extends Vue {
 		// maj de la vue lorque l'ouvrage a été modifié
 		this.alimente(this.getOuvrage());
 		super.update(observable,  objet);
-	}	
+	}
 }

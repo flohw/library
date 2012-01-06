@@ -372,7 +372,7 @@ public class Controleur implements Serializable{
 			return ouv;
 		}
 		
-		public Ouvrage rechOuvrage(String isbn) {
+		public void rechOuvrage(String isbn) {
 			Ouvrage ouv = this.getOuvrage(isbn);
 			if (ouv == null) {
 				int option = JOptionPane.showConfirmDialog(null, "Ouvrage inconnu, voulez-vous le créer ?",
@@ -389,16 +389,19 @@ public class Controleur implements Serializable{
 			} else {
 				if (this.getVueSaisieExemplaire() != null) {
 					ouv.addObserver(this.getVueSaisieExemplaire());
+					this.getVueSaisieExemplaire().setOuvrage(ouv);
 					this.getVueSaisieExemplaire().setEtat(Vue.inter1);
-					this.getVueSaisieExemplaire().alimente(ouv);
+					ouv.notifierObservateurs();
 				}
-				if (this.getVueConsulterOuvrage() != null)
-					this.getVueConsulterOuvrage().alimente(ouv);
+				if (this.getVueConsulterOuvrage() != null) {
+					ouv.addObserver(this.getVueConsulterOuvrage());
+					this.getVueConsulterOuvrage().setOuvrage(ouv);
+					ouv.notifierObservateurs();
+				}
 			}
-			return ouv;
 		} // Fin rechOuvrage
 		
-		public void auteurExiste(Auteur aut, HashSet<Auteur> auteurs) {
+		public boolean auteurExiste(Auteur aut, HashSet<Auteur> auteurs) {
 			boolean exist = false;
 			for (Auteur a : auteurs) {
 				if (aut.getAuteur().equals(a.getAuteur()))
@@ -412,8 +415,12 @@ public class Controleur implements Serializable{
 				auteurs.add(aut);
 				Message dialog = new Message("Auteur enregistré");
 				dialog.setVisible(true);
-				getVueSaisieOuvrage().setEtat(Vue.inter2);
+				if (getVueSaisieOuvrage() != null)
+					getVueSaisieOuvrage().setEtat(Vue.inter2);
+				if (getVueNouvelArticle() != null)
+					getVueNouvelArticle().setEtat(Vue.finale);
 			}
+			return exist;
 		}
 		
 		public void nouvOuvrage(Ouvrage ouv, HashSet<Auteur> auteurs, HashSet<String> motsCles) {
@@ -482,7 +489,7 @@ public class Controleur implements Serializable{
 			}
 		}
 		
-		public Periodique rechPeriodique(String issn) {
+		public void rechPeriodique(String issn) {
 			Periodique per = this.getPeriodique(issn);
 			if (per == null)
 			{			
@@ -502,19 +509,26 @@ public class Controleur implements Serializable{
 			}
 			else
 			{
-				if (this.getVueConsulterPeriodique() != null)
-					this.getVueConsulterPeriodique().alimente(per);
+				if (this.getVueConsulterPeriodique() != null) {
+					per.addObserver(getVueConsulterPeriodique());
+					getVueConsulterPeriodique().setPeriodique(per);
+					per.notifierObservateurs();
+				}
 				if (this.getVueNouvelleParution() != null)
 				{
-					this.getVueNouvelleParution().alimente(per);
+					per.addObserver(getVueNouvelleParution());
+					getVueNouvelleParution().setPeriodique(per);
 					this.getVueNouvelleParution().setEtat(Vue.finale);
+					per.notifierObservateurs();
 				}
 				if (this.getVueNouvelArticle() != null)
 				{
-					if (per.getNbParutions() != 0)
+					if (per.getNbParutions() != 0) {
+						per.addObserver(getVueNouvelArticle());
+						getVueNouvelArticle().setPeriodique(per);
 						getVueNouvelArticle().setEtat(Vue.inter1);
-					else if (per.getNbParutions() == 0)
-					{			
+						per.notifierObservateurs();
+					} else if (per.getNbParutions() == 0) {			
 						int option = JOptionPane.showConfirmDialog(null, "Il n'y a pas de parutions, voulez-vous les créer ?",
 								"Erreur Parutions", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
@@ -524,11 +538,15 @@ public class Controleur implements Serializable{
 							saisirParution();
 						}
 						else
+						{
+							per.addObserver(getVueNouvelArticle());
+							getVueNouvelArticle().setPeriodique(per);
 							getVueNouvelArticle().setEtat(Vue.initiale);
+							per.notifierObservateurs();
+						}
 					}
 				}
 			}
-			return per;
 		}
 		
 		public void nouveauPeriodique (String issn, String nom, GregorianCalendar date) {
@@ -588,7 +606,7 @@ public class Controleur implements Serializable{
 			return article;
 		}
 		
-		public Parution rechParution(Periodique pe, Integer id)
+		public void rechParution(Periodique pe, Integer id)
 		{
 			Parution pa = pe.getParution(id);
 			if (pa == null)
@@ -604,8 +622,12 @@ public class Controleur implements Serializable{
 				}
 			}
 			else
+			{
+				pa.addObserver(getVueNouvelArticle());
+				getVueNouvelArticle().setParution(pa);
 				this.getVueNouvelArticle().setEtat(Vue.inter2);
-			return pa;
+				pa.notifierObservateurs();
+			}
 		}
 		
 		public void nouvArticle(String titre, Integer page, HashSet<Auteur> auteurs, HashSet<String> motsCles, Parution pa) {
@@ -630,13 +652,10 @@ public class Controleur implements Serializable{
 			int option = JOptionPane.showConfirmDialog(null, "L'article a bien été enregistré, voulez-vous en créer un nouveau ?",
 					"Nouvelle Parution", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-			if(option == JOptionPane.YES_OPTION)
-			{
+			if(option == JOptionPane.YES_OPTION) {
 				if (this.getVueNouvelArticle() != null)
 					getVueNouvelArticle().setEtat(Vue.initiale);
-			}
-			else
-			{
+			} else {
 				if (this.getVueNouvelArticle() != null)
 					fermerVue(getVueNouvelArticle());
 			}

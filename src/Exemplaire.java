@@ -30,14 +30,6 @@ public class Exemplaire extends Observable implements Serializable {
 	// ************************************************************************************************************
 	// Constructeur
 	// ************************************************************************************************************
-	/**
-	 * Constructeur. Crée un exemplaire d'ouvrage .
-	 * 
-	 * @param numero		numéro de l'exemplaire dans l'ouvrage.
-	 * @param dateReception	date de réception de cet exemplaire.
-	 * @param statut  		statut de l'exemplaire (en consultation, empruntable)
-	 * @param ouvrage		ouvrage dont cet exemplaire est un représentant.
-	 */
 	public Exemplaire(int numero, GregorianCalendar dateReception, int statut, Ouvrage ouvrage) {
 		this.setNumero(numero);
 		this.setDateReception(dateReception);
@@ -52,27 +44,9 @@ public class Exemplaire extends Observable implements Serializable {
 
 	// ------------------------------------------------------------------------------------------------------------
 	// Affecteurs
-	
-	/**
-	 * @param numero le numéro à affecter
-	 */
-	private void setNumero(int numero) {
-		_numero = numero;
-	}
-
-	/**
-	 * @param dateReception la date de réception àaffecter
-	 */
-	private void setDateReception(GregorianCalendar dateReception) {
-		_dateReception = dateReception;
-	}
-
-	/**
-	 * @param ouvrage l'ouvrage lié à l'exemplaire
-	 */
-	private void setOuvrage(Ouvrage ouvrage) {
-		_ouvrage = ouvrage;
-	} // Fin setOuvrage
+	private void setNumero(int numero) { _numero = numero; }
+	private void setDateReception(GregorianCalendar dateReception) { _dateReception = dateReception; }
+	private void setOuvrage(Ouvrage ouvrage) { _ouvrage = ouvrage; }
 
 	// ************************************************************************************************************
 	// Méthodes publiques
@@ -80,66 +54,26 @@ public class Exemplaire extends Observable implements Serializable {
 	
 	// ------------------------------------------------------------------------------------------------------------
 	// Accesseurs
-	
-	/**
-	 * @return l'ouvrage lié à l'exemplaire
-	 */
-	public Ouvrage getOuvrage() {
-		return _ouvrage;
-	}
-
-	/**
-	 * @return le numéro de l'exemplaire
-	 */
-	public int getNumero() {
-		return _numero;
-	}
-
-	/**
-	 * @return la date de réception de l'exemplaire
-	 */
-	public GregorianCalendar getDateReception() {
-		return _dateReception;
-	}
-
-	/**
-	 * @return le statut de l'exemplaire
-	 */
-	public int getStatut() {
-		return _statut;
-	}
+	public Ouvrage getOuvrage() { return _ouvrage; }
+	public int getNumero() { return _numero; }
+	public GregorianCalendar getDateReception() { return _dateReception; }
+	public int getStatut() { return _statut; }
 
 	// ------------------------------------------------------------------------------------------------------------
 	// Affecteurs
-	
-	/**
-	 * @param statut le statut à affecter
-	 */
-	public void setStatut(int statut) {
-		_statut = statut;
-	}
+	public void setStatut(int statut) { _statut = statut; }
 
 
 	// ------------------------------------------------------------------------------------------------------------
 	// Prédicats d'Etat
-
-	/**
-	 * @return vrai si l'exemplaire est empruntable
-	 */
 	public boolean estEmpruntable() {
 		return (this.getStatut() == Exemplaire.EMPRUNTABLE);
 	}
 
-	/**
-	 * @return vrai si l'exemplaire est NON disponible
-	 */
 	public boolean estNonDisponible() {
 		return (this.getStatut() == Exemplaire.NON_DISPONIBLE);
 	}
 
-	/**
-	 * @return vrai si l'exemplaire est en consultation
-	 */
 	public boolean estEnConsultation() {
 		return (this.getStatut() == Exemplaire.EN_CONSULTATION);
 	}
@@ -147,9 +81,6 @@ public class Exemplaire extends Observable implements Serializable {
 	// ------------------------------------------------------------------------------------------------------------
 	// Pour les affichages
 	
-	/**
-	 * @return le libellé correspondant au statut courant de l'exemplaire
-	 */
 	public String libStatut() {
 		if (this.getStatut() == Exemplaire.NON_DISPONIBLE) {
 			return "non disponible";
@@ -165,5 +96,7 @@ public class Exemplaire extends Observable implements Serializable {
 	public String afficheInfos() {
 		return "Exemplaire numéro " + getNumero() + " reçu le " + ESDate.ecrireDate(getDateReception()) + " : " + libStatut() + "\n";
 	}
+	
+	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }
 
 } // Fin Classe Exemplaire

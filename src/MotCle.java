@@ -46,10 +46,7 @@ public class MotCle extends Observable implements Serializable {
 		return article;
 	}
 	
-	public void notifierObservateurs() {
-		this.setChanged();
-		this.notifyObservers();	
-	}
+	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }
 
 	public void ajouterOuvrage(String isbn, Ouvrage ouvrage) {
 		setOuvrage(isbn, ouvrage);

@@ -6,6 +6,7 @@ import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.util.Observable;
 
 
 public class VueNouvelleParution extends Vue {
@@ -50,7 +51,7 @@ public class VueNouvelleParution extends Vue {
 					dialog.setVisible(true);
 				}
 				else
-					setPeriodique(getControleur().rechPeriodique(textFieldIssn.getText()));
+					getControleur().rechPeriodique(textFieldIssn.getText());
 			}
 		});
 		
@@ -147,13 +148,19 @@ public class VueNouvelleParution extends Vue {
 		content.add(lblISSN);
 	}
 	
-	private void setPeriodique(Periodique pe) { _periodique = pe; }
+	public void setPeriodique(Periodique pe) { _periodique = pe; }
 	public Periodique getPeriodique() { return _periodique; }
 	
 	public void alimente (Periodique pe)
 	{
 		textFieldPerio.setText(pe.getNom());
 		textFieldDate.setText(ESDate.ecrireDate(pe.getDate()));
+	}
+	
+	public void update(Observable observable, Object objet) {
+		// maj de la vue lorque l'ouvrage a été modifié
+		this.alimente(this.getPeriodique());
+		super.update(observable,  objet);
 	}
 	
 	public void setEtat(int etat) {
