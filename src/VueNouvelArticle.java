@@ -217,12 +217,7 @@ public class VueNouvelArticle extends Vue {
 				if (nom.length() != 0 && prenom.length() != 0)
 				{
 					Auteur auteur = new Auteur(nom, prenom);
-					_auteurs.add(auteur);
-					Message dialog = new Message("Auteur enregistré");
-					dialog.setVisible(true);
-					textFieldNom.setText("");
-					textFieldPrenom.setText("");
-					setEtat(Vue.finale);
+					getControleur().auteurExiste(auteur, _auteurs);
 				}
 				else
 				{

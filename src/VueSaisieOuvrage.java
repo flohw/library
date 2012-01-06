@@ -162,12 +162,7 @@ public class VueSaisieOuvrage extends Vue {
 				if (nom.length() != 0 && prenom.length() != 0)
 				{
 					Auteur auteur = new Auteur(nom, prenom);
-					_auteurs.add(auteur);
-					Message dialog = new Message("Auteur enregistré");
-					dialog.setVisible(true);
-					setEtat(Vue.inter2);
-					textFieldNom.setText("");
-					textFieldPrenom.setText("");
+					getControleur().auteurExiste(auteur, _auteurs);
 				}
 				else
 				{
@@ -371,7 +366,9 @@ public class VueSaisieOuvrage extends Vue {
 			}
 			break;
 			}
-		case inter2: {			
+		case inter2: {
+			textFieldNom.setText("");
+			textFieldPrenom.setText("");
 			lblMotsclefs.setEnabled(true);
 			btnTerminer.setEnabled(true);
 			if (!modeleCible.isEmpty())

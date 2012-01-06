@@ -398,6 +398,24 @@ public class Controleur implements Serializable{
 			return ouv;
 		} // Fin rechOuvrage
 		
+		public void auteurExiste(Auteur aut, HashSet<Auteur> auteurs) {
+			boolean exist = false;
+			for (Auteur a : auteurs) {
+				if (aut.getAuteur().equals(a.getAuteur()))
+					exist = true;
+			}
+			
+			if (exist) {
+				Message dialog = new Message("Cet auteur a déjà été enregistré");
+				dialog.setVisible(true);
+			} else {
+				auteurs.add(aut);
+				Message dialog = new Message("Auteur enregistré");
+				dialog.setVisible(true);
+				getVueSaisieOuvrage().setEtat(Vue.inter2);
+			}
+		}
+		
 		public void nouvOuvrage(Ouvrage ouv, HashSet<Auteur> auteurs, HashSet<String> motsCles) {
 			// vérification de la présence des infos obligatoires et du format de la date
 			// Instanciation de l'ouvrage
