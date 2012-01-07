@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 public class Controleur implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
+	final static int information = 0, attention = 1, erreur = 2;
 
 	/**
 	 * La classe Controleur est unique pour tous les cas d'utilisation
@@ -222,8 +223,7 @@ public class Controleur implements Serializable{
 			try {
 				if (this.getMotsCles().isEmpty()) {
 					menuBiblio();
-					Message m = new Message("Aucun mot clé associé à un ouvrage ou à un article");
-					m.setVisible(true);
+					new Message("Aucun mot clé associé à un ouvrage ou à un article", Controleur.erreur);
 				} else {
 					this.setVueRechMotCle(new VueRechMotCle(this)); 
 					this.getVueRechMotCle().setEtat(Vue.initiale);
@@ -238,8 +238,7 @@ public class Controleur implements Serializable{
 			try {
 				if (this.getAuteurs().isEmpty()) {
 					menuBiblio();
-					Message msg = new Message("Aucun auteur n'est enregistré, créez des ouvrages ou des articles");
-					msg.setVisible(true);
+					new Message("Aucun auteur n'est enregistré, créez des ouvrages ou des articles", Controleur.erreur);
 				} else {
 					this.setVueRechAuteur(new VueRechAuteur(this));
 					this.getVueRechAuteur().setEtat(Vue.initiale);
@@ -387,8 +386,7 @@ public class Controleur implements Serializable{
 				return((Controleur) in.readObject());
 			} catch (Exception e) {
 				System.out.print(e.getMessage());
-				Message dialog = new Message("Pbs de Restauration ou fichier non encore créé");
-				dialog.setVisible(true);
+				new Message("Pbs de Restauration ou fichier non encore créé", Controleur.erreur);
 				return this;
 			} 
 		}
@@ -399,8 +397,7 @@ public class Controleur implements Serializable{
 				out.writeObject(this);
 			} catch (Exception e) {
 				System.out.print(e.getMessage());
-				Message dialog = new Message("Pb de Sauvegarde dans le fichier");
-				dialog.setVisible(true);
+				new Message("Pb de Sauvegarde dans le fichier", Controleur.erreur);
 			}
 		}
 		////////////////////////////////////////////////////////////////////////////
@@ -468,11 +465,9 @@ public class Controleur implements Serializable{
 			}
 			
 			if (exist) {
-				Message dialog = new Message("Cet auteur a déjà été enregistré");
-				dialog.setVisible(true);
+				new Message("Cet auteur a déjà été enregistré", Controleur.attention);
 			} else {
-				Message dialog = new Message("Auteur enregistré");
-				dialog.setVisible(true);
+				new Message("Auteur enregistré", Controleur.information);
 				auteurs.add(aut);
 				if (getVueSaisieOuvrage() != null)
 					getVueSaisieOuvrage().setEtat(Vue.inter2);
@@ -518,16 +513,12 @@ public class Controleur implements Serializable{
 		
 		public void nouvExemplaire(Ouvrage ouv, String dateReception, String statut) {
 			// vérification de la présence de la date et de son format
-			if (dateReception.length() == 0 ){
-					Message dialog = new Message("La date de réception est obligatoire");
-					dialog.setVisible(true);
-					}
+			if (dateReception.length() == 0 )
+					new Message("La date de réception est obligatoire", Controleur.erreur);
 			else {
 				GregorianCalendar date = ESDate.lireDate (dateReception);
-				if (date == null) {
-					Message dialog = new Message("Le format de la date est incorrect");
-					dialog.setVisible(true);
-					}
+				if (date == null)
+					new Message("Le format de la date est incorrect", Controleur.erreur);
 				else {
 					int statutEx;
 					if (statut == "empruntable")
@@ -538,12 +529,9 @@ public class Controleur implements Serializable{
 					Exemplaire exemplaire = ouv.ajouterExemplaire(date, statutEx);
 					if (exemplaire != null) {
 						this.getVueSaisieExemplaire().setEtat(Vue.finale);
-						Message dialog = new Message("Exemplaire enregistré");
-						dialog.setVisible(true);
-					} else {
-						Message dialog = new Message("Date de Reception incorrecte / à la date d'Edition.");
-						dialog.setVisible(true);
-					}
+						new Message("Exemplaire enregistré", Controleur.information);
+					} else
+						new Message("Date de Reception incorrecte / à la date d'Edition.", Controleur.erreur);
 				}
 			}
 		}
@@ -609,22 +597,16 @@ public class Controleur implements Serializable{
 					fermerVue(getVueNouveauPeriodique());
 					menuBiblio();
 				}
-			} else {
-				Message dialogue = new Message("Le périodique existe déjà");
-				dialogue.setVisible(true);
-			}
+			} else
+				new Message("Le périodique existe déjà", Controleur.information);
 		}
 		
 		
 		public void nouvelleParution(Periodique pe, Integer id, String titre) {
 			Parution pa = getPeriodique(pe.getIssn()).getParution(id);
 			if (pa != null)
-			{
-				Message dialog = new Message("La parution existe deja pour le périodique");
-				dialog.setVisible(true);
-			}
-			else
-			{
+				new Message("La parution existe deja pour le périodique", Controleur.attention);
+			else {
 				pe.setParution(id, new Parution(id, titre));			
 				int option = JOptionPane.showConfirmDialog(null, "La parution a été enregistrée pour " + pe.getNom() +"" +
 						", voulez-vous en créer une autre ?",
@@ -642,10 +624,7 @@ public class Controleur implements Serializable{
 		public Article rechArticle(Parution pa, String titre) {
 			Article article = pa.getArticle(titre);
 			if (article != null)
-			{
-				Message dg = new Message("Ce titre existe déjà pour cette parution");
-				dg.setVisible(true);
-			}
+				new Message("Ce titre existe déjà pour cette parution", Controleur.attention);
 			else
 				getVueNouvelArticle().setEtat(Vue.inter3);
 			return article;
