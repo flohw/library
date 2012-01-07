@@ -58,10 +58,9 @@ public class VueConsulterPeriodique extends Vue {
 		btnRechercher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int issn = listIssn.getSelectedIndex();
-				if (issn == -1) {
-					Message dialog = new Message("Vous devez sélectionner un périodique");
-					dialog.setVisible(true);
-				} else
+				if (issn == -1)
+					new Message("Vous devez sélectionner un périodique", Controleur.information);
+				else
 					getControleur().rechPeriodique(modeleIssn.get(issn).toString());
 			}
 		});

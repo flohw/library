@@ -42,10 +42,9 @@ public class VueRechAuteur extends Vue {
 		btnRechercher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int index = listAuteurs.getSelectedIndex();
-				if (index == -1) {
-					Message msg = new Message("Vous devez sélectionner un auteur");
-					msg.setVisible(true);
-				} else {
+				if (index == -1)
+					new Message("Vous devez sélectionner un auteur", Controleur.attention);
+				else {
 					getControleur().fermerVue(VueRechAuteur.this);
 					getControleur().affRechAuteur(modeleAuteurs.get(index).toString());
 				}

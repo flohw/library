@@ -73,10 +73,9 @@ public class VueConsulterOuvrage extends Vue {
 			public void actionPerformed(ActionEvent e) {
 				// Actions recherche ouvrage
 				int index = listIsbn.getSelectedIndex();
-				if (index == -1) {
-					Message dialog = new Message("Sélectionnez un ouvrage");
-					dialog.setVisible(true);
-				} else
+				if (index == -1)
+					new Message("Vous devez sélectionnez un ouvrage", Controleur.information);
+				else
 					getControleur().rechOuvrage(modeleIsbn.get(index).toString());
 			}
 		});

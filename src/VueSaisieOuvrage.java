@@ -106,13 +106,10 @@ public class VueSaisieOuvrage extends Vue {
 				String _titre = textFieldTitre.getText();
 				String _editeur = textFieldEditeur.getText();
 				GregorianCalendar _dateEd = ESDate.lireDate (textFieldDateEd.getText());
-				if ((_isbn.length() == 0) || (_titre.length() == 0) || (_editeur.length() == 0)) {
-					Message dialog = new Message("Un des champs est vide");
-					dialog.setVisible(true);
-				} else if (_dateEd == null) {
-					Message dialog = new Message("La date est incorrecte");
-					dialog.setVisible(true);
-				}
+				if ((_isbn.length() == 0) || (_titre.length() == 0) || (_editeur.length() == 0))
+					new Message("Un des champs est vide", Controleur.attention);
+				else if (_dateEd == null)
+					new Message("La date est incorrecte", Controleur.erreur);
 				else
 					setOuvrage(getControleur().rechOuvrage(_isbn, _titre, _editeur, _dateEd));
 			}
@@ -159,10 +156,8 @@ public class VueSaisieOuvrage extends Vue {
 				if (nom.length() != 0 && prenom.length() != 0) {
 					Auteur auteur = new Auteur(nom, prenom);
 					getControleur().auteurExiste(auteur, _auteurs);
-				} else {
-					Message dialog = new Message("Un des champs est vide");
-					dialog.setVisible(true);
-				}
+				} else
+					new Message("Un des champs est vide", Controleur.attention);
 			}
 		});
 		btnNouvelAuteur.setEnabled(false);
@@ -252,10 +247,8 @@ public class VueSaisieOuvrage extends Vue {
 				for (int index = 0; index < modeleCible.size(); index++)
 					_motsCles.add(modeleCible.get(index).toString());
 				
-				if (modeleSource.isEmpty()) {
-					Message dialog = new Message("Ajoutez au moins un mot clé");
-					dialog.setVisible(true);
-				}
+				if (modeleSource.isEmpty())
+					new Message("Ajoutez au moins un mot clé", Controleur.attention);
 				else
 					getControleur().nouvOuvrage(getOuvrage(), _auteurs, _motsCles);
 			}

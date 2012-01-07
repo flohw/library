@@ -57,13 +57,11 @@ public class VueNouveauPeriodique extends Vue {
 				String nom = textFieldNom.getText();
 				String date = textFieldDate.getText();
 				GregorianCalendar dateCal = ESDate.lireDate(date);
-				if (issn.length() == 0 || nom.length() == 0 || date.length() == 0) {
-					Message dialog = new Message("Vous devez remplir tous les champs");
-					dialog.setVisible(true);
-				} else if (dateCal == null) {
-					Message m = new Message("La date est incorrecte");
-					m.setVisible(true);
-				} else
+				if (issn.length() == 0 || nom.length() == 0 || date.length() == 0)
+					new Message("Vous devez remplir tous les champs", Controleur.attention);
+				else if (dateCal == null)
+					new Message("La date est incorrecte", Controleur.erreur);
+				else
 					getControleur().nouveauPeriodique(issn, nom, ESDate.lireDate(date));
 			}
 		});

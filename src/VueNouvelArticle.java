@@ -85,15 +85,11 @@ public class VueNouvelArticle extends Vue {
 				{
 					Integer.decode(_page);
 					if (_titre.length() == 0 || _page.length() == 0)
-					{
-						Message msg = new Message("Vous devez renseinger tous les champs");
-						msg.setVisible(true);
-					}
+						new Message("Vous devez renseinger tous les champs", Controleur.attention);
 					else
 						getControleur().rechArticle(getParution(), _titre);
 				} catch (NumberFormatException ex) {
-					Message msg = new Message("La page n'est pas un chiffre");
-					msg.setVisible(true);
+					new Message("La page n'est pas un chiffre", Controleur.erreur);
 				}
 			}
 		});
@@ -236,10 +232,8 @@ public class VueNouvelArticle extends Vue {
 						textFieldNom.setText("");
 						textFieldPrenom.setText("");
 					}
-				} else {
-					Message dialog = new Message("Un des champs est vide");
-					dialog.setVisible(true);
-				}
+				} else
+					new Message("Un des champs est vide", Controleur.attention);
 			}
 		});
 		
@@ -263,12 +257,10 @@ public class VueNouvelArticle extends Vue {
 		btnRechPe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = listIssn.getSelectedIndex();
-				if (index == -1) {
-					Message msg = new Message("Sélectionnez un periodique");
-					msg.setVisible(true);
-				} else {
+				if (index == -1)
+					new Message("Vous devez sélectionnez un periodique", Controleur.information);
+				else
 					getControleur().rechPeriodique(modeleIssn.get(index).toString());
-				}
 			}
 		});
 		
@@ -278,10 +270,9 @@ public class VueNouvelArticle extends Vue {
 		btnRechPa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = listIdent.getSelectedIndex();
-				if (index == -1) {
-					Message msg = new Message("Sélectionnez une parution");
-					msg.setVisible(true);
-				} else
+				if (index == -1)
+					new Message("Vous devez sélectionnez une parution", Controleur.information);
+				else
 					getControleur().rechParution(getPeriodique(), modeleIdent.get(index).toString());
 			}
 		});
@@ -294,10 +285,7 @@ public class VueNouvelArticle extends Vue {
 				for (int index = 0; index < modeleCible.size(); index++)
 					_motsCles.add(modeleCible.get(index).toString());
 				if (modeleCible.isEmpty())
-				{
-					Message dg = new Message("Vous devez entrer au moins un mot clé");
-					dg.setVisible(true);
-				}
+					new Message("Vous devez entrer au moins un mot clé", Controleur.information);
 				else
 					getControleur().nouvArticle(_titre, Integer.decode(_page), _auteurs, _motsCles, getParution());
 			}

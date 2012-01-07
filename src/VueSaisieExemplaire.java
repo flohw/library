@@ -78,10 +78,9 @@ public class VueSaisieExemplaire extends Vue {
 			public void actionPerformed(ActionEvent e) {
 				// liaison de la vue avec l'objet observé
 				int index = listIsbn.getSelectedIndex();
-				if (index == -1) {
-					Message dg = new Message("Sélectionnez un ouvrage");
-					dg.setVisible(true);
-				} else
+				if (index == -1)
+					new Message("Vous devez sélectionner un ouvrage", Controleur.information);
+				else
 					getControleur().rechOuvrage(modeleIsbn.get(index).toString());
 		}});
 		contentPane.add(buttonRech);
