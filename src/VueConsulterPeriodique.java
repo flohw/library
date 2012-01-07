@@ -52,9 +52,8 @@ public class VueConsulterPeriodique extends Vue {
 		for (String issn : getControleur().getPeriodiques().keySet())
 			modeleIssn.addElement(getControleur().getPeriodique(issn).afficheInfos());
 		
-		textPeriodiques = new JTextArea();
-		textPeriodiques.setEditable(false);
-		scrollIssn = new JScrollPane(textPeriodiques);
+		listIssn = new JList(modeleIssn);
+		scrollIssn = new JScrollPane(listIssn);
 		scrollIssn.setBounds(219, 23, 291, 104);
 		
 		btnRechercher = new JButton("Rechercher");
@@ -69,9 +68,6 @@ public class VueConsulterPeriodique extends Vue {
 					getControleur().rechPeriodique(modeleIssn.get(issn).toString());
 			}
 		});
-		
-		separator = new JSeparator();
-		separator.setBounds(397, 184, 0, 12);
 		
 		lblParutions = new JLabel("Parutions");
 		lblParutions.setFont(new Font("Lucida Grande", Font.BOLD | Font.ITALIC, 13));
@@ -93,7 +89,12 @@ public class VueConsulterPeriodique extends Vue {
 		textFieldDate.setBounds(219, 211, 291, 28);
 		textFieldDate.setEditable(false);
 		textFieldDate.setColumns(10);
-		scrollPane = new JScrollPane();
+		
+		
+		textPeriodiques = new JTextArea();
+		textPeriodiques.setEditable(false);
+		
+		scrollPane = new JScrollPane(textPeriodiques);
 		scrollPane.setBounds(33, 279, 487, 132);
 		
 		btnTerminer = new JButton("Terminer");
@@ -105,7 +106,6 @@ public class VueConsulterPeriodique extends Vue {
 			}
 		});
 		content.setLayout(null);
-		
 		content.add(scrollPane);
 		content.add(lblIssn);
 		content.add(lblNomDuPriodique);
@@ -115,7 +115,6 @@ public class VueConsulterPeriodique extends Vue {
 		content.add(textFieldDate);
 		content.add(btnRechercher);
 		content.add(btnTerminer);
-		content.add(separator);
 		content.add(scrollIssn);
 				
 		getFrame().setVisible(true);
