@@ -4,13 +4,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JList;
-import javax.swing.ListModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
+import java.util.Observable;
 import java.awt.Font;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 
 public class VueNouvelArticle extends Vue {
@@ -57,7 +58,10 @@ public class VueNouvelArticle extends Vue {
 		lblIssn.setBounds(22, 12, 98, 16);
 		
 		listIssn = new JList(modeleIssn);
+		listIssn.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listIdent = new JList(modeleIdent);
+		for (String issn : getControleur().getPeriodiques().keySet())
+			modeleIssn.addElement(getControleur().getPeriodique(issn).afficheInfos());
 		
 		scrollIdent = new JScrollPane(listIdent);
 		scrollIdent.setBounds(249, 136, 312, 109);
@@ -258,14 +262,13 @@ public class VueNouvelArticle extends Vue {
 		btnRechPe.setBounds(22, 56, 113, 29);
 		btnRechPe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String issn = textFieldIssn.getText();
-				if (issn.length() == 0)
-				{
-					Message msg = new Message("Vous devez remplir le champ ISSN");
+				int index = listIssn.getSelectedIndex();
+				if (index == -1) {
+					Message msg = new Message("Sélectionnez un periodique");
 					msg.setVisible(true);
+				} else {
+					getControleur().rechPeriodique(modeleIssn.get(index).toString());
 				}
-				else
-					getControleur().rechPeriodique(issn);
 			}
 		});
 		
@@ -274,14 +277,12 @@ public class VueNouvelArticle extends Vue {
 		btnRechPa.setBounds(22, 155, 113, 29);
 		btnRechPa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String id = textFieldId.getText();
-				if (id.length() == 0)
-				{
-					Message msg = new Message("Vous devez remplir le champ de la parution");
+				int index = listIdent.getSelectedIndex();
+				if (index == -1) {
+					Message msg = new Message("Sélectionnez une parution");
 					msg.setVisible(true);
-				}
-				else
-					getControleur().rechParution(getPeriodique(), Integer.decode(id));
+				} else
+					getControleur().rechParution(getPeriodique(), modeleIdent.get(index).toString());
 			}
 		});
 		
@@ -359,17 +360,18 @@ public class VueNouvelArticle extends Vue {
 		case initiale:
 			initSources();
 			lblIssn.setEnabled(true);
-			textFieldIssn.setEnabled(true);
+			listIssn.setEnabled(true);
 			btnRechPe.setEnabled(true);
 			btnAnnulerPa.setEnabled(false);
 			lblId.setEnabled(false);
-			textFieldId.setEnabled(false);
+			listIdent.setEnabled(false);
 			btnRechPa.setEnabled(false);
 			btnAnnulerPa.setEnabled(false);
 			labelMC.setEnabled(false);
 			listSource.setEnabled(false);
 			listCible.setEnabled(false);
 			buttonSC.setEnabled(false);
+			buttonCS.setEnabled(false);
 			btnTerminer.setEnabled(false);
 			lblNouvelAuteurs.setEnabled(false);
 			labelInfo.setEnabled(false);
@@ -384,10 +386,10 @@ public class VueNouvelArticle extends Vue {
 		case inter1:
 			// selection periodique -> selection parution
 			lblIssn.setEnabled(false);
-			textFieldIssn.setEnabled(false);
+			listIssn.setEnabled(false);
 			btnRechPe.setEnabled(false);
 			lblId.setEnabled(true);
-			textFieldId.setEnabled(true);
+			listIdent.setEnabled(true);
 			btnRechPa.setEnabled(true);
 			btnAnnulerPa.setEnabled(true);
 			
@@ -403,7 +405,7 @@ public class VueNouvelArticle extends Vue {
 		case inter2:
 			// selection parution -> ajout article
 			lblId.setEnabled(false);
-			textFieldId.setEnabled(false);
+			listIdent.setEnabled(false);
 			btnRechPa.setEnabled(false);
 			btnAnnulerPa.setEnabled(false);
 			lblNouvelArticle.setEnabled(true);
@@ -466,8 +468,19 @@ public class VueNouvelArticle extends Vue {
 	private void initSources() {
 		modeleCible.clear();
 		modeleSource.clear();
+		modeleIdent.clear();
+		textFieldTitre.setText("");
+		textFieldPage.setText("");
 		_auteurs = new HashSet<Auteur>();
 		for(String item : getControleur().lectureLignesFichier())
 			modeleSource.addElement(item);
+	}
+	
+	public void update(Observable observable, Object objet) {
+		// maj de la vue lorque l'ouvrage a été modifié
+		modeleIdent.clear();
+		for (Integer id : getPeriodique().getParutions().keySet())
+			modeleIdent.addElement(getPeriodique().getParution(id).afficheParution());
+		super.update(observable,  objet);
 	}
 }

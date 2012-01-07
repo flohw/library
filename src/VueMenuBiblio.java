@@ -20,10 +20,10 @@ public class VueMenuBiblio  extends Vue{
     
     private void initialize() {
     	getFrame().setTitle("Gestion de bibliothèque");
-        getFrame().setBounds(100, 100, 550, 251);
+        getFrame().setBounds(100, 100, 550, 250);
         
         JMenuBar menuBar = new JMenuBar();
-        menuBar.setBounds(45, 25, 400, 20);
+        menuBar.setBounds(0, 0, 550, 20);
         getFrame().getContentPane().add(menuBar);
        
         JMenu mnApplication = new JMenu("Application");

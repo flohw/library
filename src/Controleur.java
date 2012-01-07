@@ -302,7 +302,7 @@ public class Controleur implements Serializable{
 		//NOUVELLE PARUTION
 		public void saisirParution() {
 			try {
-				if (this.getOuvrages().isEmpty()) {
+				if (this.getPeriodiques().isEmpty()) {
 					int option = JOptionPane.showConfirmDialog(null, "Aucun périodique enregistré, voulez-vous en créer ?",
 							"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 					
@@ -338,8 +338,6 @@ public class Controleur implements Serializable{
 			try {
 				this.setVueAfficheMC(new VueAfficheMC(this));
 				MotCle mc = getMotCle(motCle);
-				Message m = new Message(mc.getMotcle());
-				m.setVisible(true);
 				mc.addObserver(getVueAfficheMC());
 				getVueAfficheMC().setMotCle(mc);
 				this.getVueAfficheMC().setEtat(Vue.initiale);
@@ -553,61 +551,45 @@ public class Controleur implements Serializable{
 		public void rechPeriodique(String issn) {
 			issn = this.getIdentifiant(issn);
 			Periodique per = this.getPeriodique(issn);
-			if (per == null) {
-				int option = JOptionPane.showConfirmDialog(null, "Periodique inconnu, voulez-vous le créer ?",
-						"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-				if(option == JOptionPane.YES_OPTION ) {
-					if (this.getVueNouvelArticle() != null)
-						fermerVue(getVueNouvelArticle());
-					if (this.getVueNouvelleParution() != null)
-						fermerVue(getVueNouvelleParution());
-					saisiePeriodique();
-				}
-			} else {
-				if (this.getVueConsulterPeriodique() != null) {
-					if (per.getNbParutions() == 0) {
-						per.addObserver(getVueConsulterPeriodique());
-						getVueConsulterPeriodique().setPeriodique(per);
-						per.notifierObservateurs();
-						int option = JOptionPane.showConfirmDialog(null, "Aucune parution pour ce périodique, voulez-vous en créer ?",
-								"Aucune Parution", JOptionPane.YES_NO_OPTION    , JOptionPane.QUESTION_MESSAGE); 
-						if(option == JOptionPane.YES_OPTION ) {
-							fermerVue(getVueConsulterPeriodique());
-							saisirParution();
-						}
+			if (this.getVueConsulterPeriodique() != null) {
+				per.addObserver(getVueConsulterPeriodique());
+				getVueConsulterPeriodique().setPeriodique(per);
+				per.notifierObservateurs();
+				if (per.getNbParutions() == 0) {
+					int option = JOptionPane.showConfirmDialog(null, "Aucune parution pour ce périodique, voulez-vous en créer ?",
+							"Aucune Parution", JOptionPane.YES_NO_OPTION    , JOptionPane.QUESTION_MESSAGE); 
+					if(option == JOptionPane.YES_OPTION ) {
+						fermerVue(getVueConsulterPeriodique());
+						saisirParution();
 					}
 				}
-				if (this.getVueNouvelleParution() != null)
-				{
-					per.addObserver(getVueNouvelleParution());
-					getVueNouvelleParution().setPeriodique(per);
-					this.getVueNouvelleParution().setEtat(Vue.finale);
+			}
+			
+			if (this.getVueNouvelleParution() != null) {
+				per.addObserver(getVueNouvelleParution());
+				getVueNouvelleParution().setPeriodique(per);
+				this.getVueNouvelleParution().setEtat(Vue.finale);
+				per.notifierObservateurs();
+			}
+			
+			if (this.getVueNouvelArticle() != null) {
+				if (per.getNbParutions() != 0) {
+					per.addObserver(getVueNouvelArticle());
+					getVueNouvelArticle().setPeriodique(per);
+					getVueNouvelArticle().setEtat(Vue.inter1);
 					per.notifierObservateurs();
-				}
-				if (this.getVueNouvelArticle() != null)
-				{
-					if (per.getNbParutions() != 0) {
+				} else if (per.getNbParutions() == 0) {			
+					int option = JOptionPane.showConfirmDialog(null, "Il n'y a pas de parutions, voulez-vous les créer ?",
+							"Erreur Parutions", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+					if(option == JOptionPane.YES_OPTION ) {
+						fermerVue(getVueNouvelArticle());
+						saisirParution();
+					} else {
 						per.addObserver(getVueNouvelArticle());
 						getVueNouvelArticle().setPeriodique(per);
-						getVueNouvelArticle().setEtat(Vue.inter1);
+						getVueNouvelArticle().setEtat(Vue.initiale);
 						per.notifierObservateurs();
-					} else if (per.getNbParutions() == 0) {			
-						int option = JOptionPane.showConfirmDialog(null, "Il n'y a pas de parutions, voulez-vous les créer ?",
-								"Erreur Parutions", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-						if(option == JOptionPane.YES_OPTION )
-						{
-							fermerVue(getVueNouvelArticle());
-							saisirParution();
-						}
-						else
-						{
-							per.addObserver(getVueNouvelArticle());
-							getVueNouvelArticle().setPeriodique(per);
-							getVueNouvelArticle().setEtat(Vue.initiale);
-							per.notifierObservateurs();
-						}
 					}
 				}
 			}
@@ -669,11 +651,11 @@ public class Controleur implements Serializable{
 			return article;
 		}
 		
-		public void rechParution(Periodique pe, Integer id)
+		public void rechParution(Periodique pe, String id)
 		{
-			Parution pa = pe.getParution(id);
-			if (pa == null)
-			{		
+			id = this.getIdentifiant(id); 
+			Parution pa = pe.getParution(Integer.decode(id));
+			if (pa == null) {
 				int option = JOptionPane.showConfirmDialog(null, "La parution n'existe pas, voulez-vous la créer ?",
 						"Nouvelle Parution", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
@@ -683,9 +665,7 @@ public class Controleur implements Serializable{
 						fermerVue(getVueNouvelArticle());
 					saisirParution();
 				}
-			}
-			else
-			{
+			} else {
 				pa.addObserver(getVueNouvelArticle());
 				getVueNouvelArticle().setParution(pa);
 				this.getVueNouvelArticle().setEtat(Vue.inter2);

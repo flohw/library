@@ -53,7 +53,14 @@ public class Parution extends Observable implements Serializable {
 	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }
 	
 	public String afficheInfos() {
-		return "Titre : " + getTitre() + ", " + getNbArticles() + " articles\n";
+		String r = getTitre() + "\n\t" + getNbArticles() + " articles :\n";
+		for (String id : getArticles().keySet())
+			r += "\t\t" + getArticle(id).getTitre() + ", page " + getArticle(id).getPage() + "\n";
+		return r;
+	}
+	
+	public String afficheParution() {
+		return this.getId() + " - " + getTitre();
 	}
 	
 }

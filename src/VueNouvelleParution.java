@@ -42,6 +42,9 @@ public class VueNouvelleParution extends Vue {
 		JLabel lblISSN = new JLabel("ISSN");
 		lblISSN.setBounds(20, 19, 28, 16);
 		
+		for (String issn : getControleur().getPeriodiques().keySet())
+			modeleIssn.addElement(getControleur().getPeriodique(issn).afficheInfos());
+		
 		listIssn = new JList(modeleIssn);
 		scrollIssn = new JScrollPane(listIssn);
 		scrollIssn.setBounds(178, 22, 281, 97);
@@ -53,14 +56,12 @@ public class VueNouvelleParution extends Vue {
 		btnRechercher.setBounds(20, 80, 113, 29);
 		btnRechercher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String issn = textFieldIssn.getText();
-				if (issn.length() == 0)
-				{
+				int index = listIssn.getSelectedIndex();
+				if (index == -1) {
 					Message dialog = new Message("Vous devez remplir tous les champs");
 					dialog.setVisible(true);
-				}
-				else
-					getControleur().rechPeriodique(textFieldIssn.getText());
+				} else
+					getControleur().rechPeriodique(modeleIssn.get(index).toString());
 			}
 		});
 		
@@ -127,6 +128,11 @@ public class VueNouvelleParution extends Vue {
 		textFieldPerio.setColumns(10);
 		textFieldPerio.setBounds(180, 179, 279, 28);
 		
+		JLabel lblParution = new JLabel("Parution");
+		lblParution.setHorizontalAlignment(SwingConstants.CENTER);
+		lblParution.setFont(new Font("Lucida Grande", Font.BOLD | Font.ITALIC, 13));
+		lblParution.setBounds(20, 259, 439, 16);
+		
 		textFieldDate = new JTextField();
 		textFieldDate.setEditable(false);
 		textFieldDate.setColumns(10);
@@ -150,16 +156,9 @@ public class VueNouvelleParution extends Vue {
 		content.add(btnAnnuler);
 		content.add(btnRechercher);
 		content.add(separator);
-		
-		JLabel lblParution = new JLabel("Parution");
-		lblParution.setHorizontalAlignment(SwingConstants.CENTER);
-		lblParution.setFont(new Font("Lucida Grande", Font.BOLD | Font.ITALIC, 13));
-		lblParution.setBounds(20, 259, 439, 16);
 		content.add(lblParution);
 		content.add(lblISSN);
 		content.add(scrollIssn);
-		
-
 		
 		getFrame().setVisible(true);
 	}
@@ -167,9 +166,7 @@ public class VueNouvelleParution extends Vue {
 	public void setPeriodique(Periodique pe) { _periodique = pe; }
 	public Periodique getPeriodique() { return _periodique; }
 	
-	public void alimente (Periodique pe)
-	{
-		textFieldIssn.setText(getPeriodique().getIssn());
+	public void alimente (Periodique pe) {
 		textFieldPerio.setText(pe.getNom());
 		textFieldDate.setText(ESDate.ecrireDate(pe.getDate()));
 	}

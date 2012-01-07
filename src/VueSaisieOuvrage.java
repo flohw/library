@@ -289,6 +289,10 @@ public class VueSaisieOuvrage extends Vue {
 		content.add(btnCS);
 		content.add(scrollSource);
 		content.add(scrollCible);
+		
+		JLabel lblRinitialiseLaListe = new JLabel("Réinitialise la liste des auteurs");
+		lblRinitialiseLaListe.setBounds(463, 245, 199, 16);
+		content.add(lblRinitialiseLaListe);
 		getFrame().setVisible(true);
 	}
 	
@@ -299,6 +303,7 @@ public class VueSaisieOuvrage extends Vue {
 		super.setEtat(etat);
 		switch (etat) {
 		case initiale: {
+			initSources();
 			btnEnregistrerOuvrage.setEnabled(true);
 			textFieldTitre.setEnabled(true);
 			textFieldIsbn.setEnabled(true);
@@ -379,5 +384,8 @@ public class VueSaisieOuvrage extends Vue {
 			break;
 		}
 		}
+	}
+	private void initSources() {
+		_auteurs.clear();
 	}
 }
