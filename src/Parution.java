@@ -2,7 +2,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Observable;
 
-
 public class Parution extends Observable implements Serializable {
 
 	// ************************************************************************************************************
@@ -53,9 +52,10 @@ public class Parution extends Observable implements Serializable {
 	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }
 	
 	public String afficheInfos() {
-		String r = getTitre() + "\n\t" + getNbArticles() + " articles :\n";
+		String r = getTitre() + "\n" + getNbArticles() + " articles :\n";
 		for (String id : getArticles().keySet())
-			r += "\t\t" + getArticle(id).getTitre() + ", page " + getArticle(id).getPage() + "\n";
+			r += "     " + getArticle(id).getTitre() + ", page " + getArticle(id).getPage() + "\n";
+		r += "------------------------------------------------------------ \n";
 		return r;
 	}
 	
@@ -64,4 +64,3 @@ public class Parution extends Observable implements Serializable {
 	}
 	
 }
-

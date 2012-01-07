@@ -2,6 +2,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
@@ -9,6 +10,7 @@ import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Observable;
+
 import javax.swing.SwingConstants;
 import java.awt.Font;
 
@@ -25,8 +27,6 @@ public class VueConsulterPeriodique extends Vue {
 	private JTextField textFieldDate;
 	
 	private JScrollPane scrollPane;
-	private JList listPeriodiques;
-	private DefaultListModel modelePeriodiques = new DefaultListModel();
 	private DefaultListModel modeleIssn = new DefaultListModel();	
 	
 	private JButton btnRechercher;
@@ -37,12 +37,13 @@ public class VueConsulterPeriodique extends Vue {
 	private Periodique _periodique;
 	private JScrollPane scrollIssn;
 	private JList listIssn;
+	private JTextArea textPeriodiques;
 
 	public VueConsulterPeriodique(Controleur controleur) {
 		super(controleur);
 		content = new JPanel();
 		getFrame().setTitle("Consulter un Périodique");
-		getFrame().setBounds(100, 100, 533, 480);
+		getFrame().setBounds(100, 100, 533, 500);
 		getFrame().setContentPane(content);
 		
 		lblIssn = new JLabel("ISSN");
@@ -50,8 +51,10 @@ public class VueConsulterPeriodique extends Vue {
 		
 		for (String issn : getControleur().getPeriodiques().keySet())
 			modeleIssn.addElement(getControleur().getPeriodique(issn).afficheInfos());
-		listIssn = new JList(modeleIssn);
-		scrollIssn = new JScrollPane(listIssn);
+		
+		textPeriodiques = new JTextArea();
+		textPeriodiques.setEditable(false);
+		scrollIssn = new JScrollPane(textPeriodiques);
 		scrollIssn.setBounds(219, 23, 291, 104);
 		
 		btnRechercher = new JButton("Rechercher");
@@ -90,14 +93,11 @@ public class VueConsulterPeriodique extends Vue {
 		textFieldDate.setBounds(219, 211, 291, 28);
 		textFieldDate.setEditable(false);
 		textFieldDate.setColumns(10);
-		
-		listPeriodiques = new JList();
-		scrollPane = new JScrollPane(listPeriodiques);
-		scrollPane.setBounds(23, 279, 487, 132);
-		listPeriodiques.setModel(modelePeriodiques);
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(33, 279, 487, 132);
 		
 		btnTerminer = new JButton("Terminer");
-		btnTerminer.setBounds(216, 423, 100, 29);
+		btnTerminer.setBounds(217, 432, 100, 29);
 		btnTerminer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				getControleur().fermerVue(VueConsulterPeriodique.this);
@@ -128,9 +128,9 @@ public class VueConsulterPeriodique extends Vue {
 	{
 		textFieldNom.setText(per.getNom());
 		textFieldDate.setText(ESDate.ecrireDate(per.getDate()));
-		modelePeriodiques.clear();
+		textPeriodiques.setText("");
 		for (Integer i : per.getParutions().keySet())
-			modelePeriodiques.addElement(per.getParution(i).afficheInfos());
+			textPeriodiques.append(per.getParution(i).afficheInfos());
 	}
 	
 	public void update(Observable observable, Object objet) {

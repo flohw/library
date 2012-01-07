@@ -1,7 +1,5 @@
-import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -10,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.util.Observable;
+import javax.swing.JTextArea;
 
 
 public class VueAfficheMC extends Vue {
@@ -21,14 +20,13 @@ public class VueAfficheMC extends Vue {
 	private JLabel lblArt;
 	
 	private JScrollPane scrollOuvrage;
-	private JList listOuvrage;
-	private JList listArt;
 	private JScrollPane scrollArt;
 	
-	private DefaultListModel modeleArticles = new DefaultListModel();
-	private DefaultListModel modeleOuvrages = new DefaultListModel();
 	private JButton btnNouvRech;
 	private JButton btnFermer;
+	
+	private JTextArea textOuvrages;
+	private JTextArea textArticles;
 	
 	private MotCle _mot;
 	private JLabel lvlRsultatDeLa;
@@ -39,7 +37,7 @@ public class VueAfficheMC extends Vue {
 		content.setLayout(null);
 		getFrame().setTitle("Affichage des ouvrage/articles de l'auteur");
 		getFrame().setContentPane(content);
-		getFrame().setBounds(100, 100, 525, 420);
+		getFrame().setBounds(100, 100, 525, 450);
 		
 		lvlRsultatDeLa = new JLabel("Résultat de la recherche pour ");
 		lvlRsultatDeLa.setHorizontalAlignment(SwingConstants.CENTER);
@@ -51,13 +49,9 @@ public class VueAfficheMC extends Vue {
 		
 		lblArt = new JLabel("Articles Associés");
 		lblArt.setBounds(12, 268, 121, 15);
-		
-		listOuvrage = new JList(modeleOuvrages);
-		scrollOuvrage = new JScrollPane(listOuvrage);
+		scrollOuvrage = new JScrollPane();
 		scrollOuvrage.setBounds(145, 61, 346, 132);
-		
-		listArt = new JList(modeleArticles);
-		scrollArt = new JScrollPane(listArt);
+		scrollArt = new JScrollPane();
 		scrollArt.setBounds(145, 227, 346, 132);
 		
 		btnNouvRech = new JButton("Nouvelle Recherche");
@@ -65,7 +59,7 @@ public class VueAfficheMC extends Vue {
 		btnNouvRech.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getControleur().fermerVue(VueAfficheMC.this);
-				getControleur().rechAuteur();
+				getControleur().rechMotCle();
 			}
 		});
 		
@@ -80,10 +74,16 @@ public class VueAfficheMC extends Vue {
 		
 		content.add(btnFermer);
 		content.add(btnNouvRech);
-		scrollArt.setColumnHeaderView(listArt);
 		content.add(scrollArt);
-		scrollOuvrage.setViewportView(listOuvrage);
+		
+		textArticles = new JTextArea();
+		textArticles.setEditable(false);
+		scrollArt.setViewportView(textArticles);
 		content.add(scrollOuvrage);
+		
+		textOuvrages = new JTextArea();
+		textOuvrages.setEditable(false);
+		scrollOuvrage.setViewportView(textOuvrages);
 		content.add(lblArt);
 		content.add(lblOuv);
 		content.add(lvlRsultatDeLa);
@@ -95,15 +95,15 @@ public class VueAfficheMC extends Vue {
 	public MotCle getMotCle() { return _mot; }
 	
 	public void alimente(MotCle mot) {
-		modeleArticles.clear();
-		modeleOuvrages.clear();
+		textArticles.setText("");
+		textOuvrages.setText("");
 		lvlRsultatDeLa.setText(lvlRsultatDeLa.getText() +
 				getMotCle().getMotcle());
 		for (String a : getMotCle().getArticles().keySet())
-			modeleArticles.addElement(getMotCle().getArticle(a).afficheInfos());
+			textArticles.append(getMotCle().getArticle(a).afficheInfos());
 		
 		for (String o : getMotCle().getOuvrages().keySet())
-			modeleOuvrages.addElement(getMotCle().getOuvrage(o).afficheInfos());
+			textOuvrages.append(getMotCle().getOuvrage(o).afficheInfos());
 	}
 	
 	public void update(Observable observable, Object objet) {

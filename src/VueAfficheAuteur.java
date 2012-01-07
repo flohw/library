@@ -1,7 +1,6 @@
-import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import javax.swing.JList;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
@@ -11,6 +10,7 @@ import java.util.HashMap;
 import java.util.Observable;
 
 import javax.swing.SwingConstants;
+import javax.swing.JTextArea;
 
 
 public class VueAfficheAuteur extends Vue {
@@ -20,14 +20,8 @@ public class VueAfficheAuteur extends Vue {
 	private JPanel content;
 	
 	private JButton btnNouvRech;
-	
-	private JList listOuvrage;
-	private JList listArt;
 	private JScrollPane scrollArt;
 	private JScrollPane scrollOuvrage;
-	
-	private DefaultListModel modeleArticles = new DefaultListModel();
-	private DefaultListModel modeleOuvrages = new DefaultListModel();
 	
 	private JLabel lblArt;
 	private JLabel lblOuv;
@@ -35,6 +29,8 @@ public class VueAfficheAuteur extends Vue {
 	private JButton btnFermer;
 	
 	private Auteur _auteur;
+	private JTextArea textOuvrages;
+	private JTextArea textArticles;
 	
 	public VueAfficheAuteur(Controleur controleur) {
 		super (controleur);
@@ -42,7 +38,7 @@ public class VueAfficheAuteur extends Vue {
 		content.setLayout(null);
 		getFrame().setTitle("Affichage des ouvrage/articles de l'auteur");
 		getFrame().setContentPane(content);
-		getFrame().setBounds(100, 100, 525, 420);
+		getFrame().setBounds(100, 100, 580, 440);
 		
 		lblRsultatDeLa = new JLabel("Résultat de la recherche pour ");
 		lblRsultatDeLa.setHorizontalAlignment(SwingConstants.CENTER);
@@ -55,12 +51,16 @@ public class VueAfficheAuteur extends Vue {
 		lblArt = new JLabel("Articles Associés");
 		lblArt.setBounds(12, 268, 121, 15);
 		
-		listOuvrage = new JList(modeleOuvrages);
-		scrollOuvrage = new JScrollPane(listOuvrage);
+		textOuvrages = new JTextArea();
+		textOuvrages.setEditable(false);
+		
+		scrollOuvrage = new JScrollPane(textOuvrages);
 		scrollOuvrage.setBounds(145, 61, 346, 132);
 		
-		listArt = new JList(modeleArticles);
-		scrollArt = new JScrollPane(listArt);
+		textArticles = new JTextArea();
+		textArticles.setEditable(false);
+		
+		scrollArt = new JScrollPane(textArticles);
 		scrollArt.setBounds(145, 227, 346, 132);
 		
 		btnNouvRech = new JButton("Nouvelle Recherche");
@@ -83,9 +83,7 @@ public class VueAfficheAuteur extends Vue {
 		
 		content.add(btnFermer);
 		content.add(btnNouvRech);
-		scrollArt.setColumnHeaderView(listArt);
 		content.add(scrollArt);
-		scrollOuvrage.setViewportView(listOuvrage);
 		content.add(scrollOuvrage);
 		content.add(lblArt);
 		content.add(lblOuv);
@@ -98,13 +96,13 @@ public class VueAfficheAuteur extends Vue {
 	public Auteur getAuteur() { return _auteur; }
 	
 	public void alimente(Auteur aut, HashMap<String, Ouvrage> ouv, HashMap<String, Article> art) {
-		modeleOuvrages.clear();
-		modeleArticles.clear();
+		textOuvrages.setText("");
+		textArticles.setText("");
 		lblRsultatDeLa.setText(lblRsultatDeLa.getText() + aut.getAuteur());
 		for (String isbn : ouv.keySet())
-			modeleOuvrages.addElement(ouv.get(isbn).afficheInfos());
+			textOuvrages.append(ouv.get(isbn).afficheInfos());
 		for (String id : art.keySet())
-			modeleArticles.addElement(art.get(id).afficheInfos());
+			textArticles.append(art.get(id).afficheInfos());
 		
 	}
 	

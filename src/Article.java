@@ -79,6 +79,9 @@ public class Article extends Observable implements Serializable {
 	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }
 
 	public String afficheInfos() {
-		return "Periodique : "+ getParution().getPeriodique().getNom() + ", Parution : " + getParution().getTitre() + ", Titre : " + getTitre() + ", Page " + getPage(); 
+		String r = "Periodique : "+ getParution().getPeriodique().getNom() + ",\n";
+		r += "Parution : " + getParution().getTitre() + ", Titre : " + getTitre() + ", Page " + getPage() + "\n";
+		r += "-------------------------------------------------------------------\n";
+		return r;
 	}
 }
