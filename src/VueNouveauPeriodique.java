@@ -22,32 +22,33 @@ public class VueNouveauPeriodique extends Vue {
 		super(controleur);
 		content = new JPanel();
 		getFrame().setTitle("Enregistrer un Nouveau Périodique");
-		getFrame().setBounds(100, 100, 539, 154);
+		getFrame().setBounds(100, 100, 460, 200);
 		getFrame().setContentPane(content);
 		
 		JLabel lblIssn = new JLabel("ISSN");
-		lblIssn.setBounds(89, 9, 122, 15);
+		lblIssn.setBounds(15, 22, 28, 16);
 		
 		textFieldIssn = new JTextField();
-		textFieldIssn.setBounds(300, 7, 150, 19);
+		textFieldIssn.setBounds(227, 16, 210, 28);
 		textFieldIssn.setColumns(10);
 		
 		JLabel lblNomDuPriodique = new JLabel("Nom du périodique");
-		lblNomDuPriodique.setBounds(89, 35, 122, 15);
+		lblNomDuPriodique.setBounds(15, 62, 121, 16);
 		
 		textFieldNom = new JTextField();
-		textFieldNom.setBounds(300, 33, 150, 19);
+		textFieldNom.setBounds(227, 56, 210, 28);
 		textFieldNom.setColumns(10);
 		
 		JLabel lblDateDabonnement = new JLabel("Date d'abonnement");
-		lblDateDabonnement.setBounds(89, 61, 122, 15);
+		lblDateDabonnement.setBounds(15, 102, 122, 16);
 		
 		textFieldDate = new JTextField();
-		textFieldDate.setBounds(300, 59, 150, 19);
+		textFieldDate.setText("mm/aaaa");
+		textFieldDate.setBounds(227, 96, 210, 28);
 		textFieldDate.setColumns(10);
 		
 		btnEnregistrer = new JButton("Nouveau Périodique");
-		btnEnregistrer.setBounds(89, 85, 161, 25);
+		btnEnregistrer.setBounds(44, 136, 169, 29);
 		btnEnregistrer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Actions recherche ouvrage
@@ -65,13 +66,14 @@ public class VueNouveauPeriodique extends Vue {
 		});
 		
 		btnAnnuler = new JButton("Annuler");
-		btnAnnuler.setBounds(300, 85, 150, 25);
+		btnAnnuler.setBounds(292, 136, 93, 29);
 		btnAnnuler.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Actions recherche ouvrage
 				getControleur().fermerVue(VueNouveauPeriodique.this);
+				getControleur().menuBiblio();
 			}
 		});
+		content.setLayout(null);
 		
 		content.add(lblIssn);
 		content.add(lblNomDuPriodique);
@@ -89,7 +91,7 @@ public class VueNouveauPeriodique extends Vue {
 		switch (etat){
 		case initiale:
 			textFieldIssn.setText("");
-			textFieldDate.setText("");
+			textFieldDate.setText("mm/aaaa");
 			textFieldNom.setText("");
 			break;
 		}

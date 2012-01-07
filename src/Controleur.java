@@ -131,7 +131,6 @@ public class Controleur implements Serializable{
 		////////////////////////////////////////////////////////////////////////////
 		// Getteur de vues
 		////////////////////////////////////////////////////////////////////////////
-		private VueMenuBiblio getVueMenuBiblio() { return _vueMenuBiblio ; }
 		private VueSaisieOuvrage getVueSaisieOuvrage() { return _vueSaisieOuvrage ; }
 		private VueSaisieExemplaire getVueSaisieExemplaire() { return _vueSaisieExemplaire ; }
 		private VueConsulterOuvrage getVueConsulterOuvrage() { return _vueConsulterOuvrage ; }
@@ -157,10 +156,8 @@ public class Controleur implements Serializable{
 		// Consulter ouvrage
 		public void consulterOuvrage() {
 			try {
-				this.setVueConsulterOuvrage (new VueConsulterOuvrage(this));
-				this.getVueMenuBiblio().getFrame().setVisible(false); 	
+				this.setVueConsulterOuvrage (new VueConsulterOuvrage(this)); 	
 				this.getVueConsulterOuvrage().setEtat(Vue.initiale);
-				this.getVueConsulterOuvrage().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -170,9 +167,7 @@ public class Controleur implements Serializable{
 		public void saisirExemplaire() {
 			try {
 				this.setVueSaisieExemplaire(new VueSaisieExemplaire(this));
-				this.getVueMenuBiblio().getFrame().setVisible(false); 
 				this.getVueSaisieExemplaire().setEtat(Vue.initiale);
-				this.getVueSaisieExemplaire().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -182,9 +177,7 @@ public class Controleur implements Serializable{
 		public void saisirOuvrage() {
 			try {
 				this.setVueSaisieOuvrage(new VueSaisieOuvrage(this));
-				this.getVueMenuBiblio().getFrame().setVisible(false); 
 				this.getVueSaisieOuvrage().setEtat(Vue.initiale);
-				this.getVueSaisieOuvrage().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -193,12 +186,8 @@ public class Controleur implements Serializable{
 		//RECHERCHER MOT CLEF
 		public void rechMotCle() {
 			try {
-				this.setVueRechMotCle(new VueRechMotCle(this));
-				// le Menu est caché
-				this.getVueMenuBiblio().getFrame().setVisible(false); 
-				// la vue courante est VueRechMotCle
+				this.setVueRechMotCle(new VueRechMotCle(this)); 
 				this.getVueRechMotCle().setEtat(Vue.initiale);
-				this.getVueRechMotCle().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -208,11 +197,7 @@ public class Controleur implements Serializable{
 		public void rechAuteur() {
 			try {
 				this.setVueRechAuteur(new VueRechAuteur(this));
-				// le Menu est caché
-				this.getVueMenuBiblio().getFrame().setVisible(false); 
-				// la vue courante est VueRechAuteur
 				this.getVueRechAuteur().setEtat(Vue.initiale);
-				this.getVueRechAuteur().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -222,11 +207,7 @@ public class Controleur implements Serializable{
 		public void consulterPeriodique() {
 			try {
 				this.setVueConsulterPeriodique(new VueConsulterPeriodique(this));
-				// le Menu est caché
-				this.getVueMenuBiblio().getFrame().setVisible(false); 
-				// la vue courante est VueConsulterPeriodique
 				this.getVueConsulterPeriodique().setEtat(Vue.initiale);
-				this.getVueConsulterPeriodique().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -235,12 +216,8 @@ public class Controleur implements Serializable{
 		//NOUVEAU PERIODIQUE
 		public void saisiePeriodique() {
 			try {
-				this.setVueNouveauPeriodique(new VueNouveauPeriodique(this));
-				// le Menu est caché
-//				this.getVueMenuBiblio().getFrame().setVisible(false); 
-				// la vue courante est VueNouveauPeriodique
+				this.setVueNouveauPeriodique(new VueNouveauPeriodique(this)); 
 				this.getVueNouveauPeriodique().setEtat(Vue.initiale);
-//				this.getVueNouveauPeriodique().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -250,9 +227,7 @@ public class Controleur implements Serializable{
 		public void saisieArticle() {
 			try {
 				this.setVueNouvelArticle(new VueNouvelArticle(this));
-				this.getVueMenuBiblio().getFrame().setVisible(false); 
 				this.getVueNouvelArticle().setEtat(Vue.initiale);
-				this.getVueNouvelArticle().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -262,11 +237,7 @@ public class Controleur implements Serializable{
 		public void saisirParution() {
 			try {
 				this.setVueNouvelleParution(new VueNouvelleParution(this));
-				// le Menu est caché
-				this.getVueMenuBiblio().getFrame().setVisible(false); 
-				// la vue courante est VueNouvelleParution
 				this.getVueNouvelleParution().setEtat(Vue.initiale);
-				this.getVueNouvelleParution().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -275,11 +246,8 @@ public class Controleur implements Serializable{
 		//AFFICHER RECHERCHE AUTEUR
 		public void affRechAuteur() {
 			try {
-				this.setVueAfficheAuteur(new VueAfficheAuteur(this));
-				// le Menu est caché
-				this.getVueMenuBiblio().getFrame().setVisible(false); 
+				this.setVueAfficheAuteur(new VueAfficheAuteur(this)); 
 				this.getVueAfficheAuteur().setEtat(Vue.initiale);
-				this.getVueAfficheAuteur().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -288,11 +256,8 @@ public class Controleur implements Serializable{
 		//AFFICHER RECHERCHE MC
 		public void affRechMC() {
 			try {
-				this.setVueAfficheMC(new VueAfficheMC(this));
-				// le Menu est caché
-				this.getVueMenuBiblio().getFrame().setVisible(false); 
+				this.setVueAfficheMC(new VueAfficheMC(this)); 
 				this.getVueAfficheMC().setEtat(Vue.initiale);
-				this.getVueAfficheMC().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -300,15 +265,17 @@ public class Controleur implements Serializable{
 		
 
 		public void fermerVue (Vue vue) {
-			if (vue instanceof VueMenuBiblio ) {	
-			// Quitte l'aplication. Sauvegarde les objets du modèle
+			vue.dispose();
+			vue.getFrame().setVisible(false);
+			this.resetVues();
+		}
+		
+		public void quitter(VueMenuBiblio vue) {
+				vue.dispose();
+				vue.getFrame().setVisible(false);
+				this.resetVues();
 				this.sauve();
 				System.exit(0);
-				}
-			vue.dispose();
-			// le Menu est rendu de nouveau visible
-//			this.getVueMenuBiblio().getFrame().setVisible(true);
-			this.resetVues();
 		}
 		
 		// Restaure l'état de l'interface avec seule la fenêtre du Menu principal active
@@ -362,8 +329,7 @@ public class Controleur implements Serializable{
 				int option = JOptionPane.showConfirmDialog(null, "Cet ouvrage existe déjà, voulez vous créer un exemplaire ?",
 						"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-				if(option == JOptionPane.YES_OPTION )
-				{
+				if(option == JOptionPane.YES_OPTION ) {
 					fermerVue(getVueSaisieOuvrage());
 					saisirExemplaire();
 				}
@@ -430,18 +396,15 @@ public class Controleur implements Serializable{
 			// Instanciation de l'ouvrage
 			// Ajout de l'ouvrage dans l'ensemble des ouvrages de la bibliothèque
 			this.setOuvrage(ouv, ouv.getIsbn());
-			for (Auteur aut : auteurs)
-			{
+			for (Auteur aut : auteurs) {
 				if (getAuteur(aut) == null)
 					this.getAuteurs().add(aut);
 				aut.ajouterOuvrage(ouv.getIsbn(), ouv);
 			}
 			MotCle mot = null;
-			for (String mc : motsCles)
-			{
+			for (String mc : motsCles) {
 				mot = getMotCle(mc);
-				if (mot == null)
-				{
+				if (mot == null) {
 					mot = new MotCle(mc);
 					this.getMotsCles().add(mot);
 				}
@@ -452,11 +415,11 @@ public class Controleur implements Serializable{
 					"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 			if(option == JOptionPane.YES_OPTION )
-			{
 				getVueSaisieOuvrage().setEtat(Vue.initiale);
-			}
-			else
+			else {
 				this.fermerVue (this.getVueSaisieOuvrage());
+				this.menuBiblio();
+			}
 		}
 		
 		public void nouvExemplaire(Ouvrage ouv, String dateReception, String statut) {
@@ -561,7 +524,10 @@ public class Controleur implements Serializable{
 				if(option == JOptionPane.YES_OPTION )
 					getVueNouveauPeriodique().setEtat(Vue.initiale);
 				else
+				{
 					fermerVue(getVueNouveauPeriodique());
+					menuBiblio();
+				}
 			} else {
 				Message dialogue = new Message("Le périodique existe déjà");
 				dialogue.setVisible(true);
@@ -584,14 +550,10 @@ public class Controleur implements Serializable{
 						"Nouvelle Parution", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 				if(option == JOptionPane.YES_OPTION)
-				{
-					if (this.getVueNouvelleParution() != null)
 						getVueNouvelleParution().setEtat(Vue.initiale);
-				}
-				else
-				{
-					if (this.getVueNouvelleParution() != null)
-						fermerVue(getVueNouvelleParution());
+				else {
+					fermerVue(getVueNouvelleParution());
+					menuBiblio();
 				}
 			}
 		}
@@ -654,12 +616,11 @@ public class Controleur implements Serializable{
 			int option = JOptionPane.showConfirmDialog(null, "L'article a bien été enregistré, voulez-vous en créer un nouveau ?",
 					"Nouvelle Parution", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-			if(option == JOptionPane.YES_OPTION) {
-				if (this.getVueNouvelArticle() != null)
+			if(option == JOptionPane.YES_OPTION)
 					getVueNouvelArticle().setEtat(Vue.initiale);
-			} else {
-				if (this.getVueNouvelArticle() != null)
-					fermerVue(getVueNouvelArticle());
+			else {
+				fermerVue(getVueNouvelArticle());
+				menuBiblio();
 			}
 		}
 		/*****************************************/
@@ -681,6 +642,6 @@ public class Controleur implements Serializable{
 				System.out.println();
 			}
 			return motsCles;
-		} //  lectureLignesFichier;
+		} //  lectureLignesFichier
 
 }

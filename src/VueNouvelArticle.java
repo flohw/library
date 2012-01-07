@@ -3,7 +3,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JSeparator;
 import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -42,27 +41,26 @@ public class VueNouvelArticle extends Vue {
 	public VueNouvelArticle(Controleur controleur) {
 		super (controleur);
 		content = new JPanel();
-		setTitle("Ajouter un Nouvel Article");
-		setBounds(100, 100, 736, 655);
-		setContentPane(content);
-		content.setLayout(null);
+		getFrame().setTitle("Ajouter un Nouvel Article");
+		getFrame().setBounds(100, 100, 640, 555);
+		getFrame().setContentPane(content);
 		
 		lblIssn = new JLabel("ISSN Periodique");
-		lblIssn.setBounds(61, 20, 102, 15);
+		lblIssn.setBounds(22, 12, 98, 16);
 		
 		textFieldId = new JTextField();
 		textFieldId.setEnabled(false);
-		textFieldId.setBounds(254, 60, 195, 21);
+		textFieldId.setBounds(189, 46, 192, 28);
 		textFieldId.setColumns(10);
 		
 		textFieldPage = new JTextField();
 		textFieldPage.setEnabled(false);
-		textFieldPage.setBounds(254, 185, 195, 21);
+		textFieldPage.setBounds(189, 160, 192, 28);
 		textFieldPage.setColumns(10);
 		
 		btnEnregistrerArt = new JButton("Enregistrer");
 		btnEnregistrerArt.setEnabled(false);
-		btnEnregistrerArt.setBounds(461, 140, 108, 25);
+		btnEnregistrerArt.setBounds(393, 119, 112, 29);
 		btnEnregistrerArt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				_titre = textFieldTitre.getText();
@@ -86,7 +84,7 @@ public class VueNouvelArticle extends Vue {
 		
 		btnAnnulerArt = new JButton("Annuler");
 		btnAnnulerArt.setEnabled(false);
-		btnAnnulerArt.setBounds(605, 140, 108, 25);
+		btnAnnulerArt.setBounds(393, 159, 112, 29);
 		btnAnnulerArt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setEtat(Vue.inter1);
@@ -95,47 +93,47 @@ public class VueNouvelArticle extends Vue {
 		
 		lblPageDebut = new JLabel("Page de début");
 		lblPageDebut.setEnabled(false);
-		lblPageDebut.setBounds(61, 188, 102, 15);
+		lblPageDebut.setBounds(22, 166, 88, 16);
 		
 		labelInfo = new JLabel("Réinitialise la liste des auteurs");
 		labelInfo.setFont(new Font("Dialog", Font.PLAIN, 13));
 		labelInfo.setEnabled(false);
-		labelInfo.setBounds(471, 332, 195, 15);
+		labelInfo.setBounds(393, 304, 192, 16);
 		
 		lblTitre = new JLabel("Titre de l'Article");
 		lblTitre.setEnabled(false);
-		lblTitre.setBounds(61, 145, 102, 15);
+		lblTitre.setBounds(22, 126, 100, 16);
 		
 		lblId = new JLabel("Identifiant de la Parution");
 		lblId.setEnabled(false);
-		lblId.setBounds(61, 63, 155, 15);
+		lblId.setBounds(22, 52, 155, 16);
 		
 		lblNom = new JLabel("Nom de l'auteur");
 		lblNom.setEnabled(false);
-		lblNom.setBounds(61, 268, 102, 15);
+		lblNom.setBounds(22, 246, 100, 16);
 		
 		lblPrenom = new JLabel("Prénom de l'auteur");
 		lblPrenom.setEnabled(false);
-		lblPrenom.setBounds(61, 310, 125, 15);
+		lblPrenom.setBounds(22, 285, 117, 16);
 		
 		labelMC = new JLabel("Mots-Clefs");
 		labelMC.setEnabled(false);
 		labelMC.setFont(new Font("Lucida Grande", Font.BOLD | Font.ITALIC, 13));
-		labelMC.setBounds(323, 386, 117, 15);
+		labelMC.setBounds(281, 319, 73, 16);
 		
 		textFieldNom = new JTextField();
 		textFieldNom.setEnabled(false);
-		textFieldNom.setBounds(254, 265, 195, 21);
+		textFieldNom.setBounds(189, 240, 192, 28);
 		textFieldNom.setColumns(10);
 		
 		textFieldPrenom = new JTextField();
 		textFieldPrenom.setEnabled(false);
-		textFieldPrenom.setBounds(254, 307, 195, 21);
+		textFieldPrenom.setBounds(189, 279, 192, 28);
 		textFieldPrenom.setColumns(10);
 		
 		btnAnnulerPa = new JButton("Annuler");
 		btnAnnulerPa.setEnabled(false);
-		btnAnnulerPa.setBounds(605, 58, 108, 25);
+		btnAnnulerPa.setBounds(524, 45, 93, 29);
 		btnAnnulerPa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setEtat(Vue.initiale);
@@ -144,7 +142,7 @@ public class VueNouvelArticle extends Vue {
 		
 		buttonCS = new JButton("<<");
 		buttonCS.setEnabled(false);
-		buttonCS.setBounds(353, 432, 54, 25);
+		buttonCS.setBounds(280, 359, 75, 29);
 		buttonCS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Actions retirer mot cle
@@ -168,16 +166,16 @@ public class VueNouvelArticle extends Vue {
 		listSource = new JList(modeleSource);
 		listSource.setEnabled(false);
 		scrollSource = new JScrollPane(listSource);
-		scrollSource.setBounds(61, 413, 280, 161);
+		scrollSource.setBounds(22, 347, 230, 132);
 		
 		listCible = new JList(modeleCible);
 		listCible.setEnabled(false);
 		scrollCible = new JScrollPane(listCible);
-		scrollCible.setBounds(419, 413, 294, 161);
+		scrollCible.setBounds(387, 347, 230, 132);
 		
 		buttonSC = new JButton(">>");
 		buttonSC.setEnabled(false);
-		buttonSC.setBounds(353, 517, 54, 25);
+		buttonSC.setBounds(280, 432, 75, 29);
 		buttonSC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Actions ajouter mot cle
@@ -199,7 +197,7 @@ public class VueNouvelArticle extends Vue {
 		});
 		
 		btnFermer = new JButton("Fermer");
-		btnFermer.setBounds(174, 590, 123, 25);
+		btnFermer.setBounds(110, 492, 87, 29);
 		btnFermer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getControleur().fermerVue(VueNouvelArticle.this);
@@ -208,7 +206,7 @@ public class VueNouvelArticle extends Vue {
 		
 		btnNouvelAut = new JButton("Nouvel Auteur");
 		btnNouvelAut.setEnabled(false);
-		btnNouvelAut.setBounds(461, 264, 125, 25);
+		btnNouvelAut.setBounds(393, 239, 134, 29);
 		btnNouvelAut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Action enregistrer auteur
@@ -229,7 +227,7 @@ public class VueNouvelArticle extends Vue {
 		
 		btnAnnulerAut = new JButton("Annuler");
 		btnAnnulerAut.setEnabled(false);
-		btnAnnulerAut.setBounds(461, 305, 125, 25);
+		btnAnnulerAut.setBounds(393, 278, 93, 29);
 		btnAnnulerAut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				_auteurs.clear();
@@ -238,19 +236,16 @@ public class VueNouvelArticle extends Vue {
 		});
 		
 		textFieldIssn = new JTextField();
-		textFieldIssn.setBounds(254, 17, 195, 21);
+		textFieldIssn.setBounds(189, 6, 192, 28);
 		textFieldIssn.setColumns(10);
-		
-		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 97, 728, 15);
 		
 		textFieldTitre = new JTextField();
 		textFieldTitre.setEnabled(false);
-		textFieldTitre.setBounds(254, 142, 195, 21);
+		textFieldTitre.setBounds(189, 120, 192, 28);
 		textFieldTitre.setColumns(10);
 		
 		btnRechPe = new JButton("Rechercher");
-		btnRechPe.setBounds(461, 15, 108, 25);
+		btnRechPe.setBounds(393, 5, 113, 29);
 		btnRechPe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String issn = textFieldIssn.getText();
@@ -266,7 +261,7 @@ public class VueNouvelArticle extends Vue {
 		
 		btnRechPa = new JButton("Rechercher");
 		btnRechPa.setEnabled(false);
-		btnRechPa.setBounds(461, 58, 108, 25);
+		btnRechPa.setBounds(393, 45, 113, 29);
 		btnRechPa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String id = textFieldId.getText();
@@ -282,7 +277,7 @@ public class VueNouvelArticle extends Vue {
 		
 		btnTerminer = new JButton("Terminer");
 		btnTerminer.setEnabled(false);
-		btnTerminer.setBounds(461, 590, 107, 25);
+		btnTerminer.setBounds(385, 492, 100, 29);
 		btnTerminer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				for (int index = 0; index < modeleCible.size(); index++)
@@ -300,18 +295,13 @@ public class VueNouvelArticle extends Vue {
 		lblNouvelArticle = new JLabel("Nouvel Article");
 		lblNouvelArticle.setEnabled(false);
 		lblNouvelArticle.setFont(new Font("Lucida Grande", Font.BOLD | Font.ITALIC, 13));
-		lblNouvelArticle.setBounds(315, 114, 104, 16);
-		
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(0, 220, 728, 15);
+		lblNouvelArticle.setBounds(270, 86, 95, 16);
 		
 		lblNouvelAuteurs = new JLabel("Nouvel Auteur");
 		lblNouvelAuteurs.setEnabled(false);
 		lblNouvelAuteurs.setFont(new Font("Lucida Grande", Font.BOLD | Font.ITALIC, 13));
-		lblNouvelAuteurs.setBounds(315, 235, 134, 16);
-		
-		JSeparator separator_2 = new JSeparator();
-		separator_2.setBounds(0, 359, 728, 15);
+		lblNouvelAuteurs.setBounds(269, 207, 98, 16);
+		content.setLayout(null);
 		
 		content.add(lblIssn);
 		content.add(lblPageDebut);
@@ -346,11 +336,7 @@ public class VueNouvelArticle extends Vue {
 		content.add(btnAnnulerPa);
 		content.add(btnTerminer);
 		
-		content.add(separator);
-		content.add(separator_1);
-		content.add(separator_2);
-		
-		content.setVisible(true);
+		getFrame().setVisible(true);
 	}
 	
 	public void setPeriodique(Periodique pe) { _periodique = pe; }

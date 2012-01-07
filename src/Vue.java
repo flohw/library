@@ -25,8 +25,6 @@ public abstract class Vue extends JFrame implements Observer{
 	public Vue(Controleur controleur) {
 		frame = new JFrame();
         frame.setResizable(false);
-        frame.setTitle("Gestion de bibliothèque");
-        frame.setBounds(100, 100, 550, 251);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener (new WindowAdapter() {
             public void windowClosing (WindowEvent e) {
@@ -34,13 +32,6 @@ public abstract class Vue extends JFrame implements Observer{
             }
         });
         frame.getContentPane().setLayout(null);
-        
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				getControleur().fermerVue(Vue.this);
-			}
-		});
 		this.setControleur(controleur);
 	}
 	

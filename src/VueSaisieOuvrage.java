@@ -67,9 +67,8 @@ public class VueSaisieOuvrage extends Vue {
 	public VueSaisieOuvrage(Controleur controleur) {
 		super(controleur);
 		content = new JPanel();
-		setBounds(100, 100, 717, 578);
-		setContentPane(content);
-		content.setLayout(null);
+		getFrame().setBounds(100, 100, 717, 578);
+		getFrame().setContentPane(content);
 		
 		lblTitre = new JLabel("Titre");
 		lblTitre.setBounds(116, 9, 117, 15);
@@ -126,6 +125,7 @@ public class VueSaisieOuvrage extends Vue {
 		btnAnnulerOuvrage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getControleur().fermerVue(VueSaisieOuvrage.this);
+				getControleur().menuBiblio();
 			}
 		});
 		
@@ -159,13 +159,10 @@ public class VueSaisieOuvrage extends Vue {
 				// Action enregistrer auteur
 				String nom = textFieldNom.getText();
 				String prenom = textFieldPrenom.getText();
-				if (nom.length() != 0 && prenom.length() != 0)
-				{
+				if (nom.length() != 0 && prenom.length() != 0) {
 					Auteur auteur = new Auteur(nom, prenom);
 					getControleur().auteurExiste(auteur, _auteurs);
-				}
-				else
-				{
+				} else {
 					Message dialog = new Message("Un des champs est vide");
 					dialog.setVisible(true);
 				}
@@ -214,8 +211,7 @@ public class VueSaisieOuvrage extends Vue {
 				// Actions retirer mot cle
 				int [] indexes = listCible.getSelectedIndices();
 				HashSet<String> elems = new HashSet<String>();
-				for (int index : indexes)
-				{
+				for (int index : indexes) {
 					String elem = modeleCible.getElementAt(index).toString();
 					modeleSource.addElement(elem);
 					elems.add(elem);
@@ -237,8 +233,7 @@ public class VueSaisieOuvrage extends Vue {
 				// Actions ajouter mot cle
 				int [] indexes = listSource.getSelectedIndices();
 				HashSet<String> elems = new HashSet<String>();
-				for (int index : indexes)
-				{
+				for (int index : indexes) {
 					String elem = modeleSource.getElementAt(index).toString();
 					modeleCible.addElement(elem);
 					elems.add(elem);
@@ -260,8 +255,7 @@ public class VueSaisieOuvrage extends Vue {
 				for (int index = 0; index < modeleCible.size(); index++)
 					_motsCles.add(modeleCible.get(index).toString());
 				
-				if (modeleSource.isEmpty())
-				{
+				if (modeleSource.isEmpty()) {
 					Message dialog = new Message("Ajoutez au moins un mot clé");
 					dialog.setVisible(true);
 				}
@@ -298,7 +292,7 @@ public class VueSaisieOuvrage extends Vue {
 		content.add(btnCS);
 		content.add(scrollSource);
 		content.add(scrollCible);
-		
+		getFrame().setVisible(true);
 	}
 	
 	private void setOuvrage(Ouvrage ouv) { _ouvrage = ouv; }

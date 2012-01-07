@@ -19,6 +19,9 @@ public class VueMenuBiblio  extends Vue{
     }
     
     private void initialize() {
+    	getFrame().setTitle("Gestion de bibliothèque");
+        getFrame().setBounds(100, 100, 550, 251);
+        
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBounds(45, 25, 400, 20);
         getFrame().getContentPane().add(menuBar);
@@ -30,8 +33,8 @@ public class VueMenuBiblio  extends Vue{
         JMenuItem menuItemQuitter = new JMenuItem("Quitter");
         menuItemQuitter.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                getControleur().fermerVue(VueMenuBiblio.this);
-                }       
+                getControleur().quitter(VueMenuBiblio.this);
+            }
         });
         mnApplication.add(menuItemQuitter);
        
@@ -40,12 +43,13 @@ public class VueMenuBiblio  extends Vue{
        
         JMenuItem MenuItemOuv = new JMenuItem("Nouvel ouvrage");
        
-        MenuItemOuv.addActionListener(new ActionListener()
-         {
+        MenuItemOuv.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 //  affichage de la fenetre de saisie d'un ouvrage
-                getControleur().saisirOuvrage() ;}
+            	getControleur().fermerVue(VueMenuBiblio.this);
+                getControleur().saisirOuvrage() ;
+            }
         });
         mnOuvrage.add(MenuItemOuv);
 
@@ -53,6 +57,7 @@ public class VueMenuBiblio  extends Vue{
         MenuItemExemp.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //  affichage de la fenetre de saisie d'un exemplaire
+            	getControleur().fermerVue(VueMenuBiblio.this);
                 getControleur().saisirExemplaire() ;}
         });
         mnOuvrage.add(MenuItemExemp);
@@ -61,6 +66,7 @@ public class VueMenuBiblio  extends Vue{
         menuItemConsult.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // affichage de la fenetre de consultation d'un ouvrage
+            	getControleur().fermerVue(VueMenuBiblio.this);
                 getControleur(). consulterOuvrage() ;}
         });
         mnOuvrage.add(menuItemConsult);
@@ -80,6 +86,7 @@ public class VueMenuBiblio  extends Vue{
         menuItemConsultPerio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // affichage de la fenetre de consultation d'un periodique
+            	getControleur().fermerVue(VueMenuBiblio.this);
                 getControleur(). consulterPeriodique() ;}
         });
         mnPeriodiques.add(menuItemConsultPerio);
@@ -89,6 +96,7 @@ public class VueMenuBiblio  extends Vue{
         menuItemNewPerio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // affichage de la fenetre de saisie d'un periodique
+            	getControleur().fermerVue(VueMenuBiblio.this);
                 getControleur(). saisiePeriodique() ;}
         });
         mnPeriodiques.add(menuItemNewPerio);
@@ -98,6 +106,7 @@ public class VueMenuBiblio  extends Vue{
         menuItemNewArticle.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // affichage de la fenetre de saisie d'un periodique
+            	getControleur().fermerVue(VueMenuBiblio.this);
                 getControleur(). saisieArticle() ;}
         });
         mnParutions.add(menuItemNewArticle);
@@ -107,6 +116,7 @@ public class VueMenuBiblio  extends Vue{
         menuItemNewParu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // affichage de la fenetre de saisie d'un periodique
+            	getControleur().fermerVue(VueMenuBiblio.this);
                 getControleur(). saisirParution() ;}
         });
         mnParutions.add(menuItemNewParu);        
@@ -116,6 +126,7 @@ public class VueMenuBiblio  extends Vue{
         menuItemRechAut.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // affichage de la fenetre de saisie d'un periodique
+            	getControleur().fermerVue(VueMenuBiblio.this);
                 getControleur(). rechAuteur() ;}
         });
         mnRecherches.add(menuItemRechAut);
@@ -125,6 +136,7 @@ public class VueMenuBiblio  extends Vue{
         menuItemRechMot.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // affichage de la fenetre de saisie d'un periodique
+            	getControleur().fermerVue(VueMenuBiblio.this);
                 getControleur(). rechMotCle() ;}
         });
         mnRecherches.add(menuItemRechMot);   

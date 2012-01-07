@@ -52,10 +52,9 @@ public class VueConsulterOuvrage extends Vue {
 	public VueConsulterOuvrage(Controleur controleur) {
 		super(controleur);
 		content = new JPanel();
-		setTitle("Consulter un Ouvrage");
-		setBounds(100, 100, 612, 541);
-		setContentPane(content);
-		content.setLayout(null);
+		getFrame().setTitle("Consulter un Ouvrage");
+		getFrame().setBounds(100, 100, 612, 541);
+		getFrame().setContentPane(content);
 		
 		lblIsbn = new JLabel("ISBN");
 		lblIsbn.setBounds(89, 9, 154, 15);
@@ -133,6 +132,7 @@ public class VueConsulterOuvrage extends Vue {
 			public void actionPerformed(ActionEvent e) {
 				// Actions recherche ouvrage
 				getControleur().fermerVue(VueConsulterOuvrage.this);
+				getControleur().menuBiblio();
 			}
 		});
 		
@@ -154,6 +154,7 @@ public class VueConsulterOuvrage extends Vue {
 		content.add(btnRechercher);
 		content.add(btnTerminer);
 		content.add(separator);
+		getFrame().setVisible(true);
 	}
 	
 	public Ouvrage getOuvrage() { return _ouvrage; }

@@ -9,6 +9,8 @@ import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Observable;
+import javax.swing.SwingConstants;
+import java.awt.Font;
 
 
 public class VueConsulterPeriodique extends Vue {
@@ -19,12 +21,10 @@ public class VueConsulterPeriodique extends Vue {
 	private JLabel lblParutions;
 	private JLabel lblNomDuPriodique;
 	private JLabel lblDateDabonnement;
-	private JLabel lblIssn_1;
 	
 	private JTextField textFieldIssnRech;
 	private JTextField textFieldNom;
 	private JTextField textFieldDate;
-	private JTextField textFieldIssn;
 	
 	private JScrollPane scrollPane;
 	private JList listPeriodiques;
@@ -40,20 +40,19 @@ public class VueConsulterPeriodique extends Vue {
 	public VueConsulterPeriodique(Controleur controleur) {
 		super(controleur);
 		content = new JPanel();
-		setTitle("Consulter un Périodique");
-		setBounds(100, 100, 497, 389);
-		setContentPane(content);
-		content.setLayout(null);
+		getFrame().setTitle("Consulter un Périodique");
+		getFrame().setBounds(100, 100, 533, 400);
+		getFrame().setContentPane(content);
 		
 		lblIssn = new JLabel("ISSN");
-		lblIssn.setBounds(6, 13, 154, 16);
+		lblIssn.setBounds(23, 23, 28, 16);
 		
 		textFieldIssnRech = new JTextField();
-		textFieldIssnRech.setBounds(172, 9, 305, 25);
+		textFieldIssnRech.setBounds(219, 17, 166, 28);
 		textFieldIssnRech.setColumns(10);
 		
 		btnRechercher = new JButton("Rechercher");
-		btnRechercher.setBounds(172, 41, 154, 25);
+		btnRechercher.setBounds(397, 18, 113, 29);
 		btnRechercher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String issn = textFieldIssnRech.getText();
@@ -68,61 +67,57 @@ public class VueConsulterPeriodique extends Vue {
 		});
 		
 		separator = new JSeparator();
-		separator.setBounds(0, 78, 497, 12);
+		separator.setBounds(397, 184, 0, 12);
 		
 		lblParutions = new JLabel("Parutions");
-		lblParutions.setBounds(6, 222, 154, 16);
+		lblParutions.setFont(new Font("Lucida Grande", Font.BOLD | Font.ITALIC, 13));
+		lblParutions.setHorizontalAlignment(SwingConstants.CENTER);
+		lblParutions.setBounds(23, 164, 487, 16);
 		
 		lblNomDuPriodique = new JLabel("Nom du périodique");
-		lblNomDuPriodique.setBounds(6, 108, 154, 16);
+		lblNomDuPriodique.setBounds(23, 90, 121, 16);
 		
 		textFieldNom = new JTextField();
+		textFieldNom.setBounds(219, 84, 291, 28);
 		textFieldNom.setEditable(false);
-		textFieldNom.setBounds(172, 104, 305, 25);
 		textFieldNom.setColumns(10);
 		
 		lblDateDabonnement = new JLabel("Date d'abonnement");
-		lblDateDabonnement.setBounds(6, 148, 154, 16);
+		lblDateDabonnement.setBounds(23, 130, 122, 16);
 		
 		textFieldDate = new JTextField();
+		textFieldDate.setBounds(219, 124, 291, 28);
 		textFieldDate.setEditable(false);
-		textFieldDate.setBounds(172, 144, 305, 25);
 		textFieldDate.setColumns(10);
-		
-		lblIssn_1 = new JLabel("ISSN");
-		lblIssn_1.setBounds(6, 188, 154, 16);
-		
-		textFieldIssn = new JTextField();
-		textFieldIssn.setEditable(false);
-		textFieldIssn.setBounds(172, 184, 305, 25);
-		textFieldIssn.setColumns(10);
 		
 		listPeriodiques = new JList();
 		scrollPane = new JScrollPane(listPeriodiques);
-		scrollPane.setBounds(172, 221, 305, 86);
+		scrollPane.setBounds(23, 192, 487, 132);
 		listPeriodiques.setModel(modelePeriodiques);
 		
 		btnTerminer = new JButton("Terminer");
-		btnTerminer.setBounds(172, 319, 138, 25);
+		btnTerminer.setBounds(216, 336, 100, 29);
 		btnTerminer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				getControleur().fermerVue(VueConsulterPeriodique.this);
+				getControleur().menuBiblio();
 			}
 		});
+		content.setLayout(null);
 		
 		content.add(scrollPane);
 		content.add(lblIssn);
-		content.add(lblIssn_1);
 		content.add(lblNomDuPriodique);
 		content.add(lblDateDabonnement);
 		content.add(lblParutions);
 		content.add(textFieldIssnRech);
 		content.add(textFieldNom);
 		content.add(textFieldDate);
-		content.add(textFieldIssn);
 		content.add(btnRechercher);
 		content.add(btnTerminer);
 		content.add(separator);
+		
+		getFrame().setVisible(true);
 	}
 	
 	public void setPeriodique(Periodique pe) { _periodique = pe; }
@@ -131,7 +126,6 @@ public class VueConsulterPeriodique extends Vue {
 	public void alimente(Periodique per)
 	{
 		textFieldNom.setText(per.getNom());
-		textFieldIssn.setText(per.getIssn());
 		textFieldDate.setText(ESDate.ecrireDate(per.getDate()));
 		modelePeriodiques.clear();
 		for (Integer i : per.getParutions().keySet())

@@ -1,6 +1,4 @@
-import java.awt.Rectangle;
-
-
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -10,12 +8,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 import java.util.Observable;
-import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JList;
 
 public class VueSaisieExemplaire extends Vue {
 
@@ -25,7 +23,9 @@ public class VueSaisieExemplaire extends Vue {
 	private JTextField textFieldTitre;
 	private JTextField textFieldDateReception;
 	private JTextField textFieldNbExemplaires;
-	private JTextArea textAreaInfosExemplaires;
+	
+	private JList listExemplaires;
+	private DefaultListModel modeleExemplaires = new DefaultListModel();
 	
 	// pour que les boutons soient des attributs, il faut faire "convert local to field"
 	private JButton buttonRech;
@@ -37,34 +37,35 @@ public class VueSaisieExemplaire extends Vue {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JRadioButton RadioButtonConsultable;
 	private JRadioButton RadioButtonEmpruntable;
+	private JScrollPane scrollExemplaires;
 	
 
 	public VueSaisieExemplaire(Controleur controleur) {
 		super (controleur);
-		setTitle("Enregistrement d'un nouvel exemplaire d'ouvrage");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-		setBounds(100, 100, 540, 461);
 		contentPane = new JPanel();
-		setContentPane(contentPane);
+		getFrame().setTitle("Enregistrement d'un nouvel exemplaire d'ouvrage");
+		getFrame().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+		getFrame().setBounds(100, 100, 540, 461);
+		getFrame().setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Isbn");
-		lblNewLabel.setBounds(145, 31, 43, 17);
+		lblNewLabel.setBounds(24, 11, 27, 16);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Date réception");
-		lblNewLabel_1.setBounds(91, 115, 97, 15);
+		lblNewLabel_1.setBounds(24, 108, 92, 16);
 		contentPane.add(lblNewLabel_1);
 		
 		textFieldIsbn = new JTextField();
-		textFieldIsbn.setBounds(190, 30, 159, 19);
+		textFieldIsbn.setBounds(200, 5, 134, 28);
 		contentPane.add(textFieldIsbn);
 		textFieldIsbn.setColumns(10);
 		
 		textFieldDateReception = new JTextField();
 		textFieldDateReception.setEditable(false);
 		textFieldDateReception.setText("mm/aaaa");
-		textFieldDateReception.setBounds(189, 114, 114, 19);
+		textFieldDateReception.setBounds(200, 102, 134, 28);
 		contentPane.add(textFieldDateReception);
 		textFieldDateReception.setColumns(10);
 		
@@ -74,7 +75,7 @@ public class VueSaisieExemplaire extends Vue {
 				// liaison de la vue avec l'objet observé
 				getControleur().rechOuvrage(textFieldIsbn.getText());
 		}});
-		buttonRech.setBounds(357, 27, 107, 25);
+		buttonRech.setBounds(378, 6, 113, 29);
 		contentPane.add(buttonRech);
 		
 		buttonEnreg = new JButton("Enregistrer");
@@ -88,35 +89,35 @@ public class VueSaisieExemplaire extends Vue {
 					getControleur().nouvExemplaire(getOuvrage(), textFieldDateReception.getText(), statut);
 				}
 		});
-		buttonEnreg.setBounds(357, 143, 107, 25);
+		buttonEnreg.setBounds(378, 103, 112, 29);
 		contentPane.add(buttonEnreg);
 		
 		JLabel lblNewLabel_2 = new JLabel("Titre ouvrage");
-		lblNewLabel_2.setBounds(91, 85, 97, 15);
+		lblNewLabel_2.setBounds(24, 52, 83, 16);
 		contentPane.add(lblNewLabel_2);
 		
 		textFieldTitre = new JTextField();
 		textFieldTitre.setEditable(false);
-		textFieldTitre.setBounds(189, 83, 247, 19);
+		textFieldTitre.setBounds(200, 45, 291, 28);
 		contentPane.add(textFieldTitre);
 		textFieldTitre.setColumns(10);
 		
 		JLabel lblExemplaires = new JLabel("Exemplaires");
 		lblExemplaires.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 12));
-		lblExemplaires.setBounds(206, 237, 97, 15);
+		lblExemplaires.setBounds(206, 212, 75, 15);
 		contentPane.add(lblExemplaires);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(38, 222, 426, 3);
+		separator.setBounds(261, 80, 0, 12);
 		contentPane.add(separator);
 		
 		JLabel lblNewLabel_3 = new JLabel("Nombre d'exemplaires");
-		lblNewLabel_3.setBounds(38, 266, 150, 15);
+		lblNewLabel_3.setBounds(24, 243, 141, 16);
 		contentPane.add(lblNewLabel_3);
 		
 		textFieldNbExemplaires = new JTextField();
 		textFieldNbExemplaires.setEditable(false);
-		textFieldNbExemplaires.setBounds(216, 264, 49, 19);
+		textFieldNbExemplaires.setBounds(200, 237, 62, 28);
 		contentPane.add(textFieldNbExemplaires);
 		textFieldNbExemplaires.setColumns(10);
 		
@@ -124,39 +125,37 @@ public class VueSaisieExemplaire extends Vue {
 		buttonFermer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getControleur().fermerVue(VueSaisieExemplaire.this);
+				getControleur().menuBiblio();
 			}
 		});
-		buttonFermer.setBounds(206, 399, 107, 25);
+		buttonFermer.setBounds(200, 391, 87, 29);
 		contentPane.add(buttonFermer);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(37, 291, 427, 96);
-		
-		textAreaInfosExemplaires = new JTextArea();
-		textAreaInfosExemplaires.setEditable(false);
-		scrollPane= new JScrollPane(textAreaInfosExemplaires);
-		scrollPane.setEnabled(false);
-		scrollPane.setBounds(new Rectangle(38, 295, 426, 92));
-		contentPane.add(scrollPane);
+		listExemplaires = new JList(modeleExemplaires);
+		scrollExemplaires= new JScrollPane(listExemplaires);
+		scrollExemplaires.setEnabled(false);
+		scrollExemplaires.setBounds(24, 271, 467, 108);
+		contentPane.add(scrollExemplaires);
 		
 		
 		JLabel lblNewLabel_4 = new JLabel("Statut");
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_4.setBounds(117, 172, 61, 15);
+		lblNewLabel_4.setBounds(24, 146, 37, 16);
 		contentPane.add(lblNewLabel_4);
 		
 		RadioButtonConsultable = new JRadioButton("Consultable");
 		RadioButtonConsultable.setEnabled(false);
 		buttonGroup.add(RadioButtonConsultable);
-		RadioButtonConsultable.setBounds(190, 164, 134, 23);
+		RadioButtonConsultable.setBounds(200, 177, 107, 23);
 		contentPane.add(RadioButtonConsultable);
 		
 		RadioButtonEmpruntable = new JRadioButton("Empruntable");
 		RadioButtonEmpruntable.setEnabled(false);
 		buttonGroup.add(RadioButtonEmpruntable);
 		RadioButtonEmpruntable.setSelected(true);
-		RadioButtonEmpruntable.setBounds(190, 191, 134, 23);
+		RadioButtonEmpruntable.setBounds(200, 142, 111, 23);
 		contentPane.add(RadioButtonEmpruntable);
+		getFrame().setVisible(true);
 	}
 	
 	private Ouvrage getOuvrage() { return _ouvrage; }
@@ -165,9 +164,9 @@ public class VueSaisieExemplaire extends Vue {
 	public void alimente(Ouvrage ouv) {
 		textFieldTitre.setText(ouv.getTitre());
 		textFieldNbExemplaires.setText (String.valueOf(ouv.getNbExemplaires()));
-		textAreaInfosExemplaires.setText("");
+		modeleExemplaires.clear();
 		for (int i : ouv.getExemplaires().keySet())
-			textAreaInfosExemplaires.append(ouv.getExemplaire(i).afficheInfos());
+			modeleExemplaires.addElement(ouv.getExemplaire(i).afficheInfos());
 	}
 	
 	public void setEtat (int etat){
