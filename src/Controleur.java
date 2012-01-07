@@ -484,8 +484,7 @@ public class Controleur implements Serializable{
 		
 		public void rechPeriodique(String issn) {
 			Periodique per = this.getPeriodique(issn);
-			if (per == null)
-			{			
+			if (per == null) {
 				int option = JOptionPane.showConfirmDialog(null, "Periodique inconnu, voulez-vous le créer ?",
 						"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
@@ -499,13 +498,20 @@ public class Controleur implements Serializable{
 						fermerVue(getVueNouvelleParution());
 					saisiePeriodique();
 				}
-			}
-			else
-			{
+			} else {
 				if (this.getVueConsulterPeriodique() != null) {
-					per.addObserver(getVueConsulterPeriodique());
-					getVueConsulterPeriodique().setPeriodique(per);
-					per.notifierObservateurs();
+					if (per.getNbParutions() == 0) {
+						int option = JOptionPane.showConfirmDialog(null, "Aucune parution pour ce périodique, voulez-vous en créer ?",
+								"Aucune Parution", JOptionPane.YES_NO_OPTION    , JOptionPane.QUESTION_MESSAGE); 
+						if(option == JOptionPane.YES_OPTION ) {
+							fermerVue(getVueConsulterPeriodique());
+							saisirParution();
+						} else {
+							per.addObserver(getVueConsulterPeriodique());
+							getVueConsulterPeriodique().setPeriodique(per);
+							per.notifierObservateurs();
+						}
+					}
 				}
 				if (this.getVueNouvelleParution() != null)
 				{

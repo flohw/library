@@ -72,14 +72,17 @@ public class VueNouvelleParution extends Vue {
 			public void actionPerformed(ActionEvent e) {
 				String id = textFieldId.getText();
 				String titre = textFieldTitre.getText();
-				
-				if (id.length() == 0 || titre.length() == 0)
-				{
-					Message dialog = new Message("Vous devez remplir tous les champs");
-					dialog.setVisible(true);
+				try {
+					Integer.decode(id);
+					if (id.length() == 0 || titre.length() == 0) {
+						Message dialog = new Message("Vous devez remplir tous les champs");
+						dialog.setVisible(true);
+					} else
+						getControleur().nouvelleParution(getPeriodique(), Integer.decode(id), titre);
+				} catch (NumberFormatException ex) {
+					Message msg = new Message("L'identifiant n'est pas un chiffre");
+					msg.setVisible(true);
 				}
-				else
-					getControleur().nouvelleParution(getPeriodique(), Integer.decode(id), titre);
 			}
 		});
 		
@@ -159,6 +162,7 @@ public class VueNouvelleParution extends Vue {
 	
 	public void alimente (Periodique pe)
 	{
+		textFieldIssn.setText(getPeriodique().getIssn());
 		textFieldPerio.setText(pe.getNom());
 		textFieldDate.setText(ESDate.ecrireDate(pe.getDate()));
 	}

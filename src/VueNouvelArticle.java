@@ -76,7 +76,7 @@ public class VueNouvelArticle extends Vue {
 					else
 						getControleur().rechArticle(getParution(), _titre);
 				} catch (NumberFormatException ex) {
-					Message msg = new Message("La page n'est pas un numero");
+					Message msg = new Message("La page n'est pas un chiffre");
 					msg.setVisible(true);
 				}
 			}

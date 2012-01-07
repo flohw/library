@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.GregorianCalendar;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -55,12 +56,14 @@ public class VueNouveauPeriodique extends Vue {
 				String issn = textFieldIssn.getText();
 				String nom = textFieldNom.getText();
 				String date = textFieldDate.getText();
-				if (issn.length() == 0 || nom.length() == 0 || date.length() == 0)
-				{
+				GregorianCalendar dateCal = ESDate.lireDate(date);
+				if (issn.length() == 0 || nom.length() == 0 || date.length() == 0) {
 					Message dialog = new Message("Vous devez remplir tous les champs");
 					dialog.setVisible(true);
-				}
-				else
+				} else if (dateCal == null) {
+					Message m = new Message("La date est incorrecte");
+					m.setVisible(true);
+				} else
 					getControleur().nouveauPeriodique(issn, nom, ESDate.lireDate(date));
 			}
 		});

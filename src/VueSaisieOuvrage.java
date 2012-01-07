@@ -106,13 +106,10 @@ public class VueSaisieOuvrage extends Vue {
 				String _titre = textFieldTitre.getText();
 				String _editeur = textFieldEditeur.getText();
 				GregorianCalendar _dateEd = ESDate.lireDate (textFieldDateEd.getText());
-				if ((_isbn.length() == 0) || (_titre.length() == 0) || (_editeur.length() == 0))
-				{
+				if ((_isbn.length() == 0) || (_titre.length() == 0) || (_editeur.length() == 0)) {
 					Message dialog = new Message("Un des champs est vide");
 					dialog.setVisible(true);
-				}
-				else if (_dateEd == null)
-				{
+				} else if (_dateEd == null) {
 					Message dialog = new Message("La date est incorrecte");
 					dialog.setVisible(true);
 				}
