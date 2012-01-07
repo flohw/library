@@ -181,7 +181,6 @@ public class VueSaisieExemplaire extends Vue {
 			textFieldDateReception.setEditable(true);
 			break;
 		case finale:
-			buttonRech.setEnabled(false);
 			buttonFermer.setEnabled(true);
 			break;
 		}

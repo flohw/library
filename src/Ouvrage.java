@@ -97,12 +97,8 @@ public class Ouvrage extends Observable implements Serializable {
 			return null;
 	}
 	
-	public void ajouterAuteur (Auteur auteur) {
-		this.setAuteur(auteur);
-	}
-	public void ajouterMotCle(MotCle motCle) {
-		this.setMotCle(motCle);
-	}
+	public void ajouterAuteur (Auteur auteur) { this.setAuteur(auteur); }
+	public void ajouterMotCle(MotCle motCle) { this.setMotCle(motCle); }
 
 	private boolean verifDate(GregorianCalendar dateRecep) {
 		return (dateRecep.after(_dateEdition) || dateRecep.equals(_dateEdition));
@@ -124,6 +120,10 @@ public class Ouvrage extends Observable implements Serializable {
 				nb = nb + 1;
 		}
 		return nb;
+	}
+
+	public String afficheInfos() {
+		return "Titre : " + getTitre() + ", Nombre d'exemplaires : " + this.getNbExemplaires();
 	}
 	
 }

@@ -68,18 +68,17 @@ public class Article extends Observable implements Serializable {
 		this.notifierObservateurs();
 		return parution;
 	}
-	public MotCle ajouterMC(MotCle mot) {
+	public void ajouterMC(MotCle mot) {
 		this.setMot(mot);
 		mot.ajouterArticle(this);
-		this.notifierObservateurs();
-		return mot;
 	}
-	public Auteur ajouterAuteur(Auteur auteur) {
+	public void ajouterAuteur(Auteur auteur) {
 		this.setAuteur(auteur);
-		auteur.ajouterArticle(this.getTitre(), this);
-		this.notifierObservateurs();
-		return auteur;
 	}
 
 	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }
+
+	public String afficheInfos() {
+		return "Periodique : "+ getParution().getPeriodique().getNom() + ", Parution : " + getParution().getTitre() + ", Titre : " + getTitre() + ", Page " + getPage(); 
+	}
 }

@@ -38,7 +38,9 @@ public class Auteur extends Observable implements Serializable {
 	private void setNom(String nom) { _nom = nom; }
 	private void setPrenom(String prenom) { _prenom = prenom; }
 	private void setOuvrages(HashMap<String, Ouvrage> ouvrages) { _ouvrages = ouvrages; }
+	private void setOuvrage(String isbn, Ouvrage ouv) { getOuvrages().put(isbn, ouv); }
 	private void setArticles(HashMap<String, Article> articles) { _articles = articles; }
+	private void setArticle(String titre, Article art) { getArticles().put(titre, art); }
 	public String getAuteur() { return getPrenom() + " " + getNom(); }
 	public String getNom() { return _nom; }
 	public String getPrenom() { return _prenom; }
@@ -48,12 +50,13 @@ public class Auteur extends Observable implements Serializable {
 	public Article getArticle(String titre) { return getArticles().get(titre); }
 	
 	public void ajouterOuvrage(String isbn, Ouvrage ouvrage) {
-		getOuvrages().put(isbn, ouvrage);
+		setOuvrage(isbn, ouvrage);
 		ouvrage.ajouterAuteur(this);
 	}
 	
 	public void ajouterArticle(String titre, Article article) {
-		getArticles().put(titre, article);
+		setArticle(titre, article);
+		article.ajouterAuteur(this);
 	}
 
 	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }

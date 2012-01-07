@@ -70,7 +70,7 @@ public class VueNouvelArticle extends Vue {
 					Integer.decode(_page);
 					if (_titre.length() == 0 || _page.length() == 0)
 					{
-						Message msg = new Message("Vous devez rensienger tous les champs");
+						Message msg = new Message("Vous devez renseinger tous les champs");
 						msg.setVisible(true);
 					}
 					else
@@ -201,6 +201,7 @@ public class VueNouvelArticle extends Vue {
 		btnFermer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getControleur().fermerVue(VueNouvelArticle.this);
+				getControleur().menuBiblio();
 			}
 		});
 		
@@ -214,7 +215,8 @@ public class VueNouvelArticle extends Vue {
 				String prenom = textFieldPrenom.getText();
 				if (nom.length() != 0 && prenom.length() != 0) {
 					Auteur auteur = new Auteur(nom, prenom);
-					if (getControleur().auteurExiste(auteur, _auteurs)) {
+					if (!getControleur().auteurExiste(auteur, _auteurs)) {
+						_auteurs.add(auteur);
 						textFieldNom.setText("");
 						textFieldPrenom.setText("");
 					}

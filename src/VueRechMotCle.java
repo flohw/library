@@ -27,28 +27,34 @@ public class VueRechMotCle extends Vue {
 	public VueRechMotCle(Controleur controleur) {
 		super (controleur);
 		content = new JPanel();
-		setBounds(100, 100, 534, 263);
-		setTitle("Recherche par Mot Clé");
-		setContentPane(content);
-		content.setLayout(null);
+		getFrame().setBounds(100, 100, 490, 210);
+		getFrame().setTitle("Recherche par Mot Clé");
+		getFrame().setContentPane(content);
 		
 		lblMotclef = new JLabel("Mots-Clefs");
-		lblMotclef.setBounds(61, 72, 101, 15);
+		lblMotclef.setBounds(23, 76, 101, 15);
 		
 		btnRechercher = new JButton("Rechercher");
-		btnRechercher.setBounds(102, 167, 120, 25);
+		btnRechercher.setBounds(49, 152, 120, 25);
 		btnRechercher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				getControleur().fermerVue(VueRechMotCle.this);
-				getControleur().affRechMC();
+				int index = listMC.getSelectedIndex();
+				if (index == -1) {
+					Message m = new Message("Sélectionnez un mot clé");
+					m.setVisible(true);
+				} else {
+					getControleur().fermerVue(VueRechMotCle.this);
+					getControleur().affRechMC(modeleMC.get(index).toString());
+				}
 			}
 		});
 		
 		btnAnnuler = new JButton("Annuler");
-		btnAnnuler.setBounds(333, 167, 120, 25);
+		btnAnnuler.setBounds(280, 152, 120, 25);
 		btnAnnuler.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				getControleur().fermerVue(VueRechMotCle.this);
+				getControleur().menuBiblio();
 			}
 		});
 		
@@ -56,25 +62,15 @@ public class VueRechMotCle extends Vue {
 		listMC.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listMC.setValueIsAdjusting(true);
 		scrollMC = new JScrollPane(listMC);
-		scrollMC.setBounds(165, 32, 294, 113);
+		scrollMC.setBounds(165, 27, 294, 113);
 		
 		content.setLayout(null);
 		content.add(lblMotclef);
 		content.add(btnRechercher);
 		content.add(btnAnnuler);
 		content.add(scrollMC);
-		for(String item : getControleur().lectureLignesFichier())
-			modeleMC.addElement(item);
+		for(MotCle item : getControleur().getMotsCles())
+			modeleMC.addElement(item.getMotcle());
+		getFrame().setVisible(true);
 	}
-	
-	public void setEtat(int etat) {
-		super.setEtat(etat);
-		switch (etat) {
-		case initiale:
-			break;
-		case finale:
-			break;
-		}
-	}
-
 }

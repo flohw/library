@@ -113,7 +113,15 @@ public class Controleur implements Serializable{
 			Auteur newAuteur = null;
 			for (Auteur aut : getAuteurs())
 			{
-				if (aut.equals(auteur))
+				if (aut.getAuteur().equals(auteur.getAuteur()))
+					newAuteur = aut;
+			}
+			return newAuteur;
+		}
+		public Auteur getAuteur(String auteur) {
+			Auteur newAuteur = null;
+			for (Auteur aut : getAuteurs()) {
+				if (aut.getAuteur().equals(auteur))
 					newAuteur = aut;
 			}
 			return newAuteur;
@@ -122,7 +130,7 @@ public class Controleur implements Serializable{
 			MotCle newMotCle = null;
 			for (MotCle mot : getMotsCles())
 			{
-				if (mot.getMotcle() == mc)
+				if (mot.getMotcle().equals(mc))
 					newMotCle = mot;
 			}
 			return newMotCle;
@@ -142,13 +150,15 @@ public class Controleur implements Serializable{
 		private VueNouvelleParution getVueNouvelleParution() { return _vueNouvelleParution ; }		
 		private VueAfficheAuteur getVueAfficheAuteur() { return _vueAfficheAuteur ; }		
 		private VueAfficheMC getVueAfficheMC() { return _vueAfficheMC ; }
+		private VueMenuBiblio getVueMenuBiblio() { return _vueMenuBiblio; }
 		
 		////////////////////////////////////////////////////////////////////////////
 		// Affichage des CU
 		////////////////////////////////////////////////////////////////////////////
 		public void menuBiblio() {
 			try {
-				this.setVueMenuBiblio(new VueMenuBiblio(this));	
+				this.setVueMenuBiblio(new VueMenuBiblio(this));
+				getVueMenuBiblio().setEtat(Vue.initiale);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -196,8 +206,14 @@ public class Controleur implements Serializable{
 		//RECHERCHER AUTEUR
 		public void rechAuteur() {
 			try {
-				this.setVueRechAuteur(new VueRechAuteur(this));
-				this.getVueRechAuteur().setEtat(Vue.initiale);
+				if (this.getAuteurs().isEmpty()) {
+					menuBiblio();
+					Message msg = new Message("Aucun auteur n'est enregistré, créez des ouvrages ou des articles");
+					msg.setVisible(true);
+				} else {
+					this.setVueRechAuteur(new VueRechAuteur(this));
+					this.getVueRechAuteur().setEtat(Vue.initiale);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -244,20 +260,30 @@ public class Controleur implements Serializable{
 		}
 		
 		//AFFICHER RECHERCHE AUTEUR
-		public void affRechAuteur() {
+		public void affRechAuteur(String auteur) {
 			try {
-				this.setVueAfficheAuteur(new VueAfficheAuteur(this)); 
+				this.setVueAfficheAuteur(new VueAfficheAuteur(this));
+				Auteur aut = getAuteur(auteur);
+				aut.addObserver(getVueAfficheAuteur());
+				getVueAfficheAuteur().setAuteur(aut);
 				this.getVueAfficheAuteur().setEtat(Vue.initiale);
+				aut.notifierObservateurs();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		
 		//AFFICHER RECHERCHE MC
-		public void affRechMC() {
+		public void affRechMC(String motCle) {
 			try {
-				this.setVueAfficheMC(new VueAfficheMC(this)); 
+				this.setVueAfficheMC(new VueAfficheMC(this));
+				MotCle mc = getMotCle(motCle);
+				Message m = new Message(mc.getMotcle());
+				m.setVisible(true);
+				mc.addObserver(getVueAfficheMC());
+				getVueAfficheMC().setMotCle(mc);
 				this.getVueAfficheMC().setEtat(Vue.initiale);
+				mc.notifierObservateurs();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -380,7 +406,6 @@ public class Controleur implements Serializable{
 				Message dialog = new Message("Cet auteur a déjà été enregistré");
 				dialog.setVisible(true);
 			} else {
-				auteurs.add(aut);
 				Message dialog = new Message("Auteur enregistré");
 				dialog.setVisible(true);
 				if (getVueSaisieOuvrage() != null)
@@ -397,9 +422,12 @@ public class Controleur implements Serializable{
 			// Ajout de l'ouvrage dans l'ensemble des ouvrages de la bibliothèque
 			this.setOuvrage(ouv, ouv.getIsbn());
 			for (Auteur aut : auteurs) {
-				if (getAuteur(aut) == null)
-					this.getAuteurs().add(aut);
-				aut.ajouterOuvrage(ouv.getIsbn(), ouv);
+				Auteur a = getAuteur(aut);
+				if (a == null) {
+					a = new Auteur(aut.getNom(), aut.getPrenom());
+					this.getAuteurs().add(a);
+				}
+				a.ajouterOuvrage(ouv.getIsbn(), ouv);
 			}
 			MotCle mot = null;
 			for (String mc : motsCles) {
@@ -597,12 +625,13 @@ public class Controleur implements Serializable{
 		public void nouvArticle(String titre, Integer page, HashSet<Auteur> auteurs, HashSet<String> motsCles, Parution pa) {
 			Article newArticle = new Article(titre, page, pa);
 			pa.ajouterArticle(newArticle);
-			Auteur newAuteur = null;
 			for (Auteur aut : auteurs) {
-				newAuteur = this.getAuteur(aut);
-				if (newAuteur == null)
-					newAuteur = new Auteur(aut.getNom(), aut.getPrenom());
-				newArticle.ajouterAuteur(newAuteur);
+				Auteur a = getAuteur(aut);
+				if (a == null) {
+					a = new Auteur(aut.getNom(), aut.getPrenom());
+					this.getAuteurs().add(a);
+				}
+				a.ajouterArticle(newArticle.getTitre(), newArticle);
 			}
 			MotCle mot = null;
 			for (String mc : motsCles) {
