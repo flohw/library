@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.util.Observable;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import javax.swing.ListSelectionModel;
 
 
 public class VueConsulterPeriodique extends Vue {
@@ -43,12 +42,14 @@ public class VueConsulterPeriodique extends Vue {
 		super(controleur);
 		content = new JPanel();
 		getFrame().setTitle("Consulter un Périodique");
-		getFrame().setBounds(100, 100, 533, 460);
+		getFrame().setBounds(100, 100, 533, 480);
 		getFrame().setContentPane(content);
 		
 		lblIssn = new JLabel("ISSN");
 		lblIssn.setBounds(23, 23, 28, 16);
 		
+		for (String issn : getControleur().getPeriodiques().keySet())
+			modeleIssn.addElement(getControleur().getPeriodique(issn).afficheInfos());
 		listIssn = new JList(modeleIssn);
 		scrollIssn = new JScrollPane(listIssn);
 		scrollIssn.setBounds(219, 23, 291, 104);
@@ -57,14 +58,12 @@ public class VueConsulterPeriodique extends Vue {
 		btnRechercher.setBounds(23, 78, 113, 29);
 		btnRechercher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String issn = textFieldIssnRech.getText();
-				if (issn.length() == 0)
-				{
-					Message dialog = new Message("Vous devez rensigner le numero ISSN");
+				int issn = listIssn.getSelectedIndex();
+				if (issn == -1) {
+					Message dialog = new Message("Vous devez sélectionner un périodique");
 					dialog.setVisible(true);
-				}
-				else
-					getControleur().rechPeriodique(issn);
+				} else
+					getControleur().rechPeriodique(modeleIssn.get(issn).toString());
 			}
 		});
 		

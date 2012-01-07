@@ -565,6 +565,7 @@ public class Controleur implements Serializable{
 		}
 		
 		public void rechPeriodique(String issn) {
+			issn = this.getIdentifiant(issn);
 			Periodique per = this.getPeriodique(issn);
 			if (per == null) {
 				int option = JOptionPane.showConfirmDialog(null, "Periodique inconnu, voulez-vous le créer ?",

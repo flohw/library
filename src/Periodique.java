@@ -55,6 +55,10 @@ public class Periodique extends Observable implements Serializable {
 
 	public void notifierObservateurs() { this.setChanged(); this.notifyObservers(); }
 
+	public String afficheInfos() {
+		return getIssn() + " - " + getNom();
+	}
+
 	
 } // Fin ajouterParution
 	
