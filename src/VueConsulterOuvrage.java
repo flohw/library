@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JSeparator;
 import javax.swing.JList;
 import java.awt.Rectangle;
 import java.util.Observable;
@@ -46,8 +45,6 @@ public class VueConsulterOuvrage extends Vue {
 	private DefaultListModel modeleExemplaires = new DefaultListModel();
 	private DefaultListModel modeleMC = new DefaultListModel();
 	private DefaultListModel modeleIsbn = new DefaultListModel();
-	
-	private JSeparator separator;
 	Ouvrage _ouvrage;
 	private JList listIsbn;
 
@@ -82,9 +79,6 @@ public class VueConsulterOuvrage extends Vue {
 					getControleur().rechOuvrage(modeleIsbn.get(index).toString());
 			}
 		});
-		
-		separator = new JSeparator();
-		separator.setBounds(0, 81, 604, 2);
 		
 		lblAuteur = new JLabel("Auteur(s)");
 		lblAuteur.setBounds(89, 207, 154, 15);
@@ -157,7 +151,6 @@ public class VueConsulterOuvrage extends Vue {
 		content.add(scrollExemplaires);
 		content.add(btnRechercher);
 		content.add(btnTerminer);
-		content.add(separator);
 		content.add(scrollIsbn);
 		
 		getFrame().setVisible(true);

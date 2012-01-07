@@ -6,7 +6,6 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JSeparator;
 import java.util.Observable;
 import javax.swing.JScrollPane;
 import java.awt.Font;
@@ -14,6 +13,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JList;
+import javax.swing.ListSelectionModel;
 
 public class VueSaisieExemplaire extends Vue {
 
@@ -48,20 +48,17 @@ public class VueSaisieExemplaire extends Vue {
 		getFrame().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
 		getFrame().setBounds(100, 100, 540, 520);
 		getFrame().setContentPane(contentPane);
-		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Isbn");
 		lblNewLabel.setBounds(24, 11, 27, 16);
 		contentPane.add(lblNewLabel);
 		
+		for (String isbn : getControleur().getOuvrages().keySet())
+			modeleIsbn.addElement(getControleur().getOuvrage(isbn).afficheOuvrage());
 		listIsbn = new JList(modeleIsbn);
+		listIsbn.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollIsbn = new JScrollPane(listIsbn);
 		scrollIsbn.setBounds(173, 11, 317, 96);
-		contentPane.add(scrollIsbn);
-		
-		
-		scrollIsbn.setViewportView(listIsbn);
-		
 		
 		JLabel lblNewLabel_1 = new JLabel("Date réception");
 		lblNewLabel_1.setBounds(24, 208, 92, 16);
@@ -78,7 +75,12 @@ public class VueSaisieExemplaire extends Vue {
 		buttonRech.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// liaison de la vue avec l'objet observé
-				getControleur().rechOuvrage();
+				int index = listIsbn.getSelectedIndex();
+				if (index == -1) {
+					Message dg = new Message("Sélectionnez un ouvrage");
+					dg.setVisible(true);
+				} else
+					getControleur().rechOuvrage(modeleIsbn.get(index).toString());
 		}});
 		buttonRech.setBounds(24, 52, 113, 29);
 		contentPane.add(buttonRech);
@@ -156,6 +158,7 @@ public class VueSaisieExemplaire extends Vue {
 		RadioButtonEmpruntable.setSelected(true);
 		RadioButtonEmpruntable.setBounds(200, 242, 111, 23);
 		contentPane.add(RadioButtonEmpruntable);
+		contentPane.add(scrollIsbn);
 		getFrame().setVisible(true);
 	}
 	
