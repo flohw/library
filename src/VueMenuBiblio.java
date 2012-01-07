@@ -1,5 +1,3 @@
-import java.awt.event.WindowEvent;
-
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
@@ -132,9 +130,5 @@ public class VueMenuBiblio  extends Vue{
         mnRecherches.add(menuItemRechMot);   
         
         getFrame().setVisible(true);
-    }
-   
-    public void windowClosing (WindowEvent e) {
-        getControleur().fermerVue(VueMenuBiblio.this);
     }
 }
