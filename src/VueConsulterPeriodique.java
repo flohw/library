@@ -5,7 +5,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JSeparator;
 import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -31,9 +30,7 @@ public class VueConsulterPeriodique extends Vue {
 	
 	private JButton btnRechercher;
 	private JButton btnTerminer;
-	
-	private JSeparator separator;
-	
+
 	private Periodique _periodique;
 	private JScrollPane scrollIssn;
 	private JList listIssn;
