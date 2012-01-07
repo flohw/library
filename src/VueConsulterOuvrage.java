@@ -68,12 +68,10 @@ public class VueConsulterOuvrage extends Vue {
 		btnRechercher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Actions recherche ouvrage
-				if (textFieldIsbn.getText().length() == 0)
-				{
+				if (textFieldIsbn.getText().length() == 0) {
 					Message dialog = new Message("Champ ISBN vide");
 					dialog.setVisible(true);
-				}
-				else
+				} else
 					getControleur().rechOuvrage(textFieldIsbn.getText());
 			}
 		});

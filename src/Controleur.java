@@ -166,8 +166,18 @@ public class Controleur implements Serializable{
 		// Consulter ouvrage
 		public void consulterOuvrage() {
 			try {
-				this.setVueConsulterOuvrage (new VueConsulterOuvrage(this)); 	
-				this.getVueConsulterOuvrage().setEtat(Vue.initiale);
+				if (this.getOuvrages().isEmpty()) {
+					int option = JOptionPane.showConfirmDialog(null, "Aucun ouvrage enregistré, voulez-vous en créer ?",
+							"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					
+					if(option == JOptionPane.YES_OPTION )
+						saisirOuvrage();
+					else
+						menuBiblio();
+				} else {
+					this.setVueConsulterOuvrage (new VueConsulterOuvrage(this)); 	
+					this.getVueConsulterOuvrage().setEtat(Vue.initiale);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -176,8 +186,18 @@ public class Controleur implements Serializable{
 		// SAISIR EXEMPLAIRE
 		public void saisirExemplaire() {
 			try {
-				this.setVueSaisieExemplaire(new VueSaisieExemplaire(this));
-				this.getVueSaisieExemplaire().setEtat(Vue.initiale);
+				if (this.getOuvrages().isEmpty()) {
+					int option = JOptionPane.showConfirmDialog(null, "Aucun ouvrage enregistré, voulez-vous en créer ?",
+							"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					
+					if(option == JOptionPane.YES_OPTION )
+						saisirOuvrage();
+					else
+						menuBiblio();
+				} else {
+					this.setVueSaisieExemplaire(new VueSaisieExemplaire(this));
+					this.getVueSaisieExemplaire().setEtat(Vue.initiale);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -196,8 +216,14 @@ public class Controleur implements Serializable{
 		//RECHERCHER MOT CLEF
 		public void rechMotCle() {
 			try {
-				this.setVueRechMotCle(new VueRechMotCle(this)); 
-				this.getVueRechMotCle().setEtat(Vue.initiale);
+				if (this.getMotsCles().isEmpty()) {
+					menuBiblio();
+					Message m = new Message("Aucun mot clé associé à un ouvrage ou à un article");
+					m.setVisible(true);
+				} else {
+					this.setVueRechMotCle(new VueRechMotCle(this)); 
+					this.getVueRechMotCle().setEtat(Vue.initiale);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -222,8 +248,18 @@ public class Controleur implements Serializable{
 		//CONSULTER PERIODIQUES
 		public void consulterPeriodique() {
 			try {
-				this.setVueConsulterPeriodique(new VueConsulterPeriodique(this));
-				this.getVueConsulterPeriodique().setEtat(Vue.initiale);
+				if (this.getPeriodiques().isEmpty()) {
+					int option = JOptionPane.showConfirmDialog(null, "Aucun periodique enregistré, voulez-vous en créer ?",
+							"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					
+					if(option == JOptionPane.YES_OPTION )
+						saisiePeriodique();
+					else
+						menuBiblio();
+				} else {
+					this.setVueConsulterPeriodique(new VueConsulterPeriodique(this));
+					this.getVueConsulterPeriodique().setEtat(Vue.initiale);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -242,8 +278,18 @@ public class Controleur implements Serializable{
 		//NOUVEL ARTICLE
 		public void saisieArticle() {
 			try {
-				this.setVueNouvelArticle(new VueNouvelArticle(this));
-				this.getVueNouvelArticle().setEtat(Vue.initiale);
+				if (this.getPeriodiques().isEmpty()) {
+					int option = JOptionPane.showConfirmDialog(null, "Aucun periodique enregistré, voulez-vous en créer ?",
+							"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					
+					if(option == JOptionPane.YES_OPTION )
+						saisiePeriodique();
+					else
+						menuBiblio();
+				} else {
+					this.setVueNouvelArticle(new VueNouvelArticle(this));
+					this.getVueNouvelArticle().setEtat(Vue.initiale);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -252,8 +298,18 @@ public class Controleur implements Serializable{
 		//NOUVELLE PARUTION
 		public void saisirParution() {
 			try {
-				this.setVueNouvelleParution(new VueNouvelleParution(this));
-				this.getVueNouvelleParution().setEtat(Vue.initiale);
+				if (this.getOuvrages().isEmpty()) {
+					int option = JOptionPane.showConfirmDialog(null, "Aucun périodique enregistré, voulez-vous en créer ?",
+							"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					
+					if(option == JOptionPane.YES_OPTION )
+						saisiePeriodique();
+					else
+						menuBiblio();
+				} else {
+					this.setVueNouvelleParution(new VueNouvelleParution(this));
+					this.getVueNouvelleParution().setEtat(Vue.initiale);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -372,8 +428,7 @@ public class Controleur implements Serializable{
 				int option = JOptionPane.showConfirmDialog(null, "Ouvrage inconnu, voulez-vous le créer ?",
 						"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-				if(option == JOptionPane.YES_OPTION )
-				{
+				if(option == JOptionPane.YES_OPTION ) {
 					if (this.getVueConsulterOuvrage() != null)
 						fermerVue(getVueConsulterOuvrage());
 					if (this.getVueSaisieExemplaire() != null)
@@ -388,9 +443,19 @@ public class Controleur implements Serializable{
 					ouv.notifierObservateurs();
 				}
 				if (this.getVueConsulterOuvrage() != null) {
-					ouv.addObserver(this.getVueConsulterOuvrage());
-					this.getVueConsulterOuvrage().setOuvrage(ouv);
-					ouv.notifierObservateurs();
+					if (this.getOuvrages().isEmpty()) {
+						int option = JOptionPane.showConfirmDialog(null, "Aucun ouvrage n'est enregistré, voulez-vous le créer ?",
+								"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+						if(option == JOptionPane.YES_OPTION ) {
+							fermerVue(getVueConsulterOuvrage());
+							saisirOuvrage();
+						}
+					} else {
+						ouv.addObserver(this.getVueConsulterOuvrage());
+						this.getVueConsulterOuvrage().setOuvrage(ouv);
+						ouv.notifierObservateurs();
+					}
 				}
 			}
 		} // Fin rechOuvrage
@@ -488,10 +553,7 @@ public class Controleur implements Serializable{
 				int option = JOptionPane.showConfirmDialog(null, "Periodique inconnu, voulez-vous le créer ?",
 						"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-				if(option == JOptionPane.YES_OPTION )
-				{
-					if (this.getVueConsulterPeriodique() != null)
-						fermerVue(getVueConsulterPeriodique());
+				if(option == JOptionPane.YES_OPTION ) {
 					if (this.getVueNouvelArticle() != null)
 						fermerVue(getVueNouvelArticle());
 					if (this.getVueNouvelleParution() != null)
