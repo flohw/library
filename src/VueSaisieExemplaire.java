@@ -46,11 +46,12 @@ public class VueSaisieExemplaire extends Vue {
 		contentPane = new JPanel();
 		getFrame().setTitle("Enregistrement d'un nouvel exemplaire d'ouvrage");
 		getFrame().setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-		getFrame().setBounds(100, 100, 540, 520);
+		getFrame().setBounds(100, 100, 590, 610);
 		getFrame().setContentPane(contentPane);
+		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Isbn");
-		lblNewLabel.setBounds(24, 11, 27, 16);
+		lblNewLabel.setBounds(45, 12, 30, 14);
 		contentPane.add(lblNewLabel);
 		
 		for (String isbn : getControleur().getOuvrages().keySet())
@@ -58,20 +59,21 @@ public class VueSaisieExemplaire extends Vue {
 		listIsbn = new JList(modeleIsbn);
 		listIsbn.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollIsbn = new JScrollPane(listIsbn);
-		scrollIsbn.setBounds(173, 11, 317, 96);
+		scrollIsbn.setBounds(251, 10, 259, 114);
 		
 		JLabel lblNewLabel_1 = new JLabel("Date réception");
-		lblNewLabel_1.setBounds(24, 208, 92, 16);
+		lblNewLabel_1.setBounds(45, 197, 106, 14);
 		contentPane.add(lblNewLabel_1);
 		
 		textFieldDateReception = new JTextField();
+		textFieldDateReception.setBounds(251, 195, 114, 18);
 		textFieldDateReception.setEditable(false);
 		textFieldDateReception.setText("mm/aaaa");
-		textFieldDateReception.setBounds(200, 202, 134, 28);
 		contentPane.add(textFieldDateReception);
 		textFieldDateReception.setColumns(10);
 		
 		buttonRech = new JButton("Rechercher");
+		buttonRech.setBounds(45, 69, 114, 24);
 		buttonRech.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// liaison de la vue avec l'objet observé
@@ -82,10 +84,10 @@ public class VueSaisieExemplaire extends Vue {
 				} else
 					getControleur().rechOuvrage(modeleIsbn.get(index).toString());
 		}});
-		buttonRech.setBounds(24, 52, 113, 29);
 		contentPane.add(buttonRech);
 		
 		buttonEnreg = new JButton("Enregistrer");
+		buttonEnreg.setBounds(420, 192, 114, 24);
 		buttonEnreg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String statut;
@@ -96,67 +98,66 @@ public class VueSaisieExemplaire extends Vue {
 					getControleur().nouvExemplaire(getOuvrage(), textFieldDateReception.getText(), statut);
 				}
 		});
-		buttonEnreg.setBounds(378, 203, 112, 29);
 		contentPane.add(buttonEnreg);
 		
 		JLabel lblNewLabel_2 = new JLabel("Titre ouvrage");
-		lblNewLabel_2.setBounds(24, 152, 83, 16);
+		lblNewLabel_2.setBounds(45, 154, 95, 14);
 		contentPane.add(lblNewLabel_2);
 		
 		textFieldTitre = new JTextField();
+		textFieldTitre.setBounds(251, 152, 257, 18);
 		textFieldTitre.setEditable(false);
-		textFieldTitre.setBounds(200, 145, 291, 28);
 		contentPane.add(textFieldTitre);
 		textFieldTitre.setColumns(10);
 		
 		JLabel lblExemplaires = new JLabel("Exemplaires");
+		lblExemplaires.setBounds(251, 316, 82, 14);
 		lblExemplaires.setFont(new Font("Dialog", Font.BOLD | Font.ITALIC, 12));
-		lblExemplaires.setBounds(206, 312, 75, 15);
 		contentPane.add(lblExemplaires);
 		
 		JLabel lblNewLabel_3 = new JLabel("Nombre d'exemplaires");
-		lblNewLabel_3.setBounds(24, 343, 141, 16);
+		lblNewLabel_3.setBounds(78, 344, 158, 14);
 		contentPane.add(lblNewLabel_3);
 		
 		textFieldNbExemplaires = new JTextField();
+		textFieldNbExemplaires.setBounds(284, 342, 114, 18);
 		textFieldNbExemplaires.setEditable(false);
-		textFieldNbExemplaires.setBounds(200, 337, 62, 28);
 		contentPane.add(textFieldNbExemplaires);
 		textFieldNbExemplaires.setColumns(10);
 		
 		buttonFermer = new JButton("Fermer");
+		buttonFermer.setBounds(280, 536, 84, 24);
 		buttonFermer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getControleur().fermerVue(VueSaisieExemplaire.this);
 				getControleur().menuBiblio();
 			}
 		});
-		buttonFermer.setBounds(200, 491, 87, 29);
 		contentPane.add(buttonFermer);
 		
 		listExemplaires = new JList(modeleExemplaires);
 		scrollExemplaires= new JScrollPane(listExemplaires);
+		scrollExemplaires.setBounds(78, 372, 460, 131);
 		scrollExemplaires.setEnabled(false);
-		scrollExemplaires.setBounds(24, 371, 467, 108);
 		contentPane.add(scrollExemplaires);
 		
 		
 		JLabel lblNewLabel_4 = new JLabel("Statut");
+		lblNewLabel_4.setBounds(106, 244, 45, 14);
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_4.setBounds(24, 246, 37, 16);
 		contentPane.add(lblNewLabel_4);
 		
 		RadioButtonConsultable = new JRadioButton("Consultable");
+		RadioButtonConsultable.setBounds(251, 240, 110, 22);
 		RadioButtonConsultable.setEnabled(false);
 		buttonGroup.add(RadioButtonConsultable);
-		RadioButtonConsultable.setBounds(200, 277, 107, 23);
 		contentPane.add(RadioButtonConsultable);
 		
 		RadioButtonEmpruntable = new JRadioButton("Empruntable");
+		RadioButtonEmpruntable.setBounds(251, 266, 115, 22);
 		RadioButtonEmpruntable.setEnabled(false);
 		buttonGroup.add(RadioButtonEmpruntable);
 		RadioButtonEmpruntable.setSelected(true);
-		RadioButtonEmpruntable.setBounds(200, 242, 111, 23);
 		contentPane.add(RadioButtonEmpruntable);
 		contentPane.add(scrollIsbn);
 		getFrame().setVisible(true);
