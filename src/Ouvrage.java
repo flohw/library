@@ -125,5 +125,7 @@ public class Ouvrage extends Observable implements Serializable {
 	public String afficheInfos() {
 		return "Titre : " + getTitre() + ", Nombre d'exemplaires : " + this.getNbExemplaires();
 	}
+
+	public String afficheOuvrage() { return getIsbn() + " - " + getTitre(); }
 	
 }

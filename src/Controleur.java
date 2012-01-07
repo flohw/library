@@ -135,6 +135,11 @@ public class Controleur implements Serializable{
 			}
 			return newMotCle;
 		}
+		
+		public String getIdentifiant(String ouvrage) {
+			String [] identifiant = ouvrage.split(" - ");
+			return identifiant[0];
+		}
 
 		////////////////////////////////////////////////////////////////////////////
 		// Getteur de vues
@@ -423,6 +428,7 @@ public class Controleur implements Serializable{
 		}
 		
 		public void rechOuvrage(String isbn) {
+			isbn = getIdentifiant(isbn);
 			Ouvrage ouv = this.getOuvrage(isbn);
 			if (ouv == null) {
 				int option = JOptionPane.showConfirmDialog(null, "Ouvrage inconnu, voulez-vous le créer ?",
@@ -455,6 +461,17 @@ public class Controleur implements Serializable{
 						ouv.addObserver(this.getVueConsulterOuvrage());
 						this.getVueConsulterOuvrage().setOuvrage(ouv);
 						ouv.notifierObservateurs();
+						int nbConsult = ouv.getNbExemplairesEnConsultation();
+						int nbEmpr = ouv.getNbExemplairesEmpruntable();
+						if ((nbConsult + nbEmpr)== 0) {
+							int option = JOptionPane.showConfirmDialog(null, "Aucun ouvrage n'est enregistré, voulez-vous le créer ?",
+									"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+							if(option == JOptionPane.YES_OPTION ) {
+								fermerVue(getVueConsulterOuvrage());
+								saisirExemplaire();
+							}
+						}
 					}
 				}
 			}
