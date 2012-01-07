@@ -1,4 +1,7 @@
 import javax.swing.JFrame;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Observable;
 import java.util.Observer;
 /**
@@ -17,26 +20,35 @@ public abstract class Vue extends JFrame implements Observer{
 	
 	private Controleur _controleur;
 	private int _etat;
+	private JFrame frame;
 
 	public Vue(Controleur controleur) {
+		frame = new JFrame();
+        frame.setResizable(false);
+        frame.setTitle("Gestion de bibliothèque");
+        frame.setBounds(100, 100, 550, 251);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener (new WindowAdapter() {
+            public void windowClosing (WindowEvent e) {
+            	getControleur().fermerVue(Vue.this);
+            }
+        });
+        frame.getContentPane().setLayout(null);
+        
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				getControleur().fermerVue(Vue.this);
+			}
+		});
 		this.setControleur(controleur);
 	}
 	
-	protected Controleur getControleur() {
-		return _controleur;
-	}
-	
-	protected void setControleur(Controleur cont) {
-		_controleur = cont;
-	}
-	
-	public int getEtat() {
-		return _etat;
-	}
-	
-	public void setEtat(int etat) {
-		_etat = etat;
-	}
+	protected Controleur getControleur() { return _controleur; }
+	protected void setControleur(Controleur cont) { _controleur = cont; }
+	public int getEtat() { return _etat; }
+	public void setEtat(int etat) { _etat = etat; }
+	public JFrame getFrame() { return frame; }
 	
 	// méthode de la classe interface Observer 
 	// à implémenter par toute classe réalisant cette interface

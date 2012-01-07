@@ -335,6 +335,7 @@ public class Controleur implements Serializable{
 				ObjectInputStream in = new ObjectInputStream(fichier);
 				return((Controleur) in.readObject());
 			} catch (Exception e) {
+				System.out.print(e.getMessage());
 				Message dialog = new Message("Pbs de Restauration ou fichier non encore créé");
 				dialog.setVisible(true);
 				return this;
@@ -346,6 +347,7 @@ public class Controleur implements Serializable{
 				ObjectOutputStream out = new ObjectOutputStream(f);
 				out.writeObject(this);
 			} catch (Exception e) {
+				System.out.print(e.getMessage());
 				Message dialog = new Message("Pb de Sauvegarde dans le fichier");
 				dialog.setVisible(true);
 			}

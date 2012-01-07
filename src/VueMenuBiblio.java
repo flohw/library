@@ -1,7 +1,5 @@
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
@@ -16,33 +14,16 @@ import javax.swing.SwingConstants;
 public class VueMenuBiblio  extends Vue{
     
 	private static final long serialVersionUID = 1L;
-	private JFrame frame;
 
     public VueMenuBiblio(Controleur controleur) {
         super (controleur);
         this.initialize();
     }
-   
-    public JFrame getFrame() {
-        return frame;   
-    }
     
     private void initialize() {
-        frame = new JFrame();
-        frame.setResizable(false);
-        frame.setTitle("Gestion de bibliothèque");
-        frame.setBounds(100, 100, 550, 251);
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.addWindowListener (new WindowAdapter() {
-            public void windowClosing (WindowEvent e) {
-            	getControleur().fermerVue(VueMenuBiblio.this);
-            }
-        });
-        frame.getContentPane().setLayout(null);
-       
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBounds(45, 25, 400, 20);
-        frame.getContentPane().add(menuBar);
+        getFrame().getContentPane().add(menuBar);
        
         JMenu mnApplication = new JMenu("Application");
         mnApplication.setHorizontalAlignment(SwingConstants.LEFT);
@@ -150,7 +131,7 @@ public class VueMenuBiblio  extends Vue{
         });
         mnRecherches.add(menuItemRechMot);   
         
-        frame.setVisible(true);
+        getFrame().setVisible(true);
     }
    
     public void windowClosing (WindowEvent e) {
