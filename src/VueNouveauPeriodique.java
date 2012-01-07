@@ -21,10 +21,9 @@ public class VueNouveauPeriodique extends Vue {
 	public VueNouveauPeriodique(Controleur controleur) {
 		super(controleur);
 		content = new JPanel();
-		setTitle("Enregistrer un Nouveau Périodique");
-		setBounds(100, 100, 539, 154);
-		setContentPane(content);
-		content.setLayout(null);
+		getFrame().setTitle("Enregistrer un Nouveau Périodique");
+		getFrame().setBounds(100, 100, 539, 154);
+		getFrame().setContentPane(content);
 		
 		JLabel lblIssn = new JLabel("ISSN");
 		lblIssn.setBounds(89, 9, 122, 15);
@@ -82,6 +81,7 @@ public class VueNouveauPeriodique extends Vue {
 		content.add(textFieldDate);
 		content.add(btnEnregistrer);
 		content.add(btnAnnuler);
+		getFrame().setVisible(true);
 	}
 	
 	public void setEtat(int etat) {

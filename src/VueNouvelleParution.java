@@ -29,10 +29,9 @@ public class VueNouvelleParution extends Vue {
 	public VueNouvelleParution(Controleur controleur) {
 		super (controleur);
 		content = new JPanel();
-		setTitle("Nouvelle Parution");
-		setBounds(100, 100, 465, 397);
-		setContentPane(content);
-		content.setLayout(null);
+		getFrame().setTitle("Nouvelle Parution");
+		getFrame().setBounds(100, 100, 465, 397);
+		getFrame().setContentPane(content);
 		
 		JLabel lblISSN = new JLabel("ISSN");
 		lblISSN.setBounds(6, 13, 120, 16);

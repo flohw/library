@@ -237,10 +237,10 @@ public class Controleur implements Serializable{
 			try {
 				this.setVueNouveauPeriodique(new VueNouveauPeriodique(this));
 				// le Menu est caché
-				this.getVueMenuBiblio().getFrame().setVisible(false); 
+//				this.getVueMenuBiblio().getFrame().setVisible(false); 
 				// la vue courante est VueNouveauPeriodique
 				this.getVueNouveauPeriodique().setEtat(Vue.initiale);
-				this.getVueNouveauPeriodique().setVisible(true);
+//				this.getVueNouveauPeriodique().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -307,7 +307,7 @@ public class Controleur implements Serializable{
 				}
 			vue.dispose();
 			// le Menu est rendu de nouveau visible
-			this.getVueMenuBiblio().getFrame().setVisible(true);
+//			this.getVueMenuBiblio().getFrame().setVisible(true);
 			this.resetVues();
 		}
 		
