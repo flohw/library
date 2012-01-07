@@ -101,10 +101,9 @@ public class VueAfficheMC extends Vue {
 				getMotCle().getMotcle());
 		for (String a : getMotCle().getArticles().keySet())
 			modeleArticles.addElement(getMotCle().getArticle(a).afficheInfos());
+		
 		for (String o : getMotCle().getOuvrages().keySet())
-			modeleOuvrages.addElement(getMotCle().
-					getArticle(o).
-					afficheInfos());
+			modeleOuvrages.addElement(getMotCle().getOuvrage(o).afficheInfos());
 	}
 	
 	public void update(Observable observable, Object objet) {

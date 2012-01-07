@@ -111,8 +111,7 @@ public class Controleur implements Serializable{
 		public Periodique getPeriodique(String issn) { return this.getPeriodiques().get(issn); }
 		public Auteur getAuteur(Auteur auteur) {
 			Auteur newAuteur = null;
-			for (Auteur aut : getAuteurs())
-			{
+			for (Auteur aut : getAuteurs()) {
 				if (aut.getAuteur().equals(auteur.getAuteur()))
 					newAuteur = aut;
 			}
@@ -430,47 +429,33 @@ public class Controleur implements Serializable{
 		public void rechOuvrage(String isbn) {
 			isbn = getIdentifiant(isbn);
 			Ouvrage ouv = this.getOuvrage(isbn);
-			if (ouv == null) {
-				int option = JOptionPane.showConfirmDialog(null, "Ouvrage inconnu, voulez-vous le créer ?",
-						"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-				if(option == JOptionPane.YES_OPTION ) {
-					if (this.getVueConsulterOuvrage() != null)
+			if (this.getVueSaisieExemplaire() != null) {
+				ouv.addObserver(this.getVueSaisieExemplaire());
+				this.getVueSaisieExemplaire().setOuvrage(ouv);
+				this.getVueSaisieExemplaire().setEtat(Vue.inter1);
+				ouv.notifierObservateurs();
+			}
+			if (this.getVueConsulterOuvrage() != null) {
+				if (this.getOuvrages().isEmpty()) {
+					int option = JOptionPane.showConfirmDialog(null, "Aucun ouvrage n'est enregistré, voulez-vous le créer ?",
+							"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					if(option == JOptionPane.YES_OPTION ) {
 						fermerVue(getVueConsulterOuvrage());
-					if (this.getVueSaisieExemplaire() != null)
-						fermerVue(getVueSaisieExemplaire());
-					saisirOuvrage();
-				}
-			} else {
-				if (this.getVueSaisieExemplaire() != null) {
-					ouv.addObserver(this.getVueSaisieExemplaire());
-					this.getVueSaisieExemplaire().setOuvrage(ouv);
-					this.getVueSaisieExemplaire().setEtat(Vue.inter1);
+						saisirOuvrage();
+					}
+				} else {
+					ouv.addObserver(this.getVueConsulterOuvrage());
+					this.getVueConsulterOuvrage().setOuvrage(ouv);
 					ouv.notifierObservateurs();
-				}
-				if (this.getVueConsulterOuvrage() != null) {
-					if (this.getOuvrages().isEmpty()) {
-						int option = JOptionPane.showConfirmDialog(null, "Aucun ouvrage n'est enregistré, voulez-vous le créer ?",
+					int nbConsult = ouv.getNbExemplairesEnConsultation();
+					int nbEmpr = ouv.getNbExemplairesEmpruntable();
+					if ((nbConsult + nbEmpr)== 0) {
+						int option = JOptionPane.showConfirmDialog(null, "Aucun exemplaire n'est enregistré, voulez-vous le créer ?",
 								"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 						if(option == JOptionPane.YES_OPTION ) {
 							fermerVue(getVueConsulterOuvrage());
-							saisirOuvrage();
-						}
-					} else {
-						ouv.addObserver(this.getVueConsulterOuvrage());
-						this.getVueConsulterOuvrage().setOuvrage(ouv);
-						ouv.notifierObservateurs();
-						int nbConsult = ouv.getNbExemplairesEnConsultation();
-						int nbEmpr = ouv.getNbExemplairesEmpruntable();
-						if ((nbConsult + nbEmpr)== 0) {
-							int option = JOptionPane.showConfirmDialog(null, "Aucun ouvrage n'est enregistré, voulez-vous le créer ?",
-									"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-							if(option == JOptionPane.YES_OPTION ) {
-								fermerVue(getVueConsulterOuvrage());
-								saisirExemplaire();
-							}
+							saisirExemplaire();
 						}
 					}
 				}
@@ -490,6 +475,7 @@ public class Controleur implements Serializable{
 			} else {
 				Message dialog = new Message("Auteur enregistré");
 				dialog.setVisible(true);
+				auteurs.add(aut);
 				if (getVueSaisieOuvrage() != null)
 					getVueSaisieOuvrage().setEtat(Vue.inter2);
 				if (getVueNouvelArticle() != null)
@@ -581,15 +567,14 @@ public class Controleur implements Serializable{
 			} else {
 				if (this.getVueConsulterPeriodique() != null) {
 					if (per.getNbParutions() == 0) {
+						per.addObserver(getVueConsulterPeriodique());
+						getVueConsulterPeriodique().setPeriodique(per);
+						per.notifierObservateurs();
 						int option = JOptionPane.showConfirmDialog(null, "Aucune parution pour ce périodique, voulez-vous en créer ?",
 								"Aucune Parution", JOptionPane.YES_NO_OPTION    , JOptionPane.QUESTION_MESSAGE); 
 						if(option == JOptionPane.YES_OPTION ) {
 							fermerVue(getVueConsulterPeriodique());
 							saisirParution();
-						} else {
-							per.addObserver(getVueConsulterPeriodique());
-							getVueConsulterPeriodique().setPeriodique(per);
-							per.notifierObservateurs();
 						}
 					}
 				}

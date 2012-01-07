@@ -45,8 +45,9 @@ public class VueConsulterOuvrage extends Vue {
 	private DefaultListModel modeleExemplaires = new DefaultListModel();
 	private DefaultListModel modeleMC = new DefaultListModel();
 	private DefaultListModel modeleIsbn = new DefaultListModel();
-	Ouvrage _ouvrage;
 	private JList listIsbn;
+	
+	private Ouvrage _ouvrage;
 
 	public VueConsulterOuvrage(Controleur controleur) {
 		super(controleur);
@@ -165,15 +166,14 @@ public class VueConsulterOuvrage extends Vue {
 		modeleExemplaires.clear();
 		
 		textFieldTitre.setText(ouv.getTitre());
-		for (Auteur aut : ouv.getAuteurs())
-			modeleAuteurs.addElement(aut.getAuteur());
 		textFieldDateEd.setText(ESDate.ecrireDate (ouv.getDateEdition()));
 		textFieldEditeur.setText(ouv.getEditeur());
+		for (Auteur aut : ouv.getAuteurs())
+			modeleAuteurs.addElement(aut.getAuteur());
 		for (MotCle mc : ouv.getMotCles())
 			modeleMC.addElement(mc.getMotcle());
-		
-		for (int i : ouv.getExemplaires().keySet())
-			modeleExemplaires.addElement(ouv.getExemplaire(i).afficheInfos());
+		for (int ex : ouv.getExemplaires().keySet())
+			modeleExemplaires.addElement(ouv.getExemplaire(ex).afficheInfos());
 	}
 	
 	public void update(Observable observable, Object objet) {
