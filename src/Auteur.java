@@ -42,7 +42,7 @@ public class Auteur extends Observable implements Serializable {
 	public String getPrenom() { return _prenom; }
 	public HashMap<Integer, Ouvrage> getOuvrages() { return _ouvrages; }
 	public HashMap<String, Article> getArticles() { return _articles; }
-	public Ouvrage getOuvrage(String isbn) { return getOuvrages().get(isbn); }
+	public Ouvrage getOuvrage(Integer isbn) { return getOuvrages().get(isbn); }
 	public Article getArticle(String titre) { return getArticles().get(titre); }
 	
 	public void ajouterOuvrage(Integer integer, Ouvrage ouvrage) {

@@ -3,6 +3,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -348,26 +349,24 @@ public class Controleur implements Serializable{
 		}
 		
 		public void quitter(VueMenuBiblio vue) {
-				vue.dispose();
-				vue.getFrame().setVisible(false);
-				this.resetVues();
+				this.fermerVue(vue);
 				this.sauve();
 				System.exit(0);
 		}
 		
 		// Restaure l'état de l'interface avec seule la fenêtre du Menu principal active
 		private void resetVues() {
-			this.setVueSaisieOuvrage(null); //CHECK
-			this.setVueConsulterOuvrage(null); //CHECK
-			this.setVueSaisieExemplaire(null); //CHECK
-			this.setVueRechMotCle(null); //CHECK
-			this.setVueRechAuteur(null); //CHECK
-			this.setVueConsulterPeriodique(null); //CHECK
-			this.setVueNouveauPeriodique(null); //CHECK
-			this.setVueNouvelArticle(null); //CHECK
-			this.setVueNouvelleParution(null); //CHECK
-			this.setVueAfficheAuteur(null); //CHECK
-			this.setVueAfficheMC(null); //CHECK
+			this.setVueSaisieOuvrage(null);
+			this.setVueConsulterOuvrage(null);
+			this.setVueSaisieExemplaire(null);
+			this.setVueRechMotCle(null);
+			this.setVueRechAuteur(null);
+			this.setVueConsulterPeriodique(null);
+			this.setVueNouveauPeriodique(null);
+			this.setVueNouvelArticle(null);
+			this.setVueNouvelleParution(null);
+			this.setVueAfficheAuteur(null);
+			this.setVueAfficheMC(null);
 		}
 		
 		////////////////////////////////////////////////////////////////////////////
@@ -386,7 +385,7 @@ public class Controleur implements Serializable{
 		}
 		private void sauve() {
 			try {
-				FileOutputStream f = new FileOutputStream("Fsauv.ser");
+				DataOutputStream f = new DataOutputStream(new FileOutputStream("Fsauv.ser"));
 				ObjectOutputStream out = new ObjectOutputStream(f);
 				out.writeObject(this);
 			} catch (Exception e) {

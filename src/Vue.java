@@ -9,7 +9,7 @@ import java.util.Observer;
  * @author IUT,  A.Culet 
  * @version 1.0
  */
-public abstract class Vue extends JFrame implements Observer{
+public abstract class Vue extends JFrame implements Observer {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -29,6 +29,7 @@ public abstract class Vue extends JFrame implements Observer{
         frame.addWindowListener (new WindowAdapter() {
             public void windowClosing (WindowEvent e) {
             	getControleur().fermerVue(Vue.this);
+            	getControleur().menuBiblio();
             }
         });
         frame.getContentPane().setLayout(null);

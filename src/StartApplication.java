@@ -1,10 +1,8 @@
+import javax.swing.UIManager;
 
 
-/**
- * Classe de gestion de l'application bibliothèque. Contient le main de l'application.
- * @author IUT,  refactoré par A. Culet
- * @version 3.0 application graphique *
- */
+
+
 public class StartApplication {
 
 	// ************************************************************************************************************
@@ -32,7 +30,13 @@ public class StartApplication {
 	// ************************************************************************************************************
 	
 	public static void main(String args[]) {
-		new StartApplication();
+		try {
+			UIManager.setLookAndFeel(
+		            UIManager.getCrossPlatformLookAndFeelClassName());
+			new StartApplication();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	} // Fin main
 
 } // Fin Classe StartApplication

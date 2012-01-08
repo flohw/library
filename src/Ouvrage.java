@@ -63,7 +63,7 @@ public class Ouvrage extends Observable implements Serializable {
 	private void setTitre(String titre) { _titre = titre; }
 	private void setDerNumExemplaire(int derNumExemplaire) { _derNumExemplaire  = derNumExemplaire ; }
 	
-	private int getDerNumExemplaire() { return _derNumExemplaire; }
+	private Integer getDerNumExemplaire() { return _derNumExemplaire; }
 	public HashSet<MotCle> getMotCles() { return _motCles; }
 	public Integer getIsbn() { return _isbn; }
 	public String getTitre() { return _titre; }
