@@ -7,12 +7,6 @@ public class StartApplication {
 	// Constructeur de l'application
 	// ************************************************************************************************************
 	
-	// ------------------------------------------------------------------------------------------------------------
-	/**
-	 * Constructeur de l'application. 
-	 * Instancie le controleur
-	 * Affiche la fenêtre principale
-	 */
 	public StartApplication() {
 		
 		// Creation de l'instance du controleur
