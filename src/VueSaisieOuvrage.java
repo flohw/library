@@ -188,7 +188,7 @@ public class VueSaisieOuvrage extends Vue {
 		listSource.setValueIsAdjusting(true);
 		listSource.setEnabled(false);
 		listSource.setBounds(108, 304, 199, 161);
-		for(String item : getControleur().lectureLignesFichier())
+		for(String item : getControleur().lectureLignesFichier("ListeAutorite.txt"))
 			modeleSource.addElement(item);
 		scrollSource = new JScrollPane(listSource);
 		scrollSource.setBounds(listSource.getBounds());

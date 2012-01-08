@@ -460,7 +460,7 @@ public class VueNouvelArticle extends Vue {
 		textFieldTitre.setText("");
 		textFieldPage.setText("");
 		_auteurs = new HashSet<Auteur>();
-		for(String item : getControleur().lectureLignesFichier())
+		for(String item : getControleur().lectureLignesFichier("ListeAutorite.txt"))
 			modeleSource.addElement(item);
 	}
 	

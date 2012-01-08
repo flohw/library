@@ -182,7 +182,8 @@ public class VueMenuBiblio  extends Vue{
         menuItemRechMot.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // affichage de la fenetre de saisie d'un periodique
-                getControleur().rechTitre() ;
+            	getControleur().fermerVue(VueMenuBiblio.this);
+                getControleur().rechMotCle();
             }
         });
         mnRecherches.add(menuItemRechMot);

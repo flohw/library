@@ -2,6 +2,7 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -355,7 +356,7 @@ public class Controleur implements Serializable{
 		// RECHERCHE TITRE
 		public void rechTitre() {
 			try {
-				if (this.getOuvrages().isEmpty() || this.getNbArticles().equals(new Integer(0))) {
+				if (this.getOuvrages().isEmpty() && this.getNbArticles().equals(new Integer(0))) {
 					Message.message("Il n'y a aucun documnent enregistré", Controleur.information);
 					menuBiblio();
 				} else {
@@ -372,7 +373,25 @@ public class Controleur implements Serializable{
 				this.setVueAfficheTitre(new VueAfficheTitre(this));
 				this.getVueAfficheTitre().setEtat(Vue.initiale);
 				this.getVueAfficheTitre().setRecherche(titre);
-				this.getVueAfficheTitre().alimente(titre, getOuvrages(), new HashMap<String, Article>());
+				HashMap<Integer, Ouvrage> ouvrages = new HashMap<Integer, Ouvrage>();
+				HashMap<String, Article> articles = new HashMap<String, Article>();
+				for (Integer isbn : getOuvrages().keySet()) {
+					Ouvrage o = getOuvrage(isbn);
+					if (Boolean.TRUE.equals(explode(o.getTitre(), titre)))
+						ouvrages.put(isbn, o);
+				}
+				for (Integer issn : getPeriodiques().keySet()) {
+					Periodique pe = getPeriodique(issn);
+					for (Integer id : pe.getParutions().keySet()) {
+						Parution pa = pe.getParution(id);
+						for (String titreA : pa.getArticles().keySet()) {
+							Article a = pa.getArticle(titreA);
+							if (Boolean.TRUE.equals(explode(a.getTitre(), titre)))
+								articles.put(titre, a);
+						}
+					}
+				}
+				this.getVueAfficheTitre().alimente(titre, ouvrages, articles);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -723,11 +742,11 @@ public class Controleur implements Serializable{
 		/*****************************************/
 		/* Lecture des lignes d'un fichier texte */
 		/*****************************************/
-		public HashSet<String> lectureLignesFichier()
+		public HashSet<String> lectureLignesFichier(String fichier)
 		{
 			HashSet<String> motsCles = new HashSet<String>();
 			try  {
-				BufferedReader in = new BufferedReader(new FileReader("ListeAutorite.txt"));
+				BufferedReader in = new BufferedReader(new FileReader(fichier));
 				String ligne;
 				while ((ligne= in.readLine()) != null)  {
 					motsCles.add(ligne);
@@ -740,4 +759,25 @@ public class Controleur implements Serializable{
 			}
 			return motsCles;
 		}
+		
+		public Boolean explode(String titre, String search) {
+			StringTokenizer parserTitre = new StringTokenizer(titre);
+			StringTokenizer parserSearch;
+			HashSet<String> motsVides = lectureLignesFichier("ListeMotsVides.txt");
+			Boolean trouve = new Boolean(Boolean.FALSE);
+			
+			while (parserTitre.hasMoreTokens() && trouve.equals(Boolean.FALSE))  {
+				parserSearch = new StringTokenizer(search);
+				String actualWord = parserTitre.nextToken().toLowerCase();
+				if (!motsVides.contains(actualWord)) {
+					while (parserSearch.hasMoreTokens() && trouve.equals(Boolean.FALSE)) {
+						String actualKey = parserSearch.nextToken().toLowerCase();
+						if (actualWord.equals(actualKey))
+							trouve = Boolean.TRUE;
+					}
+				}
+			}
+			return trouve;
+		}
+
 }
