@@ -58,7 +58,7 @@ public class VueNouvelleParution extends Vue {
 			public void actionPerformed(ActionEvent arg0) {
 				int index = listIssn.getSelectedIndex();
 				if (index == -1)
-					new Message("Vous devez remplir tous les champs", Controleur.attention);
+					Message.message("Vous devez remplir tous les champs", Controleur.attention);
 				else
 					getControleur().rechPeriodique(modeleIssn.get(index).toString());
 			}
@@ -84,11 +84,11 @@ public class VueNouvelleParution extends Vue {
 				try {
 					Integer.decode(id);
 					if (id.length() == 0 || titre.length() == 0)
-						new Message("Vous devez remplir tous les champs", Controleur.attention);
+						Message.message("Vous devez remplir tous les champs", Controleur.attention);
 					else
 						getControleur().nouvelleParution(getPeriodique(), Integer.decode(id), titre);
 				} catch (NumberFormatException ex) {
-					new Message("L'identifiant n'est pas un chiffre", Controleur.attention);
+					Message.message("L'identifiant n'est pas un chiffre", Controleur.attention);
 				}
 			}
 		});

@@ -108,13 +108,13 @@ public class VueSaisieOuvrage extends Vue {
 				GregorianCalendar _dateEd = ESDate.lireDate (textFieldDateEd.getText());
 				try {
 					if ((_isbn.length() == 0) || (_titre.length() == 0) || (_editeur.length() == 0))
-						new Message("Un des champs est vide", Controleur.attention);
+						Message.message("Un des champs est vide", Controleur.attention);
 					else if (_dateEd == null)
-						new Message("La date est incorrecte", Controleur.erreur);
+						Message.message("La date est incorrecte", Controleur.erreur);
 					else
 						setOuvrage(getControleur().rechOuvrage(Integer.decode(_isbn), _titre, _editeur, _dateEd));
 				} catch (NumberFormatException ex) {
-					new Message("L'isbn n'est pas un nombre", Controleur.attention);
+					Message.message("L'isbn n'est pas un nombre", Controleur.attention);
 				}
 			}
 		});
@@ -161,7 +161,7 @@ public class VueSaisieOuvrage extends Vue {
 					Auteur auteur = new Auteur(nom, prenom);
 					getControleur().auteurExiste(auteur, _auteurs);
 				} else
-					new Message("Un des champs est vide", Controleur.attention);
+					Message.message("Un des champs est vide", Controleur.attention);
 			}
 		});
 		btnNouvelAuteur.setEnabled(false);
@@ -252,7 +252,7 @@ public class VueSaisieOuvrage extends Vue {
 					_motsCles.add(modeleCible.get(index).toString());
 				
 				if (modeleSource.isEmpty())
-					new Message("Ajoutez au moins un mot clé", Controleur.attention);
+					Message.message("Ajoutez au moins un mot clé", Controleur.attention);
 				else
 					getControleur().nouvOuvrage(getOuvrage(), _auteurs, _motsCles);
 			}

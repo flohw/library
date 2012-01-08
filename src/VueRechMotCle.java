@@ -40,7 +40,7 @@ public class VueRechMotCle extends Vue {
 			public void actionPerformed(ActionEvent arg0) {
 				int index = listMC.getSelectedIndex();
 				if (index == -1)
-					new Message("Sélectionnez un mot clé", Controleur.attention);
+					Message.message("Sélectionnez un mot clé", Controleur.attention);
 				else {
 					getControleur().fermerVue(VueRechMotCle.this);
 					getControleur().affRechMC(modeleMC.get(index).toString());

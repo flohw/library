@@ -59,13 +59,13 @@ public class VueNouveauPeriodique extends Vue {
 				GregorianCalendar dateCal = ESDate.lireDate(date);
 				try {
 					if (issn.length() == 0 || nom.length() == 0 || date.length() == 0)
-						new Message("Vous devez remplir tous les champs", Controleur.attention);
+						Message.message("Vous devez remplir tous les champs", Controleur.attention);
 					else if (dateCal == null)
-						new Message("La date est incorrecte", Controleur.erreur);
+						Message.message("La date est incorrecte", Controleur.erreur);
 					else
 						getControleur().nouveauPeriodique(Integer.decode(issn), nom, ESDate.lireDate(date));
 				} catch (NumberFormatException ex) {
-					new Message("L'issn n'est pas un nombre", Controleur.attention);
+					Message.message("L'issn n'est pas un nombre", Controleur.attention);
 				}
 			}
 		});

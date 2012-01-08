@@ -3,7 +3,9 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -33,6 +35,7 @@ public class Controleur implements Serializable{
 		private HashMap<Integer, Periodique> _periodiques;
 		private HashSet<Auteur> _auteurs;
 		private HashSet<MotCle> _motsCles;
+		private String _fileName;
 		
 		// les différentes fenêtres pour chaque fonctionnalité
 		private VueMenuBiblio _vueMenuBiblio = null;
@@ -56,6 +59,7 @@ public class Controleur implements Serializable{
 		// ************************************************************************************************************
 
 		public Controleur() {
+			this.setFileName(new String("Fsauv.ser"));
 			this.setOuvrages(new HashMap<Integer, Ouvrage>());
 			this.setPeriodiques(new HashMap<Integer, Periodique>());
 			this.setAuteurs(new HashSet<Auteur>());
@@ -76,6 +80,7 @@ public class Controleur implements Serializable{
 		private void setPeriodique(Periodique periodique, Integer issn) { this.getPeriodiques().put(issn, periodique); }
 		private void setOuvrages(HashMap<Integer, Ouvrage> ouvrages) { _ouvrages = ouvrages; }
 		private void setPeriodiques(HashMap<Integer, Periodique> periodiques) { _periodiques = periodiques; }
+		public void setFileName(String nom) { _fileName = nom; }
 		
 		////////////////////////////////////////////////////////////////////////////
 		// Setteur de vues
@@ -105,6 +110,7 @@ public class Controleur implements Serializable{
 		public HashSet<MotCle> getMotsCles() { return _motsCles; }
 		public Ouvrage getOuvrage(Integer isbn) { return this.getOuvrages().get(isbn); }
 		public Periodique getPeriodique(Integer issn) { return this.getPeriodiques().get(issn); }
+		public String getFileName() { return _fileName; }
 		public Auteur getAuteur(Auteur auteur) {
 			Auteur newAuteur = null;
 			for (Auteur aut : getAuteurs()) {
@@ -159,6 +165,7 @@ public class Controleur implements Serializable{
 			try {
 				this.setVueMenuBiblio(new VueMenuBiblio(this));
 				getVueMenuBiblio().setEtat(Vue.initiale);
+				getVueMenuBiblio().alimente(getFileName());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -167,10 +174,7 @@ public class Controleur implements Serializable{
 		public void consulterOuvrage() {
 			try {
 				if (this.getOuvrages().isEmpty()) {
-					int option = JOptionPane.showConfirmDialog(null, "Aucun ouvrage enregistré, voulez-vous en créer ?",
-							"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-					
-					if(option == JOptionPane.YES_OPTION )
+					if (Message.confirmation("Aucun ouvrage enregistré, voulez-vous en créer ?", "Erreur Periodique")== JOptionPane.YES_OPTION )
 						saisirOuvrage();
 					else
 						menuBiblio();
@@ -187,10 +191,7 @@ public class Controleur implements Serializable{
 		public void saisirExemplaire() {
 			try {
 				if (this.getOuvrages().isEmpty()) {
-					int option = JOptionPane.showConfirmDialog(null, "Aucun ouvrage enregistré, voulez-vous en créer ?",
-							"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-					
-					if(option == JOptionPane.YES_OPTION )
+					if(Message.confirmation("Aucun ouvrage enregistré, voulez-vous en créer ?", "Erreur Periodique") == JOptionPane.YES_OPTION )
 						saisirOuvrage();
 					else
 						menuBiblio();
@@ -218,7 +219,7 @@ public class Controleur implements Serializable{
 			try {
 				if (this.getMotsCles().isEmpty()) {
 					menuBiblio();
-					new Message("Aucun mot clé associé à un ouvrage ou à un article", Controleur.erreur);
+					Message.message("Aucun mot clé associé à un ouvrage ou à un article", Controleur.erreur);
 				} else {
 					this.setVueRechMotCle(new VueRechMotCle(this)); 
 					this.getVueRechMotCle().setEtat(Vue.initiale);
@@ -233,7 +234,7 @@ public class Controleur implements Serializable{
 			try {
 				if (this.getAuteurs().isEmpty()) {
 					menuBiblio();
-					new Message("Aucun auteur n'est enregistré, créez des ouvrages ou des articles", Controleur.erreur);
+					Message.message("Aucun auteur n'est enregistré, créez des ouvrages ou des articles", Controleur.erreur);
 				} else {
 					this.setVueRechAuteur(new VueRechAuteur(this));
 					this.getVueRechAuteur().setEtat(Vue.initiale);
@@ -247,10 +248,7 @@ public class Controleur implements Serializable{
 		public void consulterPeriodique() {
 			try {
 				if (this.getPeriodiques().isEmpty()) {
-					int option = JOptionPane.showConfirmDialog(null, "Aucun periodique enregistré, voulez-vous en créer ?",
-							"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-					
-					if(option == JOptionPane.YES_OPTION )
+					if(Message.confirmation("Aucun periodique enregistré, voulez-vous en créer ?", "Erreur Periodique") == JOptionPane.YES_OPTION )
 						saisiePeriodique();
 					else
 						menuBiblio();
@@ -277,10 +275,7 @@ public class Controleur implements Serializable{
 		public void saisieArticle() {
 			try {
 				if (this.getPeriodiques().isEmpty()) {
-					int option = JOptionPane.showConfirmDialog(null, "Aucun periodique enregistré, voulez-vous en créer ?",
-							"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-					
-					if(option == JOptionPane.YES_OPTION )
+					if(Message.confirmation("Aucun periodique enregistré, voulez-vous en créer ?", "Erreur Periodique") == JOptionPane.YES_OPTION )
 						saisiePeriodique();
 					else
 						menuBiblio();
@@ -297,10 +292,7 @@ public class Controleur implements Serializable{
 		public void saisirParution() {
 			try {
 				if (this.getPeriodiques().isEmpty()) {
-					int option = JOptionPane.showConfirmDialog(null, "Aucun périodique enregistré, voulez-vous en créer ?",
-							"Erreur Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-					
-					if(option == JOptionPane.YES_OPTION )
+					if(Message.confirmation("Aucun périodique enregistré, voulez-vous en créer ?", "Erreur Periodique")== JOptionPane.YES_OPTION )
 						saisiePeriodique();
 					else
 						menuBiblio();
@@ -348,12 +340,6 @@ public class Controleur implements Serializable{
 			this.resetVues();
 		}
 		
-		public void quitter(VueMenuBiblio vue) {
-				this.fermerVue(vue);
-				this.sauve();
-				System.exit(0);
-		}
-		
 		// Restaure l'état de l'interface avec seule la fenêtre du Menu principal active
 		private void resetVues() {
 			this.setVueSaisieOuvrage(null);
@@ -372,27 +358,70 @@ public class Controleur implements Serializable{
 		////////////////////////////////////////////////////////////////////////////
 		// Opérations liées à la sérialisation des objets de l'application
 		////////////////////////////////////////////////////////////////////////////
+		
+		public void quitter(VueMenuBiblio vue) {
+			int msg = Message.confirmation("Voulez vous sauvegarder votre base de donnée ?", "Sauvegarde");
+			this.fermerVue(vue);
+			if (msg == JOptionPane.YES_OPTION)
+				this.sauve();
+			System.exit(0);
+		}
+		
+		public void ouvrir(String fichier) {
+			Controleur c = new Controleur();
+			c.setFileName(fichier);
+			c.restaure();
+			if (Message.confirmation("Voulez vous sauvegarder vos données ?", "Sauvegarde") == JOptionPane.YES_OPTION)
+				this.sauve();
+			this.setFileName(c.getFileName());
+			this.setAuteurs(c.getAuteurs());
+			this.setMotsCles(c.getMotsCles());
+			this.setPeriodiques(c.getPeriodiques());
+			this.setOuvrages(c.getOuvrages());
+		}
+		
 		public Controleur restaure() {
 			try {
-				FileInputStream fichier = new FileInputStream("Fsauv.ser");
+				DataInputStream fichier = new DataInputStream(new FileInputStream(getFileName()));
 				ObjectInputStream in = new ObjectInputStream(fichier);
-				return((Controleur) in.readObject());
+				Controleur r = (Controleur) in.readObject();
+				fichier.close();
+				return r;
 			} catch (Exception e) {
-				System.out.print(e.getMessage());
-				new Message("Pbs de Restauration ou fichier non encore créé", Controleur.erreur);
+				Message.message("Pbs de Restauration ou fichier non encore créé", Controleur.erreur);
 				return this;
 			} 
 		}
-		private void sauve() {
+		
+		public void sauve() {
 			try {
-				DataOutputStream f = new DataOutputStream(new FileOutputStream("Fsauv.ser"));
+				DataOutputStream f = new DataOutputStream(new FileOutputStream(getFileName()));
 				ObjectOutputStream out = new ObjectOutputStream(f);
 				out.writeObject(this);
+				f.close();
 			} catch (Exception e) {
 				System.out.print(e.getMessage());
-				new Message("Pb de Sauvegarde dans le fichier", Controleur.erreur);
+				Message.message("Pb de Sauvegarde dans le fichier", Controleur.erreur);
 			}
 		}
+		public void supprimerBase() {
+			try {
+				File f = new File(getFileName());
+				if (Message.confirmation("Êtes vous sûr de vouloir effacer la base " + getFileName() + " ?", "Suppression") == JOptionPane.YES_OPTION) {
+					f.delete();
+					this.setOuvrages(new HashMap<Integer, Ouvrage>());
+					this.setPeriodiques(new HashMap<Integer, Periodique>());
+					this.setAuteurs(new HashSet<Auteur>());
+					this.setMotsCles(new HashSet<MotCle>());
+					Message.message("La base a bien été réinitialisée", Controleur.information);
+				} else {
+					Message.message("La base " + getFileName() + " n'a pas été effacée.", Controleur.information);
+				}
+			} catch (Exception e) {
+				Message.message("La base n'a pas put être réinitialisée, le fichier peut être utilisé ou inexistant", Controleur.erreur);
+			}
+		}
+		
 		////////////////////////////////////////////////////////////////////////////
 		// Opérations liées à l'application en réponse à une action de l'utilisateur dans une vue
 		////////////////////////////////////////////////////////////////////////////
@@ -400,10 +429,7 @@ public class Controleur implements Serializable{
 		public Ouvrage rechOuvrage(Integer isbn, String titre, String editeur, GregorianCalendar date) {
 			Ouvrage ouv = this.getOuvrage(isbn);
 			if (ouv != null) {
-				int option = JOptionPane.showConfirmDialog(null, "Cet ouvrage existe déjà, voulez vous créer un exemplaire ?",
-						"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-				if(option == JOptionPane.YES_OPTION ) {
+				if (Message.confirmation("Cet ouvrage existe déjà, voulez vous créer un exemplaire ?", "Erroeur Ouvrage") == JOptionPane.YES_OPTION ) {
 					fermerVue(getVueSaisieOuvrage());
 					saisirExemplaire();
 				}
@@ -425,9 +451,7 @@ public class Controleur implements Serializable{
 			}
 			if (this.getVueConsulterOuvrage() != null) {
 				if (this.getOuvrages().isEmpty()) {
-					int option = JOptionPane.showConfirmDialog(null, "Aucun ouvrage n'est enregistré, voulez-vous le créer ?",
-							"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-					if(option == JOptionPane.YES_OPTION ) {
+					if(Message.confirmation("Aucun ouvrage n'est enregistré, voulez-vous le créer ?", "Erreur Ouvrage") == JOptionPane.YES_OPTION ) {
 						fermerVue(getVueConsulterOuvrage());
 						saisirOuvrage();
 					}
@@ -438,10 +462,7 @@ public class Controleur implements Serializable{
 					int nbConsult = ouv.getNbExemplairesEnConsultation();
 					int nbEmpr = ouv.getNbExemplairesEmpruntable();
 					if ((nbConsult + nbEmpr)== 0) {
-						int option = JOptionPane.showConfirmDialog(null, "Aucun exemplaire n'est enregistré, voulez-vous le créer ?",
-								"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-						if(option == JOptionPane.YES_OPTION ) {
+						if(Message.confirmation("Aucun exemplaire n'est enregistré, voulez-vous le créer ?", "Erreur Ouvrage") == JOptionPane.YES_OPTION ) {
 							fermerVue(getVueConsulterOuvrage());
 							saisirExemplaire();
 						}
@@ -458,9 +479,9 @@ public class Controleur implements Serializable{
 			}
 			
 			if (exist) {
-				new Message("Cet auteur a déjà été enregistré", Controleur.attention);
+				Message.message("Cet auteur a déjà été enregistré", Controleur.attention);
 			} else {
-				new Message("Auteur enregistré", Controleur.information);
+				Message.message("Auteur enregistré", Controleur.information);
 				auteurs.add(aut);
 				if (getVueSaisieOuvrage() != null)
 					getVueSaisieOuvrage().setEtat(Vue.inter2);
@@ -492,11 +513,8 @@ public class Controleur implements Serializable{
 				}
 				mot.ajouterOuvrage(ouv.getIsbn(), ouv);
 			}
-			
-			int option = JOptionPane.showConfirmDialog(null, "Ouvrage enregistré, voulez-vous en créer un autre ?",
-					"Erreur Ouvrage", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-			if(option == JOptionPane.YES_OPTION )
+			if(Message.confirmation("Ouvrage enregistré, voulez-vous en créer un autre ?", "Erreur Ouvrage") == JOptionPane.YES_OPTION )
 				getVueSaisieOuvrage().setEtat(Vue.initiale);
 			else {
 				this.fermerVue (this.getVueSaisieOuvrage());
@@ -507,11 +525,11 @@ public class Controleur implements Serializable{
 		public void nouvExemplaire(Ouvrage ouv, String dateReception, String statut) {
 			// vérification de la présence de la date et de son format
 			if (dateReception.length() == 0 )
-					new Message("La date de réception est obligatoire", Controleur.erreur);
+				Message.message("La date de réception est obligatoire", Controleur.erreur);
 			else {
 				GregorianCalendar date = ESDate.lireDate (dateReception);
 				if (date == null)
-					new Message("Le format de la date est incorrect", Controleur.erreur);
+					Message.message("Le format de la date est incorrect", Controleur.erreur);
 				else {
 					int statutEx;
 					if (statut == "empruntable")
@@ -522,9 +540,9 @@ public class Controleur implements Serializable{
 					Exemplaire exemplaire = ouv.ajouterExemplaire(date, statutEx);
 					if (exemplaire != null) {
 						this.getVueSaisieExemplaire().setEtat(Vue.finale);
-						new Message("Exemplaire enregistré", Controleur.information);
+						Message.message("Exemplaire enregistré", Controleur.information);
 					} else
-						new Message("Date de Reception incorrecte / à la date d'Edition.", Controleur.erreur);
+						Message.message("Date de Reception incorrecte / à la date d'Edition.", Controleur.erreur);
 				}
 			}
 		}
@@ -536,10 +554,8 @@ public class Controleur implements Serializable{
 				per.addObserver(getVueConsulterPeriodique());
 				getVueConsulterPeriodique().setPeriodique(per);
 				per.notifierObservateurs();
-				if (per.getNbParutions() == 0) {
-					int option = JOptionPane.showConfirmDialog(null, "Aucune parution pour ce périodique, voulez-vous en créer ?",
-							"Aucune Parution", JOptionPane.YES_NO_OPTION    , JOptionPane.QUESTION_MESSAGE); 
-					if(option == JOptionPane.YES_OPTION ) {
+				if (per.getNbParutions() == 0) { 
+					if(Message.confirmation("Aucune parution pour ce périodique, voulez-vous en créer ?", "Aucune Parution") == JOptionPane.YES_OPTION ) {
 						fermerVue(getVueConsulterPeriodique());
 						saisirParution();
 					}
@@ -560,10 +576,7 @@ public class Controleur implements Serializable{
 					getVueNouvelArticle().setEtat(Vue.inter1);
 					per.notifierObservateurs();
 				} else if (per.getNbParutions() == 0) {			
-					int option = JOptionPane.showConfirmDialog(null, "Il n'y a pas de parutions, voulez-vous les créer ?",
-							"Erreur Parutions", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-					if(option == JOptionPane.YES_OPTION ) {
+					if(Message.confirmation("Il n'y a pas de parutions, voulez-vous les créer ?", "Erreur Parutions") == JOptionPane.YES_OPTION ) {
 						fermerVue(getVueNouvelArticle());
 						saisirParution();
 					} else {
@@ -580,34 +593,29 @@ public class Controleur implements Serializable{
 			if (this.getPeriodique(issn) == null) {
 				Periodique periodique = new Periodique(issn, nom, date);
 				this.setPeriodique(periodique, issn);
-				int option = JOptionPane.showConfirmDialog(null, "Periodique enregistré, voulez-vous en créer un nouveau ?",
-						"Nouveau Periodique", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-				if(option == JOptionPane.YES_OPTION )
+				if(Message.confirmation("Periodique enregistré, voulez-vous en créer un nouveau ?", "Nouveau Periodique") == JOptionPane.YES_OPTION )
 					getVueNouveauPeriodique().setEtat(Vue.initiale);
-				else
-				{
+				else {
 					fermerVue(getVueNouveauPeriodique());
 					menuBiblio();
 				}
 			} else
-				new Message("Le périodique existe déjà", Controleur.information);
+				Message.message("Le périodique existe déjà", Controleur.information);
 		}
 		
 		
 		public void nouvelleParution(Periodique pe, Integer id, String titre) {
 			Parution pa = getPeriodique(pe.getIssn()).getParution(id);
 			if (pa != null)
-				new Message("La parution existe deja pour le périodique", Controleur.attention);
+				Message.message("La parution existe deja pour le périodique", Controleur.attention);
 			else {
-				pe.setParution(id, new Parution(id, titre));			
-				int option = JOptionPane.showConfirmDialog(null, "La parution a été enregistrée pour " + pe.getNom() +"" +
-						", voulez-vous en créer une autre ?",
-						"Nouvelle Parution", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				pe.setParution(id, new Parution(id, titre));
 
-				if(option == JOptionPane.YES_OPTION)
+				if(Message.confirmation("La parution a été enregistrée, voulez-vous en créer une autre ?",
+						"Nouvelle Parution") == JOptionPane.YES_OPTION) {
 						getVueNouvelleParution().setEtat(Vue.initiale);
-				else {
+				} else {
 					fermerVue(getVueNouvelleParution());
 					menuBiblio();
 				}
@@ -617,7 +625,7 @@ public class Controleur implements Serializable{
 		public Article rechArticle(Parution pa, String titre) {
 			Article article = pa.getArticle(titre);
 			if (article != null)
-				new Message("Ce titre existe déjà pour cette parution", Controleur.attention);
+				Message.message("Ce titre existe déjà pour cette parution", Controleur.attention);
 			else
 				getVueNouvelArticle().setEtat(Vue.inter3);
 			return article;
@@ -627,11 +635,7 @@ public class Controleur implements Serializable{
 			Integer id = this.getIdentifiant(livre); 
 			Parution pa = pe.getParution(id);
 			if (pa == null) {
-				int option = JOptionPane.showConfirmDialog(null, "La parution n'existe pas, voulez-vous la créer ?",
-						"Nouvelle Parution", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-				if(option == JOptionPane.YES_OPTION)
-				{
+				if(Message.confirmation("La parution n'existe pas, voulez-vous la créer ?", "Nouvelle Parution") == JOptionPane.YES_OPTION) {
 					if (this.getVueNouvelArticle() != null)
 						fermerVue(getVueNouvelArticle());
 					saisirParution();
@@ -664,10 +668,7 @@ public class Controleur implements Serializable{
 				}
 				newArticle.ajouterMC(mot);
 			}
-			int option = JOptionPane.showConfirmDialog(null, "L'article a bien été enregistré, voulez-vous en créer un nouveau ?",
-					"Nouvelle Parution", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-			if(option == JOptionPane.YES_OPTION)
+			if(Message.confirmation("L'article a bien été enregistré, voulez-vous en créer un nouveau ?", "Nouvelle Parution") == JOptionPane.YES_OPTION)
 					getVueNouvelArticle().setEtat(Vue.initiale);
 			else {
 				fermerVue(getVueNouvelArticle());

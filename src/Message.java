@@ -1,11 +1,11 @@
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 
-public class Message extends JDialog {
+public abstract class Message extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	
-	public Message(String str, int type) {
+	public static void message(String str, int type) {
 		int typeMsg = JOptionPane.INFORMATION_MESSAGE;
 		String titre = "Information";
 		switch (type) {
@@ -23,6 +23,14 @@ public class Message extends JDialog {
 			break;
 		}
 		JOptionPane.showMessageDialog(null, str, titre, typeMsg);
+	}
+	
+	public static String question(String str, String titre) {
+		return JOptionPane.showInputDialog(null, str, titre, JOptionPane.QUESTION_MESSAGE);
+	}
+
+	public static int confirmation(String str, String titre) {
+		return JOptionPane.showConfirmDialog(null, str, titre, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 	}
 
 }
