@@ -23,8 +23,7 @@ public class Parution extends Observable implements Serializable {
 	 * Constructeur. 
 	 */
 	
-	public Parution(Integer identifiant, String titre) 
-	{
+	public Parution(Integer identifiant, String titre) {
 		this.setId(identifiant);
 		this.setTitre(titre);
 		this.setArticles(new HashMap<String, Article>());

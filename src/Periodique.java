@@ -24,8 +24,7 @@ public class Periodique extends Observable implements Serializable {
 	 * Constructeur. 
 	 */
 	
-	public Periodique(Integer issn, String nom, GregorianCalendar dateAbonnement) 
-	{
+	public Periodique(Integer issn, String nom, GregorianCalendar dateAbonnement)  {
 		this.setIssn(issn);
 		this.setNom(nom);
 		this.setDate(dateAbonnement);

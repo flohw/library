@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
 
 
-public class VueAfficheAuteur extends Vue {
+public class VueAfficheTitre extends Vue {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,11 +28,13 @@ public class VueAfficheAuteur extends Vue {
 	private JLabel lblRsultatDeLa;
 	private JButton btnFermer;
 	
-	private Auteur _auteur;
+	private HashMap<Integer, Ouvrage> _ouvrages;
+	private HashMap<String, Article> _articles;
+	private String _recherche;
 	private JTextArea textOuvrages;
 	private JTextArea textArticles;
 	
-	public VueAfficheAuteur(Controleur controleur) {
+	public VueAfficheTitre(Controleur controleur) {
 		super (controleur);
 		content = new JPanel();
 		content.setLayout(null);
@@ -67,8 +69,8 @@ public class VueAfficheAuteur extends Vue {
 		btnNouvRech.setBounds(67, 371, 160, 25);
 		btnNouvRech.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getControleur().fermerVue(VueAfficheAuteur.this);
-				getControleur().rechAuteur();
+				getControleur().fermerVue(VueAfficheTitre.this);
+				getControleur().rechTitre();
 			}
 		});
 		
@@ -76,7 +78,7 @@ public class VueAfficheAuteur extends Vue {
 		btnFermer.setBounds(298, 371, 160, 25);
 		btnFermer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getControleur().fermerVue(VueAfficheAuteur.this);
+				getControleur().fermerVue(VueAfficheTitre.this);
 				getControleur().menuBiblio();
 			}
 		});
@@ -92,29 +94,33 @@ public class VueAfficheAuteur extends Vue {
 		getFrame().setVisible(true);
 	}
 	
-	public void setAuteur(Auteur aut) { _auteur = aut; }
-	public Auteur getAuteur() { return _auteur; }
+	public void setOuvrages(HashMap<Integer, Ouvrage> ouv) { _ouvrages = ouv; }
+	public HashMap<Integer, Ouvrage>getOuvrages() { return _ouvrages; }
+	public void setArticles(HashMap<String, Article> art) { _articles = art; }
+	public HashMap<String, Article> getArticles() { return _articles; }
+	public void setRecherche(String rech) { _recherche = rech; }
+	public String getRecherche() { return _recherche; }
 	
-	public void alimente(Auteur aut, HashMap<Integer, Ouvrage> ouv, HashMap<String, Article> art) {
+	public void alimente(String recherche, HashMap<Integer, Ouvrage> ouvrages, HashMap<String, Article> articles) {
 		textOuvrages.setText("");
 		textArticles.setText("");
-		lblRsultatDeLa.setText(lblRsultatDeLa.getText() + aut.getAuteur());
-		if (ouv.isEmpty())
+		lblRsultatDeLa.setText(lblRsultatDeLa.getText() + getRecherche());
+		if (ouvrages.isEmpty())
 			textOuvrages.setText("Aucun ouvrage correspondant");
 		else
-			for (Integer isbn : ouv.keySet())
-				textOuvrages.append(ouv.get(isbn).afficheInfos());
-		if (art.isEmpty())
+			for (Integer isbn : ouvrages.keySet())
+				textOuvrages.append(ouvrages.get(isbn).afficheInfos());
+		if (articles.isEmpty())
 			textArticles.setText("Aucun article correspondant");
 		else
-			for (String id : art.keySet())
-				textArticles.append(art.get(id).afficheInfos());
+			for (String id : articles.keySet())
+				textArticles.append(articles.get(id).afficheInfos());
 		
 	}
 	
 	public void update(Observable observable, Object objet) {
 		// maj de la vue lorque l'ouvrage a été modifié
-		this.alimente(getAuteur(), getAuteur().getOuvrages(), getAuteur().getArticles());
+		this.alimente(getRecherche(), getOuvrages(), getArticles());
 		super.update(observable,  objet);
 	}
 }

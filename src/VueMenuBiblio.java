@@ -182,13 +182,24 @@ public class VueMenuBiblio  extends Vue{
         menuItemRechMot.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // affichage de la fenetre de saisie d'un periodique
-            	getControleur().fermerVue(VueMenuBiblio.this);
-                getControleur(). rechMotCle() ;}
+                getControleur().rechTitre() ;
+            }
         });
-        content.setLayout(null);
         mnRecherches.add(menuItemRechMot);
         
+        JMenuItem mntmRechercheParTitre = new JMenuItem("Recherche par Titre");
+        mntmRechercheParTitre.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // affichage de la fenetre de saisie d'un periodique
+            	getControleur().fermerVue(VueMenuBiblio.this);
+                getControleur(). rechTitre() ;
+            }
+        });
+        mnRecherches.add(mntmRechercheParTitre);
+        
         content.add(menuBar);
+        
+        // Fichier chargé
         
         textFieldBdd = new JTextField();
         textFieldBdd.setBounds(153, 92, 134, 28);

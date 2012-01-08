@@ -47,12 +47,14 @@ public class Controleur implements Serializable{
 		private VueConsulterOuvrage _vueConsulterOuvrage = null;
 		private VueRechMotCle _vueRechMotCle = null;
 		private VueRechAuteur _vueRechAuteur = null;
+		private VueRechTitre _vueRechTitre = null;
 		private VueConsulterPeriodique _vueConsulterPeriodique = null;
 		private VueNouveauPeriodique _vueNouveauPeriodique = null;
 		private VueNouvelArticle _vueNouvelArticle = null;
 		private VueNouvelleParution _vueNouvelleParution = null;
 		private VueAfficheAuteur _vueAfficheAuteur = null;
 		private VueAfficheMC _vueAfficheMC = null;
+		private VueAfficheTitre _vueAfficheTitre = null;
 
 		// ************************************************************************************************************
 		// Constructeur
@@ -91,12 +93,14 @@ public class Controleur implements Serializable{
 		private void setVueConsulterOuvrage(VueConsulterOuvrage vue) { _vueConsulterOuvrage = vue; }
 		private void setVueRechMotCle(VueRechMotCle vue) { _vueRechMotCle = vue; }
 		private void setVueRechAuteur(VueRechAuteur vue) { _vueRechAuteur = vue; }
+		private void setVueRechTitre(VueRechTitre vue) { _vueRechTitre = vue; }
 		private void setVueConsulterPeriodique(VueConsulterPeriodique vue) { _vueConsulterPeriodique = vue; }
 		private void setVueNouveauPeriodique(VueNouveauPeriodique vue) { _vueNouveauPeriodique = vue; }
 		private void setVueNouvelArticle(VueNouvelArticle vue) { _vueNouvelArticle = vue; }
 		private void setVueNouvelleParution(VueNouvelleParution vue) { _vueNouvelleParution = vue; }		
 		private void setVueAfficheAuteur(VueAfficheAuteur vue) { _vueAfficheAuteur = vue; }		
-		private void setVueAfficheMC(VueAfficheMC vue) { _vueAfficheMC = vue; }		
+		private void setVueAfficheMC(VueAfficheMC vue) { _vueAfficheMC = vue; }
+		private void setVueAfficheTitre(VueAfficheTitre vue) { _vueAfficheTitre = vue; }
 		
 		// ------------------------------------------------------------------------------------------------------------
 		// Accesseurs
@@ -141,6 +145,19 @@ public class Controleur implements Serializable{
 			String [] identifiant = ouvrage.split(" - ");
 			return Integer.decode(identifiant[0]);
 		}
+		
+		public Integer getNbArticles() {
+			Integer r = new Integer(0);
+			for (Integer idpe : getPeriodiques().keySet()) {
+				Periodique pe = getPeriodique(idpe);
+				if (pe.getNbParutions() != 0) {
+					for (Integer idpa : pe.getParutions().keySet()) {
+						r += pe.getParution(idpa).getNbArticles();
+					}
+				}
+			}
+			return r;
+		}
 
 		////////////////////////////////////////////////////////////////////////////
 		// Getteur de vues
@@ -150,12 +167,14 @@ public class Controleur implements Serializable{
 		private VueConsulterOuvrage getVueConsulterOuvrage() { return _vueConsulterOuvrage ; }
 		private VueRechMotCle getVueRechMotCle() { return _vueRechMotCle ; }
 		private VueRechAuteur getVueRechAuteur() { return _vueRechAuteur ; }
+		private VueRechTitre getVueRechTitre() { return _vueRechTitre; }
 		private VueConsulterPeriodique getVueConsulterPeriodique() { return _vueConsulterPeriodique ; }
 		private VueNouveauPeriodique getVueNouveauPeriodique() { return _vueNouveauPeriodique ; }
 		private VueNouvelArticle getVueNouvelArticle() { return _vueNouvelArticle ; }
 		private VueNouvelleParution getVueNouvelleParution() { return _vueNouvelleParution ; }		
 		private VueAfficheAuteur getVueAfficheAuteur() { return _vueAfficheAuteur ; }		
 		private VueAfficheMC getVueAfficheMC() { return _vueAfficheMC ; }
+		private VueAfficheTitre getVueAfficheTitre() { return _vueAfficheTitre; }
 		private VueMenuBiblio getVueMenuBiblio() { return _vueMenuBiblio; }
 		
 		////////////////////////////////////////////////////////////////////////////
@@ -328,6 +347,32 @@ public class Controleur implements Serializable{
 				getVueAfficheMC().setMotCle(mc);
 				this.getVueAfficheMC().setEtat(Vue.initiale);
 				mc.notifierObservateurs();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// RECHERCHE TITRE
+		public void rechTitre() {
+			try {
+				if (this.getOuvrages().isEmpty() || this.getNbArticles().equals(new Integer(0))) {
+					Message.message("Il n'y a aucun documnent enregistré", Controleur.information);
+					menuBiblio();
+				} else {
+					this.setVueRechTitre(new VueRechTitre(this));
+					this.getVueRechTitre().setEtat(Vue.initiale);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		public void affRechTitre(String titre) {
+			try {
+				this.setVueAfficheTitre(new VueAfficheTitre(this));
+				this.getVueAfficheTitre().setEtat(Vue.initiale);
+				this.getVueAfficheTitre().setRecherche(titre);
+				this.getVueAfficheTitre().alimente(titre, getOuvrages(), new HashMap<String, Article>());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -695,5 +740,4 @@ public class Controleur implements Serializable{
 			}
 			return motsCles;
 		}
-
 }

@@ -97,13 +97,17 @@ public class VueAfficheMC extends Vue {
 	public void alimente(MotCle mot) {
 		textArticles.setText("");
 		textOuvrages.setText("");
-		lvlRsultatDeLa.setText(lvlRsultatDeLa.getText() +
-				getMotCle().getMotcle());
-		for (String a : getMotCle().getArticles().keySet())
-			textArticles.append(getMotCle().getArticle(a).afficheInfos());
-		
-		for (Integer o : getMotCle().getOuvrages().keySet())
-			textOuvrages.append(getMotCle().getOuvrage(o).afficheInfos());
+		lvlRsultatDeLa.setText(lvlRsultatDeLa.getText() + getMotCle().getMotcle());
+		if (getMotCle().getArticles().isEmpty())
+			textArticles.setText("Aucun article correspondant");
+		else
+			for (String a : getMotCle().getArticles().keySet())
+				textArticles.append(getMotCle().getArticle(a).afficheInfos());
+		if (getMotCle().getOuvrages().isEmpty())
+			textOuvrages.setText("Aucun ouvrage correspondant");
+		else
+			for (Integer o : getMotCle().getOuvrages().keySet())
+				textOuvrages.append(getMotCle().getOuvrage(o).afficheInfos());
 	}
 	
 	public void update(Observable observable, Object objet) {
