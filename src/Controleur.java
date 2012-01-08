@@ -1,4 +1,3 @@
-
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -12,11 +11,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import javax.swing.JOptionPane;
-/**
- * Classe controleur et application (système)
- * @author IUT,   A. Culet
- * @version 1.0 
- */
 
 //public class Controleur extends Observable implements Serializable{
 public class Controleur implements Serializable{
@@ -34,8 +28,8 @@ public class Controleur implements Serializable{
 	
 		// Attributs d'Association
 		// Ensemble des ouvrages de la bibliothèque
-		private HashMap<String, Ouvrage> _ouvrages;
-		private HashMap<String, Periodique> _periodiques;
+		private HashMap<Integer, Ouvrage> _ouvrages;
+		private HashMap<Integer, Periodique> _periodiques;
 		private HashSet<Auteur> _auteurs;
 		private HashSet<MotCle> _motsCles;
 		
@@ -61,8 +55,8 @@ public class Controleur implements Serializable{
 		// ************************************************************************************************************
 
 		public Controleur() {
-			this.setOuvrages(new HashMap<String, Ouvrage>());
-			this.setPeriodiques(new HashMap<String, Periodique>());
+			this.setOuvrages(new HashMap<Integer, Ouvrage>());
+			this.setPeriodiques(new HashMap<Integer, Periodique>());
 			this.setAuteurs(new HashSet<Auteur>());
 			this.setMotsCles(new HashSet<MotCle>());
 		} // Fin Controleur
@@ -77,10 +71,10 @@ public class Controleur implements Serializable{
 		// Setteur de variables
 		private void setAuteurs(HashSet<Auteur> auteurs) { _auteurs = auteurs; }
 		private void setMotsCles(HashSet<MotCle> motsCles) { _motsCles = motsCles; }
-		private void setOuvrage(Ouvrage ouvrage, String isbn) { this.getOuvrages().put(isbn, ouvrage); }
-		private void setPeriodique(Periodique periodique, String issn) { this.getPeriodiques().put(issn, periodique); }
-		private void setOuvrages(HashMap<String, Ouvrage> ouvrages) { _ouvrages = ouvrages; }
-		private void setPeriodiques(HashMap<String, Periodique> periodiques) { _periodiques = periodiques; }
+		private void setOuvrage(Ouvrage ouvrage, Integer isbn) { this.getOuvrages().put(isbn, ouvrage); }
+		private void setPeriodique(Periodique periodique, Integer issn) { this.getPeriodiques().put(issn, periodique); }
+		private void setOuvrages(HashMap<Integer, Ouvrage> ouvrages) { _ouvrages = ouvrages; }
+		private void setPeriodiques(HashMap<Integer, Periodique> periodiques) { _periodiques = periodiques; }
 		
 		////////////////////////////////////////////////////////////////////////////
 		// Setteur de vues
@@ -104,12 +98,12 @@ public class Controleur implements Serializable{
 		////////////////////////////////////////////////////////////////////////////
 		// Getteur de variables
 		////////////////////////////////////////////////////////////////////////////
-		public HashMap<String, Ouvrage> getOuvrages() { return _ouvrages; }
-		public HashMap<String, Periodique> getPeriodiques() { return _periodiques; }
+		public HashMap<Integer, Ouvrage> getOuvrages() { return _ouvrages; }
+		public HashMap<Integer, Periodique> getPeriodiques() { return _periodiques; }
 		public HashSet<Auteur> getAuteurs() { return _auteurs; }
 		public HashSet<MotCle> getMotsCles() { return _motsCles; }
-		public Ouvrage getOuvrage(String isbn) { return this.getOuvrages().get(isbn); }
-		public Periodique getPeriodique(String issn) { return this.getPeriodiques().get(issn); }
+		public Ouvrage getOuvrage(Integer isbn) { return this.getOuvrages().get(isbn); }
+		public Periodique getPeriodique(Integer issn) { return this.getPeriodiques().get(issn); }
 		public Auteur getAuteur(Auteur auteur) {
 			Auteur newAuteur = null;
 			for (Auteur aut : getAuteurs()) {
@@ -136,9 +130,9 @@ public class Controleur implements Serializable{
 			return newMotCle;
 		}
 		
-		public String getIdentifiant(String ouvrage) {
+		public Integer getIdentifiant(String ouvrage) {
 			String [] identifiant = ouvrage.split(" - ");
-			return identifiant[0];
+			return Integer.decode(identifiant[0]);
 		}
 
 		////////////////////////////////////////////////////////////////////////////
@@ -404,7 +398,7 @@ public class Controleur implements Serializable{
 		// Opérations liées à l'application en réponse à une action de l'utilisateur dans une vue
 		////////////////////////////////////////////////////////////////////////////
 		
-		public Ouvrage rechOuvrage(String isbn, String titre, String editeur, GregorianCalendar date) {
+		public Ouvrage rechOuvrage(Integer isbn, String titre, String editeur, GregorianCalendar date) {
 			Ouvrage ouv = this.getOuvrage(isbn);
 			if (ouv != null) {
 				int option = JOptionPane.showConfirmDialog(null, "Cet ouvrage existe déjà, voulez vous créer un exemplaire ?",
@@ -421,8 +415,8 @@ public class Controleur implements Serializable{
 			return ouv;
 		}
 		
-		public void rechOuvrage(String isbn) {
-			isbn = getIdentifiant(isbn);
+		public void rechOuvrage(String livre) {
+			Integer isbn = getIdentifiant(livre);
 			Ouvrage ouv = this.getOuvrage(isbn);
 			if (this.getVueSaisieExemplaire() != null) {
 				ouv.addObserver(this.getVueSaisieExemplaire());
@@ -536,8 +530,8 @@ public class Controleur implements Serializable{
 			}
 		}
 		
-		public void rechPeriodique(String issn) {
-			issn = this.getIdentifiant(issn);
+		public void rechPeriodique(String livre) {
+			Integer issn = this.getIdentifiant(livre);
 			Periodique per = this.getPeriodique(issn);
 			if (this.getVueConsulterPeriodique() != null) {
 				per.addObserver(getVueConsulterPeriodique());
@@ -583,7 +577,7 @@ public class Controleur implements Serializable{
 			}
 		}
 		
-		public void nouveauPeriodique (String issn, String nom, GregorianCalendar date) {
+		public void nouveauPeriodique (Integer issn, String nom, GregorianCalendar date) {
 			if (this.getPeriodique(issn) == null) {
 				Periodique periodique = new Periodique(issn, nom, date);
 				this.setPeriodique(periodique, issn);
@@ -630,10 +624,9 @@ public class Controleur implements Serializable{
 			return article;
 		}
 		
-		public void rechParution(Periodique pe, String id)
-		{
-			id = this.getIdentifiant(id); 
-			Parution pa = pe.getParution(Integer.decode(id));
+		public void rechParution(Periodique pe, String livre) {
+			Integer id = this.getIdentifiant(livre); 
+			Parution pa = pe.getParution(id);
 			if (pa == null) {
 				int option = JOptionPane.showConfirmDialog(null, "La parution n'existe pas, voulez-vous la créer ?",
 						"Nouvelle Parution", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -701,6 +694,6 @@ public class Controleur implements Serializable{
 				System.out.println();
 			}
 			return motsCles;
-		} //  lectureLignesFichier
+		}
 
 }

@@ -1,15 +1,8 @@
-
-
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.Observable;
 
-/**
- * Classe de gestion d'un exemplaire d'un ouvrage
- * @author IUT, refactoré par E. Ceret
- * @version 2.0
- *
- */
+
 public class Exemplaire extends Observable implements Serializable {
 
 	// ************************************************************************************************************
@@ -22,7 +15,7 @@ public class Exemplaire extends Observable implements Serializable {
 	// Attributs
 	// ************************************************************************************************************
 
-	private int _numero;
+	private Integer _numero;
 	private int _statut;
 	private GregorianCalendar _dateReception;
 	private Ouvrage _ouvrage;
@@ -44,7 +37,7 @@ public class Exemplaire extends Observable implements Serializable {
 
 	// ------------------------------------------------------------------------------------------------------------
 	// Affecteurs
-	private void setNumero(int numero) { _numero = numero; }
+	private void setNumero(Integer numero) { _numero = numero; }
 	private void setDateReception(GregorianCalendar dateReception) { _dateReception = dateReception; }
 	private void setOuvrage(Ouvrage ouvrage) { _ouvrage = ouvrage; }
 
@@ -55,7 +48,7 @@ public class Exemplaire extends Observable implements Serializable {
 	// ------------------------------------------------------------------------------------------------------------
 	// Accesseurs
 	public Ouvrage getOuvrage() { return _ouvrage; }
-	public int getNumero() { return _numero; }
+	public Integer getNumero() { return _numero; }
 	public GregorianCalendar getDateReception() { return _dateReception; }
 	public int getStatut() { return _statut; }
 

@@ -2,6 +2,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Observable;
 
+
 public class Parution extends Observable implements Serializable {
 
 	// ************************************************************************************************************

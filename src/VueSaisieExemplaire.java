@@ -54,7 +54,7 @@ public class VueSaisieExemplaire extends Vue {
 		lblNewLabel.setBounds(45, 12, 30, 14);
 		contentPane.add(lblNewLabel);
 		
-		for (String isbn : getControleur().getOuvrages().keySet())
+		for (Integer isbn : getControleur().getOuvrages().keySet())
 			modeleIsbn.addElement(getControleur().getOuvrage(isbn).afficheOuvrage());
 		listIsbn = new JList(modeleIsbn);
 		listIsbn.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

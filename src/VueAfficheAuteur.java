@@ -95,11 +95,11 @@ public class VueAfficheAuteur extends Vue {
 	public void setAuteur(Auteur aut) { _auteur = aut; }
 	public Auteur getAuteur() { return _auteur; }
 	
-	public void alimente(Auteur aut, HashMap<String, Ouvrage> ouv, HashMap<String, Article> art) {
+	public void alimente(Auteur aut, HashMap<Integer, Ouvrage> ouv, HashMap<String, Article> art) {
 		textOuvrages.setText("");
 		textArticles.setText("");
 		lblRsultatDeLa.setText(lblRsultatDeLa.getText() + aut.getAuteur());
-		for (String isbn : ouv.keySet())
+		for (Integer isbn : ouv.keySet())
 			textOuvrages.append(ouv.get(isbn).afficheInfos());
 		for (String id : art.keySet())
 			textArticles.append(art.get(id).afficheInfos());

@@ -60,7 +60,7 @@ public class VueNouvelArticle extends Vue {
 		listIssn = new JList(modeleIssn);
 		listIssn.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listIdent = new JList(modeleIdent);
-		for (String issn : getControleur().getPeriodiques().keySet())
+		for (Integer issn : getControleur().getPeriodiques().keySet())
 			modeleIssn.addElement(getControleur().getPeriodique(issn).afficheInfos());
 		
 		scrollIdent = new JScrollPane(listIdent);

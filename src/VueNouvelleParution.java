@@ -42,7 +42,7 @@ public class VueNouvelleParution extends Vue {
 		JLabel lblISSN = new JLabel("ISSN");
 		lblISSN.setBounds(20, 19, 28, 16);
 		
-		for (String issn : getControleur().getPeriodiques().keySet())
+		for (Integer issn : getControleur().getPeriodiques().keySet())
 			modeleIssn.addElement(getControleur().getPeriodique(issn).afficheInfos());
 		
 		listIssn = new JList(modeleIssn);
@@ -88,7 +88,7 @@ public class VueNouvelleParution extends Vue {
 					else
 						getControleur().nouvelleParution(getPeriodique(), Integer.decode(id), titre);
 				} catch (NumberFormatException ex) {
-					new Message("L'identifiant n'est pas un chiffre", Controleur.erreur);
+					new Message("L'identifiant n'est pas un chiffre", Controleur.attention);
 				}
 			}
 		});

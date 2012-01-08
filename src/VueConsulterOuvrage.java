@@ -64,7 +64,7 @@ public class VueConsulterOuvrage extends Vue {
 		scrollIsbn = new JScrollPane(listIsbn);
 		scrollIsbn.setBounds(219, 9, 339, 105);
 		
-		for (String isbn : getControleur().getOuvrages().keySet())
+		for (Integer isbn : getControleur().getOuvrages().keySet())
 			modeleIsbn.addElement(getControleur().getOuvrage(isbn).afficheOuvrage());
 		
 		btnRechercher = new JButton("Rechercher");

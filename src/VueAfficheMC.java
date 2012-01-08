@@ -102,7 +102,7 @@ public class VueAfficheMC extends Vue {
 		for (String a : getMotCle().getArticles().keySet())
 			textArticles.append(getMotCle().getArticle(a).afficheInfos());
 		
-		for (String o : getMotCle().getOuvrages().keySet())
+		for (Integer o : getMotCle().getOuvrages().keySet())
 			textOuvrages.append(getMotCle().getOuvrage(o).afficheInfos());
 	}
 	

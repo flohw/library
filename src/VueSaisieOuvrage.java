@@ -106,12 +106,16 @@ public class VueSaisieOuvrage extends Vue {
 				String _titre = textFieldTitre.getText();
 				String _editeur = textFieldEditeur.getText();
 				GregorianCalendar _dateEd = ESDate.lireDate (textFieldDateEd.getText());
-				if ((_isbn.length() == 0) || (_titre.length() == 0) || (_editeur.length() == 0))
-					new Message("Un des champs est vide", Controleur.attention);
-				else if (_dateEd == null)
-					new Message("La date est incorrecte", Controleur.erreur);
-				else
-					setOuvrage(getControleur().rechOuvrage(_isbn, _titre, _editeur, _dateEd));
+				try {
+					if ((_isbn.length() == 0) || (_titre.length() == 0) || (_editeur.length() == 0))
+						new Message("Un des champs est vide", Controleur.attention);
+					else if (_dateEd == null)
+						new Message("La date est incorrecte", Controleur.erreur);
+					else
+						setOuvrage(getControleur().rechOuvrage(Integer.decode(_isbn), _titre, _editeur, _dateEd));
+				} catch (NumberFormatException ex) {
+					new Message("L'isbn n'est pas un nombre", Controleur.attention);
+				}
 			}
 		});
 		btnAnnulerOuvrage = new JButton("Annuler");

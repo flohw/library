@@ -4,11 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Observable;
 
-/**
- * Classe de gestion d'ouvrage.
- * @author IUT, refactoré par E. Ceret
- * @version 2.0
- */
+
 public class Ouvrage extends Observable implements Serializable {
 
 	// ************************************************************************************************************
@@ -21,7 +17,7 @@ public class Ouvrage extends Observable implements Serializable {
 	// Attributs
 	// ************************************************************************************************************
 
-	private String _isbn;
+	private Integer _isbn;
 	private String _titre;
 	private HashSet<Auteur> _auteurs;
 	private HashSet<MotCle> _motCles;
@@ -36,7 +32,7 @@ public class Ouvrage extends Observable implements Serializable {
 	// Constructeur
 	// ************************************************************************************************************
 
-	public Ouvrage(String isbn, String titre, String editeur, GregorianCalendar dateEdition) {
+	public Ouvrage(Integer isbn, String titre, String editeur, GregorianCalendar dateEdition) {
 		this.setIsbn(isbn);
 		this.setTitre(titre);
 		this.setAuteurs(new HashSet<Auteur>());
@@ -63,13 +59,13 @@ public class Ouvrage extends Observable implements Serializable {
 	private void setEditeur(String editeur) { _editeur = editeur; }
 	private void setExemplaires(HashMap<Integer, Exemplaire> exemplaires) { _exemplaires = exemplaires; }
 	private void setExemplaire(int numero, Exemplaire exemplaire) { _exemplaires.put(numero, exemplaire); }
-	private void setIsbn(String isbn) { this._isbn = isbn; }
+	private void setIsbn(Integer isbn) { this._isbn = isbn; }
 	private void setTitre(String titre) { _titre = titre; }
 	private void setDerNumExemplaire(int derNumExemplaire) { _derNumExemplaire  = derNumExemplaire ; }
 	
 	private int getDerNumExemplaire() { return _derNumExemplaire; }
 	public HashSet<MotCle> getMotCles() { return _motCles; }
-	public String getIsbn() { return _isbn; }
+	public Integer getIsbn() { return _isbn; }
 	public String getTitre() { return _titre; }
 	public HashSet<Auteur> getAuteurs() { return _auteurs; }
 	public String getEditeur() { return _editeur; }

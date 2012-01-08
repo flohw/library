@@ -11,7 +11,7 @@ public class Periodique extends Observable implements Serializable {
 	// ************************************************************************************************************
 
 	private static final long serialVersionUID = 1L;
-	private String _issn;
+	private Integer _issn;
 	private String _nom;
 	private GregorianCalendar _dateAbonnement;
 	private HashMap<Integer, Parution> _parutions;
@@ -24,7 +24,7 @@ public class Periodique extends Observable implements Serializable {
 	 * Constructeur. 
 	 */
 	
-	public Periodique(String issn, String nom, GregorianCalendar dateAbonnement) 
+	public Periodique(Integer issn, String nom, GregorianCalendar dateAbonnement) 
 	{
 		this.setIssn(issn);
 		this.setNom(nom);
@@ -33,9 +33,9 @@ public class Periodique extends Observable implements Serializable {
 	} 
 	
 	private void setNom(String nom)  { _nom = nom; }
-	private void setIssn(String issn) { _issn = issn; }
+	private void setIssn(Integer issn) { _issn = issn; }
 	private void setDate(GregorianCalendar dateAbonnement) { _dateAbonnement = dateAbonnement; }
-	public String getIssn() { return _issn; }
+	public Integer getIssn() { return _issn; }
 	public String getNom() { return _nom; }
 	public GregorianCalendar getDate() { return _dateAbonnement; }
 	public HashMap<Integer, Parution> getParutions() { return _parutions; }

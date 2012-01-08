@@ -46,7 +46,7 @@ public class VueConsulterPeriodique extends Vue {
 		lblIssn = new JLabel("ISSN");
 		lblIssn.setBounds(23, 23, 28, 16);
 		
-		for (String issn : getControleur().getPeriodiques().keySet())
+		for (Integer issn : getControleur().getPeriodiques().keySet())
 			modeleIssn.addElement(getControleur().getPeriodique(issn).afficheInfos());
 		
 		listIssn = new JList(modeleIssn);
