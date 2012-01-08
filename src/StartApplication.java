@@ -31,7 +31,8 @@ public class StartApplication {
 	
 	public static void main(String args[]) {
 		try {
-			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+			UIManager.setLookAndFeel(
+		            UIManager.getCrossPlatformLookAndFeelClassName());
 			new StartApplication();
 		} catch (Exception e) {
 			e.printStackTrace();
