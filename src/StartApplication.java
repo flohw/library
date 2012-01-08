@@ -1,12 +1,20 @@
 import javax.swing.UIManager;
 
 
+
+
 public class StartApplication {
 
 	// ************************************************************************************************************
 	// Constructeur de l'application
 	// ************************************************************************************************************
 	
+	// ------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructeur de l'application. 
+	 * Instancie le controleur
+	 * Affiche la fenêtre principale
+	 */
 	public StartApplication() {
 		
 		// Creation de l'instance du controleur
@@ -23,7 +31,8 @@ public class StartApplication {
 	
 	public static void main(String args[]) {
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(
+		            UIManager.getCrossPlatformLookAndFeelClassName());
 			new StartApplication();
 		} catch (Exception e) {
 			e.printStackTrace();
