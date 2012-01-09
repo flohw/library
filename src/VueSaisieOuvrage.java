@@ -2,7 +2,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -53,9 +52,6 @@ public class VueSaisieOuvrage extends Vue {
 	private DefaultListModel modeleSource = new DefaultListModel();
 	private DefaultListModel modeleCible = new DefaultListModel();
 	
-	private JSeparator separator;
-	private JSeparator separator_1;
-	
 	private Ouvrage _ouvrage;
 	private HashSet<Auteur> _auteurs = new HashSet<Auteur>();
 	private HashSet<String> _motsCles = new HashSet<String>();
@@ -68,34 +64,32 @@ public class VueSaisieOuvrage extends Vue {
 		super(controleur);
 		content = new JPanel();
 		getFrame().setBounds(100, 100, 717, 578);
+		getFrame().setTitle("Nouvel ouvrage");
 		getFrame().setContentPane(content);
 		
 		lblTitre = new JLabel("Titre");
 		lblTitre.setBounds(116, 9, 117, 15);
 		textFieldTitre = new JTextField();
-		textFieldTitre.setText("Harry Potter");
 		textFieldTitre.setBounds(364, 7, 323, 19);
 		textFieldTitre.setColumns(10);
 		
 		lblISBN = new JLabel("Isbn");
 		lblISBN.setBounds(116, 35, 117, 15);
 		textFieldIsbn = new JTextField();
-		textFieldIsbn.setText("1");
 		textFieldIsbn.setBounds(364, 33, 323, 19);
 		textFieldIsbn.setColumns(10);
 		
 		lblDateEdition = new JLabel("Date d'édition");
 		lblDateEdition.setBounds(116, 61, 117, 15);
 		textFieldDateEd = new JTextField();
+		textFieldDateEd.setText("mm/aaaa");
 		textFieldDateEd.setBounds(364, 59, 323, 19);
-		textFieldDateEd.setText("12/1999");
 		textFieldDateEd.setColumns(10);
 		
 		lblEditeur = new JLabel("Editeur");
 		lblEditeur.setBounds(116, 87, 117, 15);
 		textFieldEditeur = new JTextField();
 		textFieldEditeur.setBounds(364, 85, 323, 19);
-		textFieldEditeur.setText("Gallimard");
 		textFieldEditeur.setColumns(10);
 		
 		btnEnregistrerOuvrage = new JButton("Enregistrer");
@@ -127,15 +121,11 @@ public class VueSaisieOuvrage extends Vue {
 			}
 		});
 		
-		separator = new JSeparator();
-		separator.setBounds(0, 148, 706, 2);
-		
 		lblNom = new JLabel("Nom de l'auteur");
 		lblNom.setBounds(116, 159, 117, 15);
 		lblNom.setEnabled(false);
 		
 		textFieldNom = new JTextField();
-		textFieldNom.setText("Rowlings");
 		textFieldNom.setBounds(339, 168, 323, 19);
 		textFieldNom.setEnabled(false);
 		textFieldNom.setColumns(10);
@@ -145,7 +135,6 @@ public class VueSaisieOuvrage extends Vue {
 		lblPrenom.setEnabled(false);
 		
 		textFieldPrenom = new JTextField();
-		textFieldPrenom.setText("J.K.");
 		textFieldPrenom.setBounds(339, 194, 323, 19);
 		textFieldPrenom.setEnabled(false);
 		textFieldPrenom.setColumns(10);
@@ -175,9 +164,6 @@ public class VueSaisieOuvrage extends Vue {
 				setEtat(Vue.initiale);
 			}
 		});
-		
-		separator_1 = new JSeparator();
-		separator_1.setBounds(0, 258, 714, 2);
 		
 		
 		lblMotsclefs = new JLabel("Mots-Clefs");
@@ -251,7 +237,7 @@ public class VueSaisieOuvrage extends Vue {
 				for (int index = 0; index < modeleCible.size(); index++)
 					_motsCles.add(modeleCible.get(index).toString());
 				
-				if (modeleSource.isEmpty())
+				if (modeleCible.isEmpty())
 					Message.message("Ajoutez au moins un mot clé", Controleur.attention);
 				else
 					getControleur().nouvOuvrage(getOuvrage(), _auteurs, _motsCles);
@@ -272,9 +258,7 @@ public class VueSaisieOuvrage extends Vue {
 		content.add(textFieldEditeur);
 		content.add(btnEnregistrerOuvrage);
 		content.add(btnAnnulerOuvrage);
-		content.add(separator);
 		content.add(lblNom);
-		content.add(separator_1);
 		content.add(btnTerminer);
 		content.add(lblMotsclefs);
 		content.add(lblPrenom);

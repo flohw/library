@@ -62,7 +62,7 @@ public class Controleur implements Serializable{
 		// ************************************************************************************************************
 
 		public Controleur() {
-			this.setFileName(new String("Fsauv.ser"));
+			this.setFileName("Fsauv.ser");
 			this.setOuvrages(new HashMap<Integer, Ouvrage>());
 			this.setPeriodiques(new HashMap<Integer, Periodique>());
 			this.setAuteurs(new HashSet<Auteur>());
@@ -357,7 +357,7 @@ public class Controleur implements Serializable{
 		public void rechTitre() {
 			try {
 				if (this.getOuvrages().isEmpty() && this.getNbArticles().equals(new Integer(0))) {
-					Message.message("Il n'y a aucun documnent enregistré", Controleur.information);
+					Message.message("Il n'y a aucun documnent enregistré", Controleur.erreur);
 					menuBiblio();
 				} else {
 					this.setVueRechTitre(new VueRechTitre(this));
@@ -434,7 +434,7 @@ public class Controleur implements Serializable{
 		public void ouvrir(String fichier) {
 			Controleur c = new Controleur();
 			c.setFileName(fichier);
-			c.restaure();
+			c = c.restaure();
 			if (Message.confirmation("Voulez vous sauvegarder vos données ?", "Sauvegarde") == JOptionPane.YES_OPTION)
 				this.sauve();
 			this.setFileName(c.getFileName());
